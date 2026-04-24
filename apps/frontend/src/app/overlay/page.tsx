@@ -337,22 +337,15 @@ export default function OverlayPage() {
           zIndex: 2,
         }}
         onMouseDown={(e) => {
-          if (e.button !== 0) return // только левая кнопка = drag или клик
-          const startX = e.screenX
-          const startY = e.screenY
-          let lastX = startX
-          let lastY = startY
-          let moved = false
+          if (e.button !== 0) return // только левая кнопка = drag
+          let lastX = e.screenX
+          let lastY = e.screenY
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const api = (window as any).electronAPI
           const onMove = (ev: MouseEvent) => {
             const dx = ev.screenX - lastX
             const dy = ev.screenY - lastY
             if (dx || dy) {
-              // Если суммарно сдвинулись больше 4px — считаем это drag'ом, а не кликом.
-              if (Math.abs(ev.screenX - startX) + Math.abs(ev.screenY - startY) > 4) {
-                moved = true
-              }
               api?.moveWindowBy?.(dx, dy)
               lastX = ev.screenX
               lastY = ev.screenY
@@ -361,9 +354,9 @@ export default function OverlayPage() {
           const onUp = () => {
             window.removeEventListener('mousemove', onMove)
             window.removeEventListener('mouseup', onUp)
-            // Клик без движения по персонажу — тот же toggle что Ctrl+Z.
-            if (!moved) mic.toggle()
           }
+          // Клик-toggle убран — был источник случайного отключения мика. Для toggle —
+          // только Ctrl+Z или маленькая кнопка MicBars под персонажем.
           window.addEventListener('mousemove', onMove)
           window.addEventListener('mouseup', onUp)
         }}

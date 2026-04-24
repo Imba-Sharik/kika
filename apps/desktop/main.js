@@ -1,4 +1,4 @@
-const { app, BrowserWindow, clipboard, desktopCapturer, ipcMain, Menu, screen, shell } = require('electron')
+const { app, BrowserWindow, clipboard, desktopCapturer, globalShortcut, ipcMain, Menu, screen, shell } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const { exec } = require('child_process')
 const fs = require('fs')
@@ -311,6 +311,12 @@ ipcMain.on('simulate-paste', () => {
 
 app.whenReady().then(() => {
   createWindow()
+
+  // DevTools по Ctrl+Shift+I — работает даже в packaged-билде, нужно для
+  // диагностики багов у beta-юзеров.
+  globalShortcut.register('CommandOrControl+Shift+I', () => {
+    if (mainWindow) mainWindow.webContents.toggleDevTools()
+  })
 
   // Silent auto-update (как Chrome/VSCode): проверка при старте → тихое скачивание →
   // установка при закрытии приложения юзером. Нотификаций не показываем, чтобы

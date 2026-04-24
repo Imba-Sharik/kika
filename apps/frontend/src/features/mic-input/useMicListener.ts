@@ -41,6 +41,10 @@ export function useMicListener({
   const onSpeechChangeRef = useRef(onSpeechChange)
 
   function setStateBoth(s: VadState) {
+    if (s === 'off' && stateRef.current !== 'off') {
+      // Диагностика: откуда пришло выключение мика (сам юзер или баг)
+      console.trace('[mic] state → off (from:', stateRef.current, ')')
+    }
     stateRef.current = s
     setState(s)
   }
