@@ -166,6 +166,43 @@ export function SettingsPanel({
           <div>• <b>Right Alt</b> — диктовка (hold)</div>
           <div>• <b>Left Alt + `</b> — распознать песню</div>
         </div>
+
+        <a
+          href="https://t.me/+O_SNPGI-CGI0ZjUy"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            // В Electron открываем внешнюю ссылку через shell (не внутри overlay окна).
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const api = (window as any).electronAPI
+            if (api?.openExternal) {
+              e.preventDefault()
+              api.openExternal('https://t.me/+O_SNPGI-CGI0ZjUy')
+            }
+          }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '10px 12px',
+            borderRadius: 6,
+            background: 'rgba(96, 165, 250, 0.1)',
+            border: '1px solid rgba(96, 165, 250, 0.25)',
+            color: '#93c5fd',
+            textDecoration: 'none',
+            fontSize: 11,
+            lineHeight: 1.4,
+          }}
+        >
+          <span style={{ fontSize: 16 }}>💬</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600, marginBottom: 2 }}>Чат с разработчиком</div>
+            <div style={{ color: '#9ca3af', fontSize: 10 }}>
+              Напиши что сломалось, чего не хватает, что понравилось
+            </div>
+          </div>
+          <span style={{ color: '#6b7280' }}>→</span>
+        </a>
       </div>
     </div>
   )
