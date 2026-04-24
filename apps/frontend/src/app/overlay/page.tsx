@@ -239,6 +239,23 @@ export default function OverlayPage() {
     try { localStorage.setItem(EMOTION_STORAGE_KEY, emotion) } catch {}
   }, [emotion])
 
+  // Авто-старт VAD при открытии настроек — чтобы юзер видел как его голос
+  // реагирует на порог даже без Ctrl+Z. При закрытии — стопим VAD только если
+  // это мы его сами подняли (не трогаем hands-free который юзер включил руками).
+  const autoStartedByPanelRef = useRef(false)
+  useEffect(() => {
+    if (settingsOpen) {
+      if (mic.state === 'off' || mic.state === 'error') {
+        autoStartedByPanelRef.current = true
+        mic.start()
+      }
+    } else if (autoStartedByPanelRef.current) {
+      autoStartedByPanelRef.current = false
+      mic.stop()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settingsOpen])
+
   useEffect(() => {
     // micDeviceId уже загружен через lazy useState initializer
     async function loadMics() {
