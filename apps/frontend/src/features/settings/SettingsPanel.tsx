@@ -164,7 +164,9 @@ export function SettingsPanel({
               const update = (clientX: number) => {
                 const rect = bar.getBoundingClientRect()
                 const raw = (clientX - rect.left) / rect.width
-                const clamped = Math.max(0, Math.min(1, raw))
+                // Минимум 0.05 — при 0.00 VAD считает любой шум речью и залипает,
+                // максимум 0.95 — при 1.00 Silero никогда не триггерится.
+                const clamped = Math.max(0.05, Math.min(0.95, raw))
                 onSelectVadThreshold(Math.round(clamped * 100) / 100)
               }
               update(e.clientX)
