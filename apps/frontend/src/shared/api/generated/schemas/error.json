@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "required": ["error"],
+  "properties": {
+    "data": {
+      "nullable": true,
+      "oneOf": [
+        { "type": "object" },
+        { "type": "array", "items": { "type": "object" } }
+      ]
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "integer" },
+        "name": { "type": "string" },
+        "message": { "type": "string" },
+        "details": { "type": "object" }
+      }
+    }
+  },
+  "x-readme-ref-name": "Error"
+}

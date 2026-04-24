@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "number", "example": 1 },
+    "username": { "type": "string", "example": "foo.bar" },
+    "email": { "type": "string", "example": "foo.bar@strapi.io" },
+    "provider": { "type": "string", "example": "local" },
+    "confirmed": { "type": "boolean", "example": true },
+    "blocked": { "type": "boolean", "example": false },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "example": "2022-06-02T08:32:06.258Z"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "example": "2022-06-02T08:32:06.267Z"
+    }
+  },
+  "x-readme-ref-name": "Users-Permissions-User"
+}

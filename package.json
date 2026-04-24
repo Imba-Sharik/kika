@@ -1,0 +1,17 @@
+{
+  "name": "kika",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "overrides": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  },
+  "scripts": {
+    "frontend": "npm run dev --workspace=apps/frontend",
+    "backend": "npm run develop --workspace=apps/backend",
+    "desktop": "npm run dev --workspace=apps/desktop"
+  }
+}

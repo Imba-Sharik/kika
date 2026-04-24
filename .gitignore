@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Build outputs
+.next/
+build/
+dist/
+
+# Strapi
+apps/backend/.tmp/
+apps/backend/build/
+apps/backend/exports/
+apps/backend/src/extensions/documentation/public/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local dev context
+.claude/
+
+# Markdown заметки, планы, бизнес-контекст — не тащим в публичный репо
+*.md
+
+# Third-party character assets (dev-only, not for prod)
+apps/frontend/public/kika/emotions/

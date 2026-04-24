@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100vw; height: 100vh; overflow: hidden; cursor: crosshair; user-select: none; }
+  /* Почти прозрачное, но с crosshair-курсором — чтобы Windows зарегистрировал
+     окно как интерактивное и не "прокликивало" сквозь. */
+  body { background: rgba(0,0,0,0.03); }
+  #sel {
+    position: absolute;
+    display: none;
+    border: 2px solid #ec4899;
+    background: rgba(236,72,153,0.1);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    pointer-events: none;
+  }
+  #size {
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 11px;
+    pointer-events: none;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div id="hint">Выдели область мышкой · Esc — отмена</div>
+  <div id="sel"></div>
+  <div id="size"></div>
+<script>
+  const sel = document.getElementById('sel')
+  const size = document.getElementById('size')
+  let startX = 0, startY = 0, dragging = false
+
+  function getRect(e) {
+    const x = Math.min(startX, e.clientX)
+    const y = Math.min(startY, e.clientY)
+    const w = Math.abs(e.clientX - startX)
+    const h = Math.abs(e.clientY - startY)
+    return { x, y, w, h }
+  }
+
+  window.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return
+    startX = e.clientX
+    startY = e.clientY
+    dragging = true
+    sel.style.display = 'block'
+    size.style.display = 'block'
+    sel.style.left = startX + 'px'
+    sel.style.top = startY + 'px'
+    sel.style.width = '0px'
+    sel.style.height = '0px'
+  })
+
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return
+    const r = getRect(e)
+    sel.style.left = r.x + 'px'
+    sel.style.top = r.y + 'px'
+    sel.style.width = r.w + 'px'
+    sel.style.height = r.h + 'px'
+    size.style.left = (r.x + r.w + 8) + 'px'
+    size.style.top = (r.y + r.h + 8) + 'px'
+    size.textContent = r.w + ' × ' + r.h
+  })
+
+  window.addEventListener('mouseup', (e) => {
+    if (!dragging) return
+    dragging = false
+    const r = getRect(e)
+    if (r.w < 10 || r.h < 10) {
+      window.electronAPI.cancelSelection()
+      return
+    }
+    const dpr = window.devicePixelRatio || 1
+    window.electronAPI.finishSelection({
+      x: Math.round(r.x * dpr),
+      y: Math.round(r.y * dpr),
+      width: Math.round(r.w * dpr),
+      height: Math.round(r.h * dpr),
+    })
+  })
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') window.electronAPI.cancelSelection()
+  })
+</script>
+</body>
+</html>
