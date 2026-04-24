@@ -450,14 +450,31 @@ export default function OverlayPage() {
           >
             <div style={{ fontWeight: 600, marginBottom: 6 }}>Привет! 👋</div>
             <div style={{ marginBottom: 10 }}>
-              Зажми <kbd style={{
+              Чтобы поговорить голосом — зажми <kbd style={{
                 padding: '1px 6px',
                 borderRadius: 3,
                 background: 'rgba(0,0,0,0.3)',
                 fontFamily: 'ui-monospace, monospace',
                 fontSize: 11,
-              }}>Ctrl+Z</kbd> чтобы поговорить голосом.
-              Повторное нажатие — выключить.
+              }}>Ctrl+Z</kbd> или кликни на полоски под Кикой:
+              <span style={{
+                display: 'inline-flex',
+                gap: 2,
+                alignItems: 'center',
+                marginLeft: 4,
+                padding: '2px 6px',
+                background: 'rgba(0,0,0,0.3)',
+                borderRadius: 4,
+                verticalAlign: 'middle',
+              }}>
+                <span style={{ width: 2, height: 6, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 10, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 8, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 12, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 7, background: '#22c55e' }} />
+              </span>
+              <br />
+              Повторное нажатие/клик — выключить.
             </div>
             <button
               type="button"
