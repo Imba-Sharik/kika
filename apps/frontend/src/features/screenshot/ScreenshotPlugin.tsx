@@ -43,7 +43,7 @@ let updateItem: (ts: number, patch: Partial<ScreenshotItem>) => void = () => {}
 
 type ScreenshotState = {
   history: ScreenshotItem[]
-  capture: (ctx: KikaContext, userText?: string) => Promise<void>
+  capture: (ctx: KikaContext, opts?: { userText?: string; mode?: 'full' | 'region' }) => Promise<void>
 }
 
 const ScreenCtx = createContext<ScreenshotState | null>(null)
