@@ -25,7 +25,7 @@ export default function LandingPage() {
           <a href="#pricing" className="text-sm text-white/70 hover:text-white transition">Цена</a>
           <a href="#faq" className="text-sm text-white/70 hover:text-white transition">FAQ</a>
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition">
-            Фидбек
+            Чат с разработчиком
           </a>
           <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 transition">
             Скачать
@@ -35,10 +35,15 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 pt-16 pb-24 text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white/70">
+        <a
+          href={TELEGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white/70 hover:text-white hover:bg-white/10 transition"
+        >
           <span className="h-2 w-2 rounded-full bg-pink-400 animate-pulse" />
-          Beta доступ открыт
-        </div>
+          Beta открыта — присоединяйся к чату с разработчиком →
+        </a>
         <h1 className="mb-6 text-5xl md:text-7xl font-bold tracking-tight">
           Твой AI-компаньон,<br />
           <span className="bg-gradient-to-r from-pink-400 via-pink-500 to-violet-500 bg-clip-text text-transparent">
