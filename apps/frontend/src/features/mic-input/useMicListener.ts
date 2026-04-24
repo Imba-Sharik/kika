@@ -33,6 +33,9 @@ export function useMicListener({
 }: Options) {
   const [state, setState] = useState<VadState>('off')
   const [error, setError] = useState<string | null>(null)
+  // Текущая Silero-вероятность (0-1) что юзер говорит прямо сейчас. Это ТА ЖЕ шкала,
+  // что и `positiveSpeechThreshold` — полезно для UI-полоски «настройка чувствительности».
+  const [vadProbability, setVadProbability] = useState(0)
   const vadRef = useRef<MicVADInstance | null>(null)
   const stateRef = useRef<VadState>('off')
   const pausedRef = useRef<boolean>(!!paused)
@@ -124,6 +127,11 @@ export function useMicListener({
           onSpeechChangeRef.current?.(false)
           void sendAudio(audio)
         },
+        onFrameProcessed: (probs) => {
+          // Real-time Silero-вероятность — для UI-полоски в настройках.
+          // Тикает каждые 32мс (30fps), React батчит рендеры.
+          setVadProbability(probs.isSpeech)
+        },
         model: 'v5',
         onnxWASMBasePath: '/vad/',
         baseAssetPath: '/vad/',
@@ -173,5 +181,5 @@ export function useMicListener({
   // main process (uIOhook), сигнал приходит через electronAPI.onMicToggle.
   // Overlay-страница сама подключает слушатель и вызывает toggle().
 
-  return { state, error, start, stop, toggle }
+  return { state, error, vadProbability, start, stop, toggle }
 }

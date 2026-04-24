@@ -632,7 +632,7 @@ export default function OverlayPage() {
           onSelectMic={selectMic}
           voiceId={voiceId}
           onSelectVoice={selectVoice}
-          micLevel={micLevel}
+          vadProbability={mic.vadProbability}
           vadThreshold={vadThreshold}
           onSelectVadThreshold={selectVadThreshold}
           isPluginEnabled={isEnabled}

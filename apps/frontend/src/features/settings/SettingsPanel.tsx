@@ -12,7 +12,7 @@ type Props = {
   onSelectMic: (id: string) => void
   voiceId: string
   onSelectVoice: (id: string) => void
-  micLevel: number
+  vadProbability: number
   vadThreshold: number
   onSelectVadThreshold: (v: number) => void
   isPluginEnabled: (id: string) => boolean
@@ -26,7 +26,7 @@ export function SettingsPanel({
   onSelectMic,
   voiceId,
   onSelectVoice,
-  micLevel,
+  vadProbability,
   vadThreshold,
   onSelectVadThreshold,
   isPluginEnabled,
@@ -164,7 +164,7 @@ export function SettingsPanel({
               const update = (clientX: number) => {
                 const rect = bar.getBoundingClientRect()
                 const raw = (clientX - rect.left) / rect.width
-                const clamped = Math.max(0.2, Math.min(0.9, raw))
+                const clamped = Math.max(0, Math.min(1, raw))
                 onSelectVadThreshold(Math.round(clamped * 100) / 100)
               }
               update(e.clientX)
@@ -177,16 +177,17 @@ export function SettingsPanel({
               window.addEventListener('mouseup', onUp)
             }}
           >
-            {/* Fill уровня микрофона: зелёный выше порога, серый ниже */}
+            {/* Fill: реальная Silero-вероятность в реальном времени.
+                Зелёный когда нейросеть считает что это речь (выше порога). */}
             <div
               style={{
                 height: '100%',
-                width: `${micLevel * 100}%`,
-                background: micLevel > vadThreshold ? '#22c55e' : '#4b5563',
+                width: `${vadProbability * 100}%`,
+                background: vadProbability > vadThreshold ? '#22c55e' : '#4b5563',
                 transition: 'width 60ms linear, background 150ms',
               }}
             />
-            {/* Ползунок-порог */}
+            {/* Ползунок-порог на той же шкале (0-1) */}
             <div
               style={{
                 position: 'absolute',
@@ -202,7 +203,8 @@ export function SettingsPanel({
             />
           </div>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            Тащи оранжевую полоску. Зелёный слева = речь поймали. Порог применяется после выкл/вкл мика (Ctrl+Z).
+            Голубая заливка = вероятность речи от VAD. Тащи оранжевый порог —
+            где он, там и начинается «речь». Применяется после выкл/вкл мика (Ctrl+Z).
           </div>
         </div>
 
