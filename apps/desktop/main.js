@@ -1,4 +1,5 @@
 const { app, BrowserWindow, clipboard, desktopCapturer, ipcMain, Menu, screen, shell } = require('electron')
+const { autoUpdater } = require('electron-updater')
 const { exec } = require('child_process')
 const fs = require('fs')
 const path = require('path')
@@ -310,6 +311,15 @@ ipcMain.on('simulate-paste', () => {
 
 app.whenReady().then(() => {
   createWindow()
+
+  // Авто-обновления через GitHub Releases. checkForUpdatesAndNotify() тихо качает
+  // новую версию в фоне, при закрытии приложения применяет. Работает только в
+  // packaged-билде (в dev автоматически отключен).
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+      console.error('[main] autoUpdater failed:', err)
+    })
+  }
 
   if (!uIOhook) {
     console.error('[main] uIOhook not available — dictation disabled')

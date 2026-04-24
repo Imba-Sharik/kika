@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
-// Прямая ссылка на .exe из последнего GitHub Release — качается сразу по клику.
-// TODO: при v0.2.0 сменить build.artifactName в electron-builder на version-less
-// (Kika-Setup-win.exe), чтобы эта ссылка не требовала обновления при каждой версии.
-const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Kika.Setup.0.1.0.exe'
+// Стабильная ссылка на последний .exe. Имя файла фиксировано через
+// electron-builder build.artifactName = "Kika-Setup-${arch}.${ext}" — поэтому
+// эта ссылка работает для ВСЕХ будущих версий без правок лендинга.
+const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Kika-Setup-x64.exe'
 // Telegram-канал для beta-фидбека — пока основной канал связи с юзерами.
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
