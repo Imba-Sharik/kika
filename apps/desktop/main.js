@@ -73,9 +73,9 @@ function createWindow() {
   })
 
   // URL фронта: в dev-режиме localhost, в packaged билде — prod-домен.
-  // Переопределить можно через env KIKA_APP_URL (полезно для staging).
+  // Переопределить можно через env KIKA_APP_URL (полезно для staging / custom-домена).
   const devUrl = 'http://localhost:3000/overlay'
-  const prodUrl = process.env.KIKA_APP_URL || 'https://kika.anirum.com/overlay'
+  const prodUrl = process.env.KIKA_APP_URL || 'https://kika-frontend.vercel.app/overlay'
   mainWindow.loadURL(app.isPackaged ? prodUrl : devUrl)
 
   // DevTools не открываем автоматически. Для отладки — запусти с KIKA_DEVTOOLS=1
