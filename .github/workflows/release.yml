@@ -1,0 +1,30 @@
+name: Release Kika desktop
+
+# Триггер: git tag с префиксом v (например v0.1.2).
+# Обычный push в main ничего не запускает — только создание тега публикует релиз.
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build & publish to GitHub Releases
+        working-directory: apps/desktop
+        run: npx electron-builder --win --x64 --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
