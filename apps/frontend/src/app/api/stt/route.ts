@@ -8,6 +8,25 @@ export const maxDuration = 30
 const DEFAULT_PROMPT =
   'Кика, AI-компаньон, робот, аниме, персонаж, голос, эмоция, подписка, ANIRUM, ElevenLabs, Fish Audio.'
 
+// Whisper обучен на YouTube-субтитрах и при тишине/шуме галлюцинирует
+// знакомые фразы. Режем их, возвращаем пустую строку (юзер ничего не сказал).
+const HALLUCINATION_PATTERNS: RegExp[] = [
+  /dimatorzok/i,                           // "Субтитры сделал DimaTorzok"
+  /субтитры\s+(сделал|подготовил|создал|корректор|редактор)/i,
+  /корректор\s+субтитров/i,
+  /продолжение\s+следует/i,
+  /спасибо\s+за\s+(просмотр|внимание)/i,
+  /(подписывайтесь|ставьте\s+лайк|колокольчик)/i,
+  /^\s*(thanks?\s+for\s+watching|please\s+subscribe|\[music\]|\[applause\])\s*$/i,
+  /^[\s.…,!?-]*$/,                         // только знаки препинания
+]
+
+function isHallucination(text: string): boolean {
+  const trimmed = text.trim()
+  if (!trimmed) return false // пустая строка — не галлюцинация, просто тишина
+  return HALLUCINATION_PATTERNS.some((re) => re.test(trimmed))
+}
+
 const CLEAN_SYSTEM_PROMPT = `Ты чистишь голосовую диктовку на русском языке для последующей вставки в текстовое поле.
 
 Правила:
@@ -57,6 +76,11 @@ export async function POST(req: NextRequest) {
         groq: { language, prompt },
       },
     })
+
+    if (isHallucination(text)) {
+      console.log('[stt] hallucination filtered:', JSON.stringify(text))
+      return Response.json({ text: '' })
+    }
 
     const finalText = clean ? await cleanText(text) : text
     return Response.json({ text: finalText })

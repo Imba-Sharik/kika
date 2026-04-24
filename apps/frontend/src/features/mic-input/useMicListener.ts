@@ -163,7 +163,9 @@ export function useMicListener({
         // Negative держим на 60% от positive — промежуток для стабильности гистерезиса
         // (исключает дёрганье speech/silence у границы threshold).
         negativeSpeechThreshold: Math.max(0.1, vadThreshold * 0.6),
-        minSpeechMs: 250,
+        // 400мс минимум — короче обычно кашель/клик мыши/стук. Whisper на
+        // коротких шумах галлюцинирует «субтитры сделал DimaTorzok» и т.п.
+        minSpeechMs: 400,
         preSpeechPadMs: 200,
         // Сколько мс тишины ждём прежде чем считать что юзер договорил.
         // 100мс (раньше) — реживет паузы в речи. 700мс — стандарт как у
