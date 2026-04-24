@@ -31,5 +31,3 @@ Thumbs.db
 # Markdown заметки, планы, бизнес-контекст — не тащим в публичный репо
 *.md
 
-# Third-party character assets (dev-only, not for prod)
-apps/frontend/public/kika/emotions/
