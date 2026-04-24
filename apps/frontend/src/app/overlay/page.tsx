@@ -420,7 +420,14 @@ export default function OverlayPage() {
             zIndex: 3,
           }}
         >
-          <MicBars state={mic.state} micLevel={micLevel} onClick={mic.toggle} error={mic.error} />
+          {/* В test-mode (VAD крутится только для слайдера в настройках) показываем
+              MicBars как выключенный — чтобы юзера не сбивало «режим включился сам». */}
+          <MicBars
+            state={autoStartedByPanelRef.current && settingsOpen ? 'off' : mic.state}
+            micLevel={micLevel}
+            onClick={mic.toggle}
+            error={mic.error}
+          />
         </div>
 
         {(() => {
