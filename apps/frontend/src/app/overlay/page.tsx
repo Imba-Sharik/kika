@@ -91,6 +91,16 @@ export default function OverlayPage() {
   }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  // Показываем первую подсказку «как начать разговор» один раз. Флаг в localStorage
+  // сохраняется при клике «Понятно» — в будущих запусках не всплывает.
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    if (typeof window === 'undefined') return false
+    try { return localStorage.getItem('kika:onboarding-seen') !== 'true' } catch { return false }
+  })
+  function dismissOnboarding() {
+    setShowOnboarding(false)
+    try { localStorage.setItem('kika:onboarding-seen', 'true') } catch {}
+  }
 
   // send() определена ниже — через ref ломаем циклическую зависимость.
   const sendRef = useRef<(text: string) => void>(() => {})
@@ -416,6 +426,69 @@ export default function OverlayPage() {
         }}
       >
         <KikaFace emotion={emotion} audio={audioEl} size={180} />
+
+        {/* Онбординг: показывается один раз при первом запуске справа от персонажа.
+            Объясняет главное — Ctrl+Z чтобы начать разговор. Dismiss → localStorage. */}
+        {showOnboarding && (
+          <div
+            onMouseDown={(e) => e.stopPropagation()}
+            style={{
+              ...noDragStyle,
+              position: 'absolute',
+              bottom: 60,
+              left: 200,
+              width: 220,
+              padding: '12px 14px',
+              background: 'linear-gradient(135deg, rgba(236,72,153,0.95), rgba(139,92,246,0.95))',
+              color: 'white',
+              borderRadius: 10,
+              fontSize: 12,
+              lineHeight: 1.4,
+              boxShadow: '0 6px 20px rgba(139,92,246,0.4)',
+              zIndex: 10,
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>Привет! 👋</div>
+            <div style={{ marginBottom: 10 }}>
+              Зажми <kbd style={{
+                padding: '1px 6px',
+                borderRadius: 3,
+                background: 'rgba(0,0,0,0.3)',
+                fontFamily: 'ui-monospace, monospace',
+                fontSize: 11,
+              }}>Ctrl+Z</kbd> чтобы поговорить голосом.
+              Повторное нажатие — выключить.
+            </div>
+            <button
+              type="button"
+              onClick={dismissOnboarding}
+              style={{
+                width: '100%',
+                padding: '6px 10px',
+                background: 'rgba(255,255,255,0.2)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                borderRadius: 6,
+                color: 'white',
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              Понятно
+            </button>
+            {/* Стрелочка к персонажу */}
+            <div style={{
+              position: 'absolute',
+              left: -8,
+              bottom: 20,
+              width: 0,
+              height: 0,
+              borderTop: '8px solid transparent',
+              borderBottom: '8px solid transparent',
+              borderRight: '8px solid rgba(236,72,153,0.95)',
+            }} />
+          </div>
+        )}
 
         {/* Мик-бары поверх персонажа (нижняя треть): статус hands-free, клик = toggle.
             Скрываем при открытом радиал-меню — чтобы не перекрывать кнопки. */}
