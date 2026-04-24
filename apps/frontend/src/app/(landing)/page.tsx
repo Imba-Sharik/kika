@@ -65,10 +65,11 @@ export default function LandingPage() {
               <Image
                 src="/kika/emotions/happy.png"
                 alt="Kika"
-                width={300}
-                height={400}
+                width={928}
+                height={1232}
                 className="h-auto w-64 md:w-80"
                 priority
+                unoptimized
               />
             </div>
             <div className="mt-6 rounded-2xl bg-black/40 p-4 text-left">
@@ -233,9 +234,10 @@ export default function LandingPage() {
           <Image
             src="/kika/emotions/wink.png"
             alt="Kika winking"
-            width={200}
-            height={250}
+            width={928}
+            height={1232}
             className="h-auto w-full"
+            unoptimized
           />
         </div>
         <h2 className="mb-4 text-4xl font-bold">
