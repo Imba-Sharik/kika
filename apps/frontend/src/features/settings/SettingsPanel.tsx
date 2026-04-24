@@ -13,6 +13,8 @@ type Props = {
   voiceId: string
   onSelectVoice: (id: string) => void
   micLevel: number
+  vadThreshold: number
+  onSelectVadThreshold: (v: number) => void
   isPluginEnabled: (id: string) => boolean
   setPluginEnabled: (id: string, enabled: boolean) => void
   onClose: () => void
@@ -25,6 +27,8 @@ export function SettingsPanel({
   voiceId,
   onSelectVoice,
   micLevel,
+  vadThreshold,
+  onSelectVadThreshold,
   isPluginEnabled,
   setPluginEnabled,
   onClose,
@@ -139,18 +143,52 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             Уровень сигнала
           </label>
-          <div style={{ height: 10, background: '#1f2937', borderRadius: 5, overflow: 'hidden', border: '1px solid #374151' }}>
+          <div style={{ position: 'relative', height: 10, background: '#1f2937', borderRadius: 5, overflow: 'hidden', border: '1px solid #374151' }}>
             <div
               style={{
                 height: '100%',
                 width: `${micLevel * 100}%`,
-                background: micLevel > 0.05 ? '#22c55e' : '#4b5563',
+                background: micLevel > vadThreshold ? '#22c55e' : '#4b5563',
                 transition: 'width 60ms linear, background 200ms',
+              }}
+            />
+            {/* Вертикальная черта порога VAD — наглядно где начинается речь */}
+            <div
+              style={{
+                position: 'absolute',
+                top: -2,
+                bottom: -2,
+                left: `${vadThreshold * 100}%`,
+                width: 2,
+                background: '#f59e0b',
+                boxShadow: '0 0 4px #f59e0b',
               }}
             />
           </div>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4 }}>
-            Скажи что-нибудь — полоска должна подниматься
+            Зелёный = речь. Оранжевая линия — порог срабатывания.
+          </div>
+        </div>
+
+        <div>
+          <label style={{ display: 'flex', justifyContent: 'space-between', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
+            <span>Чувствительность мика</span>
+            <span style={{ color: '#f59e0b', fontVariantNumeric: 'tabular-nums' }}>
+              {vadThreshold.toFixed(2)}
+            </span>
+          </label>
+          <input
+            type="range"
+            min={0.2}
+            max={0.9}
+            step={0.05}
+            value={vadThreshold}
+            onChange={(e) => onSelectVadThreshold(parseFloat(e.target.value))}
+            style={{ width: '100%', accentColor: '#f59e0b' }}
+          />
+          <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
+            Если Kika ловит лишний шум — двигай вправо (менее чувствительно).<br />
+            Если не слышит тихий голос — влево. Применяется после выкл/вкл мика (Ctrl+Z).
           </div>
         </div>
 

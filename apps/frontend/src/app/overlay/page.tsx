@@ -31,6 +31,8 @@ const MODEL = { provider: 'anthropic' as const, model: 'claude-haiku-4-5-2025100
 const EMOTION_STORAGE_KEY = 'kika:overlay:emotion'
 const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
 const VOICE_STORAGE_KEY = 'kika:overlay:voiceId'
+const VAD_THRESHOLD_KEY = 'kika:overlay:vadThreshold'
+const DEFAULT_VAD_THRESHOLD = 0.4
 
 // Устаревшие [APPEND:]/[WRITE:] текстовые теги больше не используются —
 // memory операции идут через настоящие tool_calls. Но стрипать теги из
@@ -75,6 +77,18 @@ export default function OverlayPage() {
     try { localStorage.setItem(VOICE_STORAGE_KEY, id) } catch {}
   }
   const [micLevel, setMicLevel] = useState(0)
+  const [vadThreshold, setVadThreshold] = useState<number>(() => {
+    if (typeof window === 'undefined') return DEFAULT_VAD_THRESHOLD
+    try {
+      const saved = localStorage.getItem(VAD_THRESHOLD_KEY)
+      const num = saved ? parseFloat(saved) : DEFAULT_VAD_THRESHOLD
+      return Number.isFinite(num) && num > 0 && num < 1 ? num : DEFAULT_VAD_THRESHOLD
+    } catch { return DEFAULT_VAD_THRESHOLD }
+  })
+  function selectVadThreshold(v: number) {
+    setVadThreshold(v)
+    try { localStorage.setItem(VAD_THRESHOLD_KEY, String(v)) } catch {}
+  }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
@@ -119,6 +133,7 @@ export default function OverlayPage() {
       setEmotion('listening')
     },
     deviceId: micDeviceId || undefined,
+    vadThreshold,
   })
 
   // Dictation и Music — теперь плагины. Их Provider'ы монтируются в
@@ -618,6 +633,8 @@ export default function OverlayPage() {
           voiceId={voiceId}
           onSelectVoice={selectVoice}
           micLevel={micLevel}
+          vadThreshold={vadThreshold}
+          onSelectVadThreshold={selectVadThreshold}
           isPluginEnabled={isEnabled}
           setPluginEnabled={setEnabled}
           onClose={() => setSettingsOpen(false)}

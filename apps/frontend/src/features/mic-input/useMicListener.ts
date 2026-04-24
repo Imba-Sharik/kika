@@ -10,6 +10,9 @@ type Options = {
   paused?: boolean
   language?: string
   deviceId?: string
+  // Порог срабатывания VAD: 0.3 (низкий = чувствительный, ловит тихий голос + шум) …
+  // 0.9 (высокий = только уверенная речь). Дефолт 0.4 — компромисс для тихой комнаты.
+  vadThreshold?: number
 }
 
 type MicVADInstance = {
@@ -26,6 +29,7 @@ export function useMicListener({
   paused,
   language = 'ru',
   deviceId,
+  vadThreshold = 0.4,
 }: Options) {
   const [state, setState] = useState<VadState>('off')
   const [error, setError] = useState<string | null>(null)
@@ -123,8 +127,10 @@ export function useMicListener({
         model: 'v5',
         onnxWASMBasePath: '/vad/',
         baseAssetPath: '/vad/',
-        positiveSpeechThreshold: 0.4,
-        negativeSpeechThreshold: 0.25,
+        positiveSpeechThreshold: vadThreshold,
+        // Negative держим на 60% от positive — промежуток для стабильности гистерезиса
+        // (исключает дёрганье speech/silence у границы threshold).
+        negativeSpeechThreshold: Math.max(0.1, vadThreshold * 0.6),
         minSpeechMs: 250,
         preSpeechPadMs: 200,
         // Сколько мс тишины ждём прежде чем считать что юзер договорил.
