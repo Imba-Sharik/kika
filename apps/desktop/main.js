@@ -312,12 +312,19 @@ ipcMain.on('simulate-paste', () => {
 app.whenReady().then(() => {
   createWindow()
 
-  // Авто-обновления через GitHub Releases. checkForUpdatesAndNotify() тихо качает
-  // новую версию в фоне, при закрытии приложения применяет. Работает только в
-  // packaged-билде (в dev автоматически отключен).
+  // Silent auto-update (как Chrome/VSCode): проверка при старте → тихое скачивание →
+  // установка при закрытии приложения юзером. Нотификаций не показываем, чтобы
+  // не дёргать Kика-диалог всплывашками. Следующий запуск = новая версия.
   if (app.isPackaged) {
-    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
-      console.error('[main] autoUpdater failed:', err)
+    autoUpdater.autoDownload = true              // качать сразу как нашлось обновление
+    autoUpdater.autoInstallOnAppQuit = true      // применять при квите (дефолт, для ясности)
+
+    autoUpdater.on('error', (err) => console.error('[updater] error:', err.message))
+    autoUpdater.on('update-available', (info) => console.log('[updater] found:', info.version))
+    autoUpdater.on('update-downloaded', (info) => console.log('[updater] downloaded:', info.version))
+
+    autoUpdater.checkForUpdates().catch((err) => {
+      console.error('[updater] check failed:', err.message)
     })
   }
 
