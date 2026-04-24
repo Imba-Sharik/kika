@@ -1,8 +1,9 @@
 import Image from 'next/image'
 
-// Прямой URL на последний .exe из GitHub Releases. До первого релиза — ведёт на
-// страницу releases (покажет "No releases"). После `git tag v0.1.0` → auto-update.
-const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest'
+// Прямая ссылка на .exe из последнего GitHub Release — качается сразу по клику.
+// TODO: при v0.2.0 сменить build.artifactName в electron-builder на version-less
+// (Kika-Setup-win.exe), чтобы эта ссылка не требовала обновления при каждой версии.
+const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Kika.Setup.0.1.0.exe'
 // Telegram-канал для beta-фидбека — пока основной канал связи с юзерами.
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
