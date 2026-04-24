@@ -140,55 +140,69 @@ export function SettingsPanel({
         </div>
 
         <div>
-          <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            Уровень сигнала
-          </label>
-          <div style={{ position: 'relative', height: 10, background: '#1f2937', borderRadius: 5, overflow: 'hidden', border: '1px solid #374151' }}>
-            <div
-              style={{
-                height: '100%',
-                width: `${micLevel * 100}%`,
-                background: micLevel > vadThreshold ? '#22c55e' : '#4b5563',
-                transition: 'width 60ms linear, background 200ms',
-              }}
-            />
-            {/* Вертикальная черта порога VAD — наглядно где начинается речь */}
-            <div
-              style={{
-                position: 'absolute',
-                top: -2,
-                bottom: -2,
-                left: `${vadThreshold * 100}%`,
-                width: 2,
-                background: '#f59e0b',
-                boxShadow: '0 0 4px #f59e0b',
-              }}
-            />
-          </div>
-          <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4 }}>
-            Зелёный = речь. Оранжевая линия — порог срабатывания.
-          </div>
-        </div>
-
-        <div>
           <label style={{ display: 'flex', justifyContent: 'space-between', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             <span>Чувствительность мика</span>
             <span style={{ color: '#f59e0b', fontVariantNumeric: 'tabular-nums' }}>
               {vadThreshold.toFixed(2)}
             </span>
           </label>
-          <input
-            type="range"
-            min={0.2}
-            max={0.9}
-            step={0.05}
-            value={vadThreshold}
-            onChange={(e) => onSelectVadThreshold(parseFloat(e.target.value))}
-            style={{ width: '100%', accentColor: '#f59e0b' }}
-          />
+          {/* Discord-style полоска: уровень мика + драггабельный порог в одном ряду.
+              Тащи оранжевый ползунок чтобы настроить — где он, там и начинается «речь». */}
+          <div
+            style={{
+              position: 'relative',
+              height: 22,
+              background: '#1f2937',
+              borderRadius: 4,
+              overflow: 'hidden',
+              border: '1px solid #374151',
+              cursor: 'ew-resize',
+              userSelect: 'none',
+            }}
+            onMouseDown={(e) => {
+              const bar = e.currentTarget
+              const update = (clientX: number) => {
+                const rect = bar.getBoundingClientRect()
+                const raw = (clientX - rect.left) / rect.width
+                const clamped = Math.max(0.2, Math.min(0.9, raw))
+                onSelectVadThreshold(Math.round(clamped * 100) / 100)
+              }
+              update(e.clientX)
+              const onMove = (ev: MouseEvent) => update(ev.clientX)
+              const onUp = () => {
+                window.removeEventListener('mousemove', onMove)
+                window.removeEventListener('mouseup', onUp)
+              }
+              window.addEventListener('mousemove', onMove)
+              window.addEventListener('mouseup', onUp)
+            }}
+          >
+            {/* Fill уровня микрофона: зелёный выше порога, серый ниже */}
+            <div
+              style={{
+                height: '100%',
+                width: `${micLevel * 100}%`,
+                background: micLevel > vadThreshold ? '#22c55e' : '#4b5563',
+                transition: 'width 60ms linear, background 150ms',
+              }}
+            />
+            {/* Ползунок-порог */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: `${vadThreshold * 100}%`,
+                width: 3,
+                background: '#f59e0b',
+                boxShadow: '0 0 6px rgba(245,158,11,0.8)',
+                transform: 'translateX(-1.5px)',
+                pointerEvents: 'none',
+              }}
+            />
+          </div>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            Если Kika ловит лишний шум — двигай вправо (менее чувствительно).<br />
-            Если не слышит тихий голос — влево. Применяется после выкл/вкл мика (Ctrl+Z).
+            Тащи оранжевую полоску. Зелёный слева = речь поймали. Порог применяется после выкл/вкл мика (Ctrl+Z).
           </div>
         </div>
 
