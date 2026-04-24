@@ -91,15 +91,20 @@ export default function OverlayPage() {
   }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  // Показываем первую подсказку «как начать разговор» один раз. Флаг в localStorage
-  // сохраняется при клике «Понятно» — в будущих запусках не всплывает.
+  // Показываем первую подсказку «как начать разговор» один раз. Ключ версионирован —
+  // при значительных правках онбординга бампай суффикс, юзеры увидят обновлённую версию.
+  const ONBOARDING_KEY = 'kika:onboarding-seen-v1'
   const [showOnboarding, setShowOnboarding] = useState(() => {
     if (typeof window === 'undefined') return false
-    try { return localStorage.getItem('kika:onboarding-seen') !== 'true' } catch { return false }
+    try { return localStorage.getItem(ONBOARDING_KEY) !== 'true' } catch { return false }
   })
   function dismissOnboarding() {
     setShowOnboarding(false)
-    try { localStorage.setItem('kika:onboarding-seen', 'true') } catch {}
+    try { localStorage.setItem(ONBOARDING_KEY, 'true') } catch {}
+  }
+  function showOnboardingAgain() {
+    try { localStorage.removeItem(ONBOARDING_KEY) } catch {}
+    setShowOnboarding(true)
   }
 
   // send() определена ниже — через ref ломаем циклическую зависимость.
@@ -767,6 +772,7 @@ export default function OverlayPage() {
           vadProbability={mic.vadProbability}
           vadThreshold={vadThreshold}
           onSelectVadThreshold={selectVadThreshold}
+          onShowOnboardingAgain={showOnboardingAgain}
           isPluginEnabled={isEnabled}
           setPluginEnabled={setEnabled}
           onClose={() => setSettingsOpen(false)}

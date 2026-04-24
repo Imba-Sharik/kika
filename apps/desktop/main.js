@@ -312,9 +312,12 @@ ipcMain.on('simulate-paste', () => {
 app.whenReady().then(() => {
   createWindow()
 
-  // DevTools по Ctrl+Shift+I — работает даже в packaged-билде, нужно для
-  // диагностики багов у beta-юзеров.
+  // DevTools по Ctrl+Shift+I и F12 — работает в packaged-билде для диагностики.
+  // F12 как дублёр, т.к. Ctrl+Shift+I на русской раскладке иногда не триггерится.
   globalShortcut.register('CommandOrControl+Shift+I', () => {
+    if (mainWindow) mainWindow.webContents.toggleDevTools()
+  })
+  globalShortcut.register('F12', () => {
     if (mainWindow) mainWindow.webContents.toggleDevTools()
   })
 

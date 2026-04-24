@@ -15,6 +15,7 @@ type Props = {
   vadProbability: number
   vadThreshold: number
   onSelectVadThreshold: (v: number) => void
+  onShowOnboardingAgain: () => void
   isPluginEnabled: (id: string) => boolean
   setPluginEnabled: (id: string, enabled: boolean) => void
   onClose: () => void
@@ -29,6 +30,7 @@ export function SettingsPanel({
   vadProbability,
   vadThreshold,
   onSelectVadThreshold,
+  onShowOnboardingAgain,
   isPluginEnabled,
   setPluginEnabled,
   onClose,
@@ -259,6 +261,23 @@ export function SettingsPanel({
           </div>
           <span style={{ color: '#6b7280' }}>→</span>
         </a>
+
+        <button
+          type="button"
+          onClick={onShowOnboardingAgain}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#6b7280',
+            fontSize: 10,
+            textAlign: 'left',
+            cursor: 'pointer',
+            padding: '4px 0',
+            textDecoration: 'underline',
+          }}
+        >
+          Показать подсказку для новичков ещё раз
+        </button>
       </div>
     </div>
   )
