@@ -3,6 +3,8 @@ import Image from 'next/image'
 // Прямой URL на последний .exe из GitHub Releases. До первого релиза — ведёт на
 // страницу releases (покажет "No releases"). После `git tag v0.1.0` → auto-update.
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest'
+// Telegram-канал для beta-фидбека — пока основной канал связи с юзерами.
+const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
 export default function LandingPage() {
   return (
@@ -22,6 +24,9 @@ export default function LandingPage() {
         <div className="flex items-center gap-3">
           <a href="#pricing" className="text-sm text-white/70 hover:text-white transition">Цена</a>
           <a href="#faq" className="text-sm text-white/70 hover:text-white transition">FAQ</a>
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition">
+            Фидбек
+          </a>
           <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 transition">
             Скачать
           </a>
@@ -270,9 +275,9 @@ export default function LandingPage() {
             © 2026
           </div>
           <div className="flex items-center gap-6 text-sm text-white/50">
-            <a href="https://t.me/kika_ai" className="hover:text-white transition">Telegram</a>
-            <a href="https://discord.gg/kika" className="hover:text-white transition">Discord</a>
-            <a href="mailto:hello@kika.ai" className="hover:text-white transition">Support</a>
+            <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Telegram</a>
+            {/* <a href="https://discord.gg/kika" className="hover:text-white transition">Discord</a> */}
+            {/* <a href="mailto:hello@kika.ai" className="hover:text-white transition">Support</a> */}
           </div>
         </div>
       </footer>
