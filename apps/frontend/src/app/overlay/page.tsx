@@ -246,6 +246,18 @@ export default function OverlayPage() {
     try { localStorage.setItem(EMOTION_STORAGE_KEY, emotion) } catch {}
   }, [emotion])
 
+  // Авто-старт hands-free при запуске приложения — Kika сразу готова слушать,
+  // не нужно Ctrl+Z искать. Бежит один раз через ref-флаг.
+  const autoStartedAtBootRef = useRef(false)
+  useEffect(() => {
+    if (autoStartedAtBootRef.current) return
+    if (mic.state === 'off') {
+      autoStartedAtBootRef.current = true
+      mic.start()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mic.state])
+
   // Авто-старт VAD при открытии настроек — чтобы юзер видел как его голос
   // реагирует на порог даже без Ctrl+Z. При закрытии — стопим VAD только если
   // это мы его сами подняли (не трогаем hands-free который юзер включил руками).
