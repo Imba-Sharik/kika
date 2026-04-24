@@ -15,12 +15,6 @@ export async function Header() {
           <Link href="/" className="hover:text-foreground text-muted-foreground transition-colors">
             Главная
           </Link>
-          <Link href="/chat-test" className="hover:text-foreground text-muted-foreground transition-colors">
-            Чат
-          </Link>
-          <Link href="/emotion-editor" className="hover:text-foreground text-muted-foreground transition-colors">
-            Эмоции
-          </Link>
         </nav>
         <UserNav session={session} />
       </div>

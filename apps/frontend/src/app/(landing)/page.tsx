@@ -1,5 +1,8 @@
-import Link from 'next/link'
 import Image from 'next/image'
+
+// Прямой URL на последний .exe из GitHub Releases. До первого релиза — ведёт на
+// страницу releases (покажет "No releases"). После `git tag v0.1.0` → auto-update.
+const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest'
 
 export default function LandingPage() {
   return (
@@ -19,9 +22,9 @@ export default function LandingPage() {
         <div className="flex items-center gap-3">
           <a href="#pricing" className="text-sm text-white/70 hover:text-white transition">Цена</a>
           <a href="#faq" className="text-sm text-white/70 hover:text-white transition">FAQ</a>
-          <Link href="/chat-test" className="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 transition">
-            Попробовать
-          </Link>
+          <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 transition">
+            Скачать
+          </a>
         </div>
       </nav>
 
@@ -42,12 +45,12 @@ export default function LandingPage() {
           и всегда рядом. Не просто ассистент — напарник с характером.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="#pricing"
+          <a
+            href={DOWNLOAD_URL}
             className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-4 text-base font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
           >
-            <span className="relative z-10">Начать за $19/мес</span>
-          </Link>
+            <span className="relative z-10">Скачать для Windows</span>
+          </a>
           <a
             href="#how"
             className="rounded-xl border border-white/15 px-8 py-4 text-base font-medium hover:bg-white/5 transition"
@@ -55,7 +58,7 @@ export default function LandingPage() {
             Как это работает
           </a>
         </div>
-        <p className="mt-4 text-xs text-white/50">Первые 7 дней бесплатно · Отмена в один клик</p>
+        <p className="mt-4 text-xs text-white/50">Бесплатно в beta · macOS и Linux скоро</p>
 
         {/* Hero illustration — персонаж */}
         <div className="relative mt-16 mx-auto max-w-3xl">
@@ -177,11 +180,14 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
-            <button className="block w-full rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-6 py-4 text-center font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50">
-              Попробовать 7 дней бесплатно
-            </button>
+            <a
+              href={DOWNLOAD_URL}
+              className="block w-full rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-6 py-4 text-center font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
+            >
+              Скачать для Windows
+            </a>
             <p className="mt-3 text-center text-xs text-white/50">
-              Подписка активна после trial. Отмена в один клик.
+              Сейчас бесплатно во время beta. Подписка — когда выйдет v1.
             </p>
           </div>
         </div>
@@ -241,18 +247,18 @@ export default function LandingPage() {
           />
         </div>
         <h2 className="mb-4 text-4xl font-bold">
-          Попробуй 7 дней.<br />
-          Потом сам поймёшь.
+          Установи за минуту.<br />
+          Дальше — как со старым другом.
         </h2>
         <p className="mb-8 text-white/60">
-          Никаких карт до конца trial. Без спама. Отмена в один клик.
+          Beta сейчас бесплатна. Без карт, без спама.
         </p>
-        <Link
-          href="#pricing"
+        <a
+          href={DOWNLOAD_URL}
           className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-4 font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
         >
-          Начать бесплатно →
-        </Link>
+          Скачать для Windows →
+        </a>
       </section>
 
       {/* Footer */}
