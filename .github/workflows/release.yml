@@ -7,6 +7,11 @@ on:
     tags:
       - 'v*'
 
+# Нужно для публикации в GitHub Releases через встроенный GITHUB_TOKEN.
+# Без этого electron-builder получает 403 Forbidden при попытке создать релиз.
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
