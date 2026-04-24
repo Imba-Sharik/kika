@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 // Stable download URL — filename is pinned via electron-builder artifactName,
 // so this link always points to the latest release without any updates to the landing.
-const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Kika-Setup-x64.exe'
+const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 // Telegram group — main feedback channel for beta users.
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
@@ -19,7 +19,7 @@ export default function LandingPageEn() {
       {/* Navbar */}
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-2 text-lg font-semibold">
-          <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Kika</span>
+          <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Yukai</span>
         </div>
         <div className="flex items-center gap-3">
           <a href="#pricing" className="text-sm text-white/70 hover:text-white transition">Pricing</a>
@@ -52,7 +52,7 @@ export default function LandingPageEn() {
           </span>
         </h1>
         <p className="mx-auto mb-10 max-w-2xl text-lg text-white/70">
-          Kika talks back, dictates your messages, Shazams music from any app,
+          Yukai talks back, dictates your messages, Shazams music from any app,
           and is always right there. Not just an assistant — a partner with personality.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -78,7 +78,7 @@ export default function LandingPageEn() {
             <div className="flex items-center justify-center">
               <Image
                 src="/kika/emotions/happy.png"
-                alt="Kika"
+                alt="Yukai"
                 width={928}
                 height={1232}
                 className="h-auto w-64 md:w-80"
@@ -87,7 +87,7 @@ export default function LandingPageEn() {
               />
             </div>
             <div className="mt-6 rounded-2xl bg-black/40 p-4 text-left">
-              <div className="mb-2 text-xs font-medium text-pink-400">Kika · happy</div>
+              <div className="mb-2 text-xs font-medium text-pink-400">Yukai · happy</div>
               <div className="text-sm text-white/80">
                 &ldquo;Hey! Ready to help you today. What should we do first — check your email or listen to music?&rdquo;
               </div>
@@ -100,7 +100,7 @@ export default function LandingPageEn() {
       <section id="features" className="mx-auto max-w-6xl px-6 py-24">
         <h2 className="mb-4 text-center text-4xl font-bold">What she can do</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          Three core features — each one replaces a separate app. All inside one Kika.
+          Three core features — each one replaces a separate app. All inside one Yukai.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -119,7 +119,7 @@ export default function LandingPageEn() {
             {
               emoji: '🎵',
               title: 'Shazam in your headphones',
-              desc: 'Song playing in YouTube or a game? Alt+` — Kika listens through system audio and tells you the title.',
+              desc: 'Song playing in YouTube or a game? Alt+` — Yukai listens through system audio and tells you the title.',
               color: 'from-pink-500/20 to-violet-500/10',
             },
           ].map((f) => (
@@ -139,13 +139,13 @@ export default function LandingPageEn() {
       <section id="how" className="mx-auto max-w-6xl px-6 py-24">
         <h2 className="mb-4 text-center text-4xl font-bold">How it looks</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          Kika is a transparent window on top of all your apps. Visible, but never in the way.
+          Yukai is a transparent window on top of all your apps. Visible, but never in the way.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { n: '01', title: 'Install and launch', desc: 'Download the .exe and run it — Kika appears in the corner of your screen.' },
+            { n: '01', title: 'Install and launch', desc: 'Download the .exe and run it — Yukai appears in the corner of your screen.' },
             { n: '02', title: 'Tune her personality', desc: 'Pick a voice, emotions. Soon — custom characters from creators.' },
-            { n: '03', title: 'Live as usual', desc: 'Work, game, watch YouTube. Kika is right there, responds when needed.' },
+            { n: '03', title: 'Live as usual', desc: 'Work, game, watch YouTube. Yukai is right there, responds when needed.' },
           ].map((s) => (
             <div key={s.n} className="relative">
               <div className="mb-4 text-6xl font-bold bg-gradient-to-br from-pink-400 to-violet-400 bg-clip-text text-transparent">
@@ -179,7 +179,7 @@ export default function LandingPageEn() {
                 'Unlimited voice chat',
                 'Voice dictation into any window',
                 'Music recognition through system audio',
-                'All emotions and Kika personality',
+                'All emotions and Yukai personality',
                 'Access to upcoming marketplace characters',
                 'Priority support',
               ].map((item) => (
@@ -215,7 +215,7 @@ export default function LandingPageEn() {
             },
             {
               q: 'Do I need internet?',
-              a: 'Yes, Kika\'s voice and brain work through the cloud (Claude AI + Fish Audio). Normal home internet is enough.',
+              a: 'Yes, Yukai\'s voice and brain work through the cloud (Claude AI + Fish Audio). Normal home internet is enough.',
             },
             {
               q: 'How many languages does she speak?',
@@ -250,7 +250,7 @@ export default function LandingPageEn() {
         <div className="mx-auto mb-8 w-32">
           <Image
             src="/kika/emotions/wink.png"
-            alt="Kika winking"
+            alt="Yukai winking"
             width={928}
             height={1232}
             className="h-auto w-full"
@@ -276,7 +276,7 @@ export default function LandingPageEn() {
       <footer className="border-t border-white/5 py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 md:flex-row">
           <div className="text-sm text-white/50">
-            <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text font-semibold text-transparent">Kika</span>
+            <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text font-semibold text-transparent">Yukai</span>
             {' · '}
             © 2026
           </div>

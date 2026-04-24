@@ -36,7 +36,7 @@ export function loadCharacter(): Character {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) return JSON.parse(raw)
   } catch {}
-  return { id: 'default', name: 'Kika', animations: {} }
+  return { id: 'default', name: 'Yukai', animations: {} }
 }
 
 export function saveCharacter(c: Character) {

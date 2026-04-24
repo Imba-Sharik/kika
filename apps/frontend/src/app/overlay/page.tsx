@@ -461,7 +461,7 @@ export default function OverlayPage() {
                 background: 'rgba(0,0,0,0.3)',
                 fontFamily: 'ui-monospace, monospace',
                 fontSize: 11,
-              }}>Ctrl+Z</kbd> или кликни на полоски под Кикой:
+              }}>Ctrl+Z</kbd> или кликни на полоски под Yukai:
               <span style={{
                 display: 'inline-flex',
                 gap: 2,
@@ -553,7 +553,7 @@ export default function OverlayPage() {
             ...pluginItems,
             {
               icon: '🧠',
-              title: 'Память Kika (открыть папку)',
+              title: 'Память Yukai (открыть папку)',
               action: () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const api = (window as any).electronAPI
@@ -624,7 +624,7 @@ export default function OverlayPage() {
               transition: 'background 200ms, box-shadow 200ms',
             }}
           />
-          <span style={{ color: '#fbbf24', fontWeight: 600 }}>Kika</span>
+          <span style={{ color: '#fbbf24', fontWeight: 600 }}>Yukai</span>
           <span style={{ color: '#9ca3af' }}>·</span>
           <span style={{ color: '#d1d5db', flex: 1 }}>
             {chat.error ? 'ошибка' : chat.speaking ? 'говорит' : chat.loading ? 'думает' : 'готова'}
@@ -694,7 +694,7 @@ export default function OverlayPage() {
             return (
               <div key={i} style={{ marginBottom: 8 }}>
                 <div style={{ color: isAssistant ? '#fbbf24' : '#60a5fa', fontSize: 10 }}>
-                  {isAssistant ? 'Kika' : 'ты'}
+                  {isAssistant ? 'Yukai' : 'ты'}
                 </div>
                 <div style={{ whiteSpace: 'pre-wrap' }}>{displayText}</div>
                 {imageParts.length > 0 && (
@@ -723,7 +723,7 @@ export default function OverlayPage() {
           {chat.streaming && (
             <div style={{ marginBottom: 8 }}>
               <div style={{ color: '#fbbf24', fontSize: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span>Kika</span>
+                <span>Yukai</span>
                 {chat.lastTimings && (
                   <span style={{ color: '#888', fontVariantNumeric: 'tabular-nums' }}>
                     ⏱ LLM {(chat.lastTimings.llmMs / 1000).toFixed(2)}s · TTS {((chat.lastTimings.ttsMs - chat.lastTimings.llmMs) / 1000).toFixed(2)}s · всего {(chat.lastTimings.ttsMs / 1000).toFixed(2)}s

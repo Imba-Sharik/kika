@@ -163,7 +163,7 @@ export function KikaFace({ emotion, audio, size = 320, overrides }: Props) {
       <img
         key={currentSrc}
         src={currentSrc}
-        alt={`Kika ${emotion}`}
+        alt={`Yukai ${emotion}`}
         width={size}
         height={size * 1.33}
         className="pointer-events-none relative h-full w-full object-contain"

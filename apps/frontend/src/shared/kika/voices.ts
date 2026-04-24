@@ -10,7 +10,7 @@ export type Voice = {
 export const BUILTIN_VOICES: Voice[] = [
   {
     id: 'eleven-kika',
-    label: 'ElevenLabs — Kika',
+    label: 'ElevenLabs — Yukai',
     provider: 'elevenlabs',
     voiceId: 'YQ8Df5FlfEfMCfGNZHsN',
   },

@@ -1,8 +1,8 @@
 {
-  "name": "kika-desktop",
-  "productName": "Kika",
-  "version": "0.1.5",
-  "description": "Kika — AI-desktop-компаньон (ANIRUM)",
+  "name": "yukai-desktop",
+  "productName": "Yukai",
+  "version": "0.2.0",
+  "description": "Yukai — AI-desktop-компаньон",
   "author": {
     "name": "ANIRUM",
     "email": "sharinigor1@gmail.com"
@@ -23,11 +23,11 @@
     "uiohook-napi": "^1.5.5"
   },
   "build": {
-    "appId": "com.anirum.kika",
-    "productName": "Kika",
-    "copyright": "Copyright © 2026 ANIRUM",
+    "appId": "com.yukai.app",
+    "productName": "Yukai",
+    "copyright": "Copyright © 2026 Yukai",
     "electronVersion": "33.4.11",
-    "artifactName": "Kika-Setup-${arch}.${ext}",
+    "artifactName": "Yukai-Setup-${arch}.${ext}",
     "directories": {
       "output": "dist",
       "buildResources": "assets"
@@ -63,7 +63,7 @@
       "perMachine": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Kika"
+      "shortcutName": "Yukai"
     }
   }
 }

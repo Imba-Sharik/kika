@@ -6,7 +6,7 @@ export const runtime = 'nodejs'
 export const maxDuration = 30
 
 const DEFAULT_PROMPT =
-  'Кика, AI-компаньон, робот, аниме, персонаж, голос, эмоция, подписка, ANIRUM, ElevenLabs, Fish Audio.'
+  'Юкай, Yukai, AI-компаньон, робот, аниме, персонаж, голос, эмоция, подписка, ElevenLabs, Fish Audio.'
 
 // Whisper обучен на YouTube-субтитрах и при тишине/шуме галлюцинирует
 // знакомые фразы. Режем их, возвращаем пустую строку (юзер ничего не сказал).

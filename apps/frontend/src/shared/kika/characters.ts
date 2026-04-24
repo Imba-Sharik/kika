@@ -9,8 +9,8 @@ export type Character = {
 
 export const BUILTIN_CHARACTERS: Character[] = [
   {
-    id: 'kika-default',
-    name: 'Кика',
+    id: 'yukai-default',
+    name: 'Юкай',
     persona: KIKA_DEFAULT_PERSONA,
     voiceId: 'eleven-kika',
   },

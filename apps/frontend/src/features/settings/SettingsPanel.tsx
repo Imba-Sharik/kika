@@ -115,7 +115,7 @@ export function SettingsPanel({
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            Голос Kika
+            Голос Yukai
           </label>
           <select
             value={voiceId}

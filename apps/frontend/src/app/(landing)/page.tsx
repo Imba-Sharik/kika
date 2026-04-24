@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
 // Стабильная ссылка на последний .exe. Имя файла фиксировано через
-// electron-builder build.artifactName = "Kika-Setup-${arch}.${ext}" — поэтому
+// electron-builder build.artifactName = "Yukai-Setup-${arch}.${ext}" — поэтому
 // эта ссылка работает для ВСЕХ будущих версий без правок лендинга.
-const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Kika-Setup-x64.exe'
+const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 // Telegram-канал для beta-фидбека — пока основной канал связи с юзерами.
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
@@ -20,7 +20,7 @@ export default function LandingPage() {
       {/* Navbar */}
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-2 text-lg font-semibold">
-          <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Kika</span>
+          <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Yukai</span>
         </div>
         <div className="flex items-center gap-3">
           <a href="#pricing" className="text-sm text-white/70 hover:text-white transition">Цена</a>
@@ -53,7 +53,7 @@ export default function LandingPage() {
           </span>
         </h1>
         <p className="mx-auto mb-10 max-w-2xl text-lg text-white/70">
-          Kika разговаривает голосом, диктует твои письма, узнаёт музыку в наушниках
+          Yukai разговаривает голосом, диктует твои письма, узнаёт музыку в наушниках
           и всегда рядом. Не просто ассистент — напарник с характером.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -79,7 +79,7 @@ export default function LandingPage() {
             <div className="flex items-center justify-center">
               <Image
                 src="/kika/emotions/happy.png"
-                alt="Kika"
+                alt="Yukai"
                 width={928}
                 height={1232}
                 className="h-auto w-64 md:w-80"
@@ -88,7 +88,7 @@ export default function LandingPage() {
               />
             </div>
             <div className="mt-6 rounded-2xl bg-black/40 p-4 text-left">
-              <div className="mb-2 text-xs font-medium text-pink-400">Kika · счастлива</div>
+              <div className="mb-2 text-xs font-medium text-pink-400">Yukai · счастлива</div>
               <div className="text-sm text-white/80">
                 &ldquo;Привет! Готова помочь тебе сегодня. Что сделаем первым — проверим почту или послушаем музыку?&rdquo;
               </div>
@@ -101,7 +101,7 @@ export default function LandingPage() {
       <section id="features" className="mx-auto max-w-6xl px-6 py-24">
         <h2 className="mb-4 text-center text-4xl font-bold">Что она умеет</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          Три главные фичи — каждая заменяет отдельное приложение. Всё в одной Kika.
+          Три главные фичи — каждая заменяет отдельное приложение. Всё в одной Yukai.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -120,7 +120,7 @@ export default function LandingPage() {
             {
               emoji: '🎵',
               title: 'Shazam в наушниках',
-              desc: 'Играет песня в YouTube или игре? Alt+` — Kika услышит через системный звук и скажет название.',
+              desc: 'Играет песня в YouTube или игре? Alt+` — Yukai услышит через системный звук и скажет название.',
               color: 'from-pink-500/20 to-violet-500/10',
             },
           ].map((f) => (
@@ -140,13 +140,13 @@ export default function LandingPage() {
       <section id="how" className="mx-auto max-w-6xl px-6 py-24">
         <h2 className="mb-4 text-center text-4xl font-bold">Как это выглядит</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          Kika — прозрачное окно поверх всех программ. Видно её, но она не мешает.
+          Yukai — прозрачное окно поверх всех программ. Видно её, но она не мешает.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { n: '01', title: 'Установи и запусти', desc: 'Скачай .exe, открой — Kika появляется в углу экрана.' },
+            { n: '01', title: 'Установи и запусти', desc: 'Скачай .exe, открой — Yukai появляется в углу экрана.' },
             { n: '02', title: 'Настрой характер', desc: 'Выбери голос, эмоции. Позже — кастомные персонажи от креаторов.' },
-            { n: '03', title: 'Живи как обычно', desc: 'Работай, играй, смотри ютуб. Kika всегда рядом, отвечает когда нужно.' },
+            { n: '03', title: 'Живи как обычно', desc: 'Работай, играй, смотри ютуб. Yukai всегда рядом, отвечает когда нужно.' },
           ].map((s) => (
             <div key={s.n} className="relative">
               <div className="mb-4 text-6xl font-bold bg-gradient-to-br from-pink-400 to-violet-400 bg-clip-text text-transparent">
@@ -180,7 +180,7 @@ export default function LandingPage() {
                 'Безлимитный чат с голосом',
                 'Голосовая диктовка в любое окно',
                 'Распознавание музыки через наушники',
-                'Все эмоции и характер Kika',
+                'Все эмоции и характер Yukai',
                 'Доступ к будущим персонажам маркетплейса',
                 'Приоритетная поддержка',
               ].map((item) => (
@@ -216,7 +216,7 @@ export default function LandingPage() {
             },
             {
               q: 'Нужен ли интернет?',
-              a: 'Да, голос и мозг Kika работают через облако (Claude AI + Fish Audio). Обычный домашний интернет справляется.',
+              a: 'Да, голос и мозг Yukai работают через облако (Claude AI + Fish Audio). Обычный домашний интернет справляется.',
             },
             {
               q: 'Сколько языков знает?',
@@ -227,7 +227,7 @@ export default function LandingPage() {
               a: 'Базовые — бесплатно. Скоро откроется маркетплейс с голосами и персонажами от креаторов (включая аниме-артистов и сэйю).',
             },
             {
-              q: 'Что делает Kika с моими данными?',
+              q: 'Что делает Yukai с моими данными?',
               a: 'Разговоры не сохраняются на серверах дольше обработки. Локальная память хранится только у тебя на компьютере.',
             },
             {
@@ -251,7 +251,7 @@ export default function LandingPage() {
         <div className="mx-auto mb-8 w-32">
           <Image
             src="/kika/emotions/wink.png"
-            alt="Kika winking"
+            alt="Yukai winking"
             width={928}
             height={1232}
             className="h-auto w-full"
@@ -277,7 +277,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/5 py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 md:flex-row">
           <div className="text-sm text-white/50">
-            <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text font-semibold text-transparent">Kika</span>
+            <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text font-semibold text-transparent">Yukai</span>
             {' · '}
             © 2026
           </div>

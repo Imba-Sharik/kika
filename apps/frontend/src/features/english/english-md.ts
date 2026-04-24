@@ -36,7 +36,7 @@ export function serializeEnglishToMd(items: EnglishItem[]): string {
   const lines: string[] = []
   lines.push('# English Vocabulary')
   lines.push('')
-  lines.push('> Автоматически управляется Kika. Ты можешь редактировать этот файл вручную — она подхватит изменения.')
+  lines.push('> Автоматически управляется Yukai. Ты можешь редактировать этот файл вручную — она подхватит изменения.')
   lines.push('')
   lines.push(`**Всего: ${items.length}** · ✅ ${known} знаю · 📚 ${learning} учу · 🆕 ${newish} новых`)
   lines.push('')

@@ -4,17 +4,27 @@ const { exec } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-// Папка с памятью Kika (у юзера в home). Kika будет здесь хранить свои заметки.
-const MEMORY_DIR = path.join(app.getPath('home'), 'kika-memory')
+// Папка с памятью Yukai. Ребренд с Kika → Yukai: если у юзера осталась
+// старая папка kika-memory — переименовываем в yukai-memory, сохраняя профиль.
+const MEMORY_DIR = path.join(app.getPath('home'), 'yukai-memory')
+const LEGACY_MEMORY_DIR = path.join(app.getPath('home'), 'kika-memory')
 
 function ensureMemoryDir() {
   try {
+    // Миграция со старой папки (v0.1.x юзеры)
+    if (!fs.existsSync(MEMORY_DIR) && fs.existsSync(LEGACY_MEMORY_DIR)) {
+      try {
+        fs.renameSync(LEGACY_MEMORY_DIR, MEMORY_DIR)
+        console.log('[main] migrated kika-memory → yukai-memory')
+      } catch (err) {
+        console.error('[main] memory migration failed, creating fresh:', err)
+      }
+    }
     if (!fs.existsSync(MEMORY_DIR)) {
       fs.mkdirSync(MEMORY_DIR, { recursive: true })
-      // Создаём стартовый README чтобы папка не была пустой
       fs.writeFileSync(
         path.join(MEMORY_DIR, 'README.md'),
-        '# Память Kika\n\nЗдесь Kika хранит заметки о тебе, прогресс и важные разговоры.\n\nФайлы обновляются через чат: скажи "запомни X" — Kika добавит.\n',
+        '# Память Yukai\n\nЗдесь Yukai хранит заметки о тебе, прогресс и важные разговоры.\n\nФайлы обновляются через чат: скажи "запомни X" — Yukai добавит.\n',
         'utf8',
       )
     }
@@ -76,7 +86,7 @@ function createWindow() {
   // URL фронта: в dev-режиме localhost, в packaged билде — prod-домен.
   // Переопределить можно через env KIKA_APP_URL (полезно для staging / custom-домена).
   const devUrl = 'http://localhost:3000/overlay'
-  const prodUrl = process.env.KIKA_APP_URL || 'https://kika-frontend.vercel.app/overlay'
+  const prodUrl = process.env.YUKAI_APP_URL || 'https://yukai.app/overlay'
   mainWindow.loadURL(app.isPackaged ? prodUrl : devUrl)
 
   // DevTools не открываем автоматически. Для отладки — запусти с KIKA_DEVTOOLS=1
