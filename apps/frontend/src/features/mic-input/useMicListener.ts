@@ -19,6 +19,7 @@ type MicVADInstance = {
   start: () => void
   pause: () => void
   destroy: () => void
+  setOptions: (update: { positiveSpeechThreshold?: number; negativeSpeechThreshold?: number }) => void
 }
 
 // Headless VAD-хук: всё поведение ListenButton без UI.
@@ -63,6 +64,17 @@ export function useMicListener({
   useEffect(() => {
     onSpeechChangeRef.current = onSpeechChange
   }, [onSpeechChange])
+
+  // Живое обновление порога — без перезапуска VAD. setOptions пробрасывает
+  // новые значения во frame-processor, следующий frame уже использует их.
+  useEffect(() => {
+    const vad = vadRef.current
+    if (!vad) return
+    vad.setOptions({
+      positiveSpeechThreshold: vadThreshold,
+      negativeSpeechThreshold: Math.max(0.1, vadThreshold * 0.6),
+    })
+  }, [vadThreshold])
 
   useEffect(() => {
     pausedRef.current = !!paused
