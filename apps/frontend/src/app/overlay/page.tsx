@@ -122,6 +122,10 @@ export default function OverlayPage() {
   })
 
   // Hands-free listener — headless VAD. UI рисует MicBars под персонажем.
+  // Флаг что VAD подняли авто-для-настроек, а не юзер через Ctrl+Z.
+  // Объявлено до useMicListener потому что используется в testMode prop.
+  const autoStartedByPanelRef = useRef(false)
+
   // Barge-in: мик слушает во время ответа Кики. Когда VAD ловит речь юзера
   // в момент TTS — прерываем Кику (chat.interrupt), VAD продолжает запись
   // и по концу реплики шлёт транскрипт в send.
@@ -134,6 +138,9 @@ export default function OverlayPage() {
     },
     deviceId: micDeviceId || undefined,
     vadThreshold,
+    // Когда Settings открыты и мик авто-поднят — крутим VAD для UI-бара,
+    // но не шлём речь в STT/Клода (иначе каждое тестовое «привет» = разговор).
+    testMode: settingsOpen && autoStartedByPanelRef.current,
   })
 
   // Dictation и Music — теперь плагины. Их Provider'ы монтируются в
@@ -242,7 +249,6 @@ export default function OverlayPage() {
   // Авто-старт VAD при открытии настроек — чтобы юзер видел как его голос
   // реагирует на порог даже без Ctrl+Z. При закрытии — стопим VAD только если
   // это мы его сами подняли (не трогаем hands-free который юзер включил руками).
-  const autoStartedByPanelRef = useRef(false)
   useEffect(() => {
     if (settingsOpen) {
       if (mic.state === 'off' || mic.state === 'error') {

@@ -13,6 +13,9 @@ type Options = {
   // Порог срабатывания VAD: 0.3 (низкий = чувствительный, ловит тихий голос + шум) …
   // 0.9 (высокий = только уверенная речь). Дефолт 0.4 — компромисс для тихой комнаты.
   vadThreshold?: number
+  // Test mode: VAD работает (крутит onFrameProcessed для UI), но не шлёт речь
+  // в STT/чат. Используется для настройки порога без "случайных разговоров".
+  testMode?: boolean
 }
 
 type MicVADInstance = {
@@ -31,6 +34,7 @@ export function useMicListener({
   language = 'ru',
   deviceId,
   vadThreshold = 0.4,
+  testMode = false,
 }: Options) {
   const [state, setState] = useState<VadState>('off')
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +51,8 @@ export function useMicListener({
   // callback захватывается закрытием. Без ref barge-in ломается: onSpeechChange
   // читает state Кики из момента включения мика, а не из текущего рендера.
   const onSpeechChangeRef = useRef(onSpeechChange)
+  // testMode через ref — MicVAD callbacks захватывают закрытие один раз в start().
+  const testModeRef = useRef(testMode)
 
   function setStateBoth(s: VadState) {
     if (s === 'off' && stateRef.current !== 'off') {
@@ -64,6 +70,10 @@ export function useMicListener({
   useEffect(() => {
     onSpeechChangeRef.current = onSpeechChange
   }, [onSpeechChange])
+
+  useEffect(() => {
+    testModeRef.current = testMode
+  }, [testMode])
 
   // Живое обновление порога — без перезапуска VAD. setOptions пробрасывает
   // новые значения во frame-processor, следующий frame уже использует их.
@@ -137,6 +147,8 @@ export function useMicListener({
         onSpeechEnd: (audio) => {
           setStateBoth('listening')
           onSpeechChangeRef.current?.(false)
+          // В test-режиме (настройки открыты) не шлём речь в STT/чат.
+          if (testModeRef.current) return
           void sendAudio(audio)
         },
         onFrameProcessed: (probs) => {
