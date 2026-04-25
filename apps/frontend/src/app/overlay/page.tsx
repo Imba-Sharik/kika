@@ -110,10 +110,14 @@ export default function OverlayPage() {
   // Показываем первую подсказку «как начать разговор» один раз. Ключ версионирован —
   // при значительных правках онбординга бампай суффикс, юзеры увидят обновлённую версию.
   const ONBOARDING_KEY = 'kika:onboarding-seen-v1'
-  const [showOnboarding, setShowOnboarding] = useState(() => {
-    if (typeof window === 'undefined') return false
-    try { return localStorage.getItem(ONBOARDING_KEY) !== 'true' } catch { return false }
-  })
+  // Default false на SSR и первом рендере → совпадает с клиентом → нет hydration mismatch.
+  // useEffect читает localStorage уже после маунта.
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(ONBOARDING_KEY) !== 'true') setShowOnboarding(true)
+    } catch {}
+  }, [])
   function dismissOnboarding() {
     setShowOnboarding(false)
     try { localStorage.setItem(ONBOARDING_KEY, 'true') } catch {}
