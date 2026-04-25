@@ -66,39 +66,46 @@ export default function OverlayPage() {
   const [emotion, setEmotion] = useState<Emotion>('neutral')
   const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null)
   const [mics, setMics] = useState<MediaDeviceInfo[]>([])
-  const [micDeviceId, setMicDeviceId] = useState<string>(() => {
-    if (typeof window === 'undefined') return ''
-    try { return localStorage.getItem(MIC_STORAGE_KEY) ?? '' } catch { return '' }
-  })
-  const [voiceId, setVoiceId] = useState<string>(() => {
-    if (typeof window === 'undefined') return DEFAULT_VOICE_ID
-    try { return localStorage.getItem(VOICE_STORAGE_KEY) ?? DEFAULT_VOICE_ID } catch { return DEFAULT_VOICE_ID }
-  })
+  // Все localStorage-state'ы стартуют с дефолтов (одинаковых SSR↔CSR) и подхватываются
+  // в useEffect — иначе hydration mismatch на каждом из <select value=...>.
+  const [micDeviceId, setMicDeviceId] = useState<string>('')
+  const [voiceId, setVoiceId] = useState<string>(DEFAULT_VOICE_ID)
+  useEffect(() => {
+    try {
+      const m = localStorage.getItem(MIC_STORAGE_KEY)
+      if (m) setMicDeviceId(m)
+      const v = localStorage.getItem(VOICE_STORAGE_KEY)
+      if (v) setVoiceId(v)
+    } catch {}
+  }, [])
   const voice = findVoice(voiceId, [])
   function selectVoice(id: string) {
     setVoiceId(id)
     try { localStorage.setItem(VOICE_STORAGE_KEY, id) } catch {}
   }
   const [micLevel, setMicLevel] = useState(0)
-  const [vadThreshold, setVadThreshold] = useState<number>(() => {
-    if (typeof window === 'undefined') return DEFAULT_VAD_THRESHOLD
+  const [vadThreshold, setVadThreshold] = useState<number>(DEFAULT_VAD_THRESHOLD)
+  useEffect(() => {
     try {
       const saved = localStorage.getItem(VAD_THRESHOLD_KEY)
-      const num = saved ? parseFloat(saved) : DEFAULT_VAD_THRESHOLD
-      return Number.isFinite(num) && num > 0 && num < 1 ? num : DEFAULT_VAD_THRESHOLD
-    } catch { return DEFAULT_VAD_THRESHOLD }
-  })
+      if (!saved) return
+      const num = parseFloat(saved)
+      if (Number.isFinite(num) && num > 0 && num < 1) setVadThreshold(num)
+    } catch {}
+  }, [])
   function selectVadThreshold(v: number) {
     setVadThreshold(v)
     try { localStorage.setItem(VAD_THRESHOLD_KEY, String(v)) } catch {}
   }
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window === 'undefined') return 'ru'
+  // Default 'ru' на SSR и первом рендере, useEffect подхватывает реальное значение
+  // из localStorage после маунта — иначе hydration mismatch.
+  const [language, setLanguage] = useState<Language>('ru')
+  useEffect(() => {
     try {
       const saved = localStorage.getItem(LANGUAGE_KEY)
-      return saved === 'en' || saved === 'ru' ? saved : 'ru'
-    } catch { return 'ru' }
-  })
+      if (saved === 'en' || saved === 'ru') setLanguage(saved)
+    } catch {}
+  }, [])
   function selectLanguage(l: Language) {
     setLanguage(l)
     try { localStorage.setItem(LANGUAGE_KEY, l) } catch {}
