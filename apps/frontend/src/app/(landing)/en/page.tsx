@@ -22,13 +22,13 @@ export default function LandingPageEn() {
           <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Yukai</span>
         </div>
         <div className="flex items-center gap-3">
-          <a href="#pricing" className="text-sm text-white/70 hover:text-white transition">Pricing</a>
-          <a href="#faq" className="text-sm text-white/70 hover:text-white transition">FAQ</a>
-          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition">
+          <a href="#pricing" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Pricing</a>
+          <a href="#faq" className="hidden md:inline text-sm text-white/70 hover:text-white transition">FAQ</a>
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
             Chat with dev
           </a>
           <a href="/" className="text-sm text-white/50 hover:text-white transition" title="Русский">RU</a>
-          <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 transition">
+          <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium hover:bg-white/15 transition">
             Download
           </a>
         </div>
