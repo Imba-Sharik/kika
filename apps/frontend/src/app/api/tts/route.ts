@@ -1,7 +1,7 @@
 import { experimental_generateSpeech as generateSpeech } from 'ai'
 import { elevenlabs } from '@ai-sdk/elevenlabs'
 import { NextRequest } from 'next/server'
-import type { Emotion } from '@/shared/kika/persona'
+import type { Emotion } from '@/shared/yukai/persona'
 
 export const runtime = 'nodejs'
 

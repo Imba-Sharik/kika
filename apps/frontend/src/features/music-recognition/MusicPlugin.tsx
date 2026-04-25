@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, type ReactNode } from 'react'
-import type { KikaPlugin, KikaContext } from '@/features/plugin-system/types'
+import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 import { useMusicRecognition, type MusicItem } from './useMusicRecognition'
 import { MusicPanel } from './MusicPanel'
 
@@ -20,7 +20,7 @@ function useMusicPlugin(): MusicPluginState {
   return v
 }
 
-function MusicProvider({ ctx, children }: { ctx: KikaContext; children: ReactNode }) {
+function MusicProvider({ ctx, children }: { ctx: YukaiContext; children: ReactNode }) {
   const music = useMusicRecognition({
     onResult: (text) => void ctx.chat.send(text),
     onEmotion: (e) => ctx.ui.setEmotion(e),
@@ -42,7 +42,7 @@ function MusicProvider({ ctx, children }: { ctx: KikaContext; children: ReactNod
   return <MusicCtx.Provider value={music}>{children}</MusicCtx.Provider>
 }
 
-function MusicPanelSlot({ ctx }: { ctx: KikaContext }) {
+function MusicPanelSlot({ ctx }: { ctx: YukaiContext }) {
   const music = useMusicPlugin()
   return <MusicPanel history={music.history} onClose={() => ctx.ui.closePanel()} />
 }
@@ -75,7 +75,7 @@ function MusicStatusBadge() {
   )
 }
 
-export const musicPlugin: KikaPlugin = {
+export const musicPlugin: YukaiPlugin = {
   id: 'music',
   name: 'Распознавание песен',
   icon: '🎵',

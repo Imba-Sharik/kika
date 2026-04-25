@@ -1,9 +1,9 @@
 'use client'
 
-import type { KikaPlugin } from './types'
+import type { YukaiPlugin } from './types'
 
 type Props = {
-  plugins: KikaPlugin[]
+  plugins: YukaiPlugin[]
   isEnabled: (id: string) => boolean
   setEnabled: (id: string, enabled: boolean) => void
 }

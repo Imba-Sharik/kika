@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { extractMediaRequests } from '@/shared/kika/persona'
+import { extractMediaRequests } from '@/shared/yukai/persona'
 
 type ImageHit = {
   word: string

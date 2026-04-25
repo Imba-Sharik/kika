@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { Emotion } from '@/shared/kika/persona'
+import type { Emotion } from '@/shared/yukai/persona'
 
-import type { EmotionOverrides } from '@/shared/kika/emotion-overrides'
+import type { EmotionOverrides } from '@/shared/yukai/emotion-overrides'
 
 type Props = {
   emotion: Emotion
@@ -13,28 +13,28 @@ type Props = {
 }
 
 const EMOTION_SRC: Record<Emotion, string> = {
-  neutral: '/kika/emotions/neutral.png',
-  happy: '/kika/emotions/happy.png',
-  excited: '/kika/emotions/excited.png',
-  love: '/kika/emotions/love.png',
-  wink: '/kika/emotions/wink.png',
-  thinking: '/kika/emotions/thinking.png',
-  listening: '/kika/emotions/listening.png',
-  confused: '/kika/emotions/confused.png',
-  surprised: '/kika/emotions/surprised.png',
-  alert: '/kika/emotions/alert.png',
-  flustered: '/kika/emotions/flustered.png',
-  worried: '/kika/emotions/worried.png',
-  sad: '/kika/emotions/sad.png',
-  upset: '/kika/emotions/upset.png',
-  crying: '/kika/emotions/crying.png',
-  angry: '/kika/emotions/angry.png',
-  sleeping: '/kika/emotions/sleeping.png',
+  neutral: '/yukai/emotions/neutral.png',
+  happy: '/yukai/emotions/happy.png',
+  excited: '/yukai/emotions/excited.png',
+  love: '/yukai/emotions/love.png',
+  wink: '/yukai/emotions/wink.png',
+  thinking: '/yukai/emotions/thinking.png',
+  listening: '/yukai/emotions/listening.png',
+  confused: '/yukai/emotions/confused.png',
+  surprised: '/yukai/emotions/surprised.png',
+  alert: '/yukai/emotions/alert.png',
+  flustered: '/yukai/emotions/flustered.png',
+  worried: '/yukai/emotions/worried.png',
+  sad: '/yukai/emotions/sad.png',
+  upset: '/yukai/emotions/upset.png',
+  crying: '/yukai/emotions/crying.png',
+  angry: '/yukai/emotions/angry.png',
+  sleeping: '/yukai/emotions/sleeping.png',
 }
 
 const FADE_MS = 250
 
-export function KikaFace({ emotion, audio, size = 320, overrides }: Props) {
+export function YukaiFace({ emotion, audio, size = 320, overrides }: Props) {
   const [amplitude, setAmplitude] = useState(0)
   const rafRef = useRef<number | null>(null)
   const ctxRef = useRef<AudioContext | null>(null)

@@ -5,11 +5,11 @@ import type { ModelMessage } from 'ai'
 import {
   buildSystemPrompt,
   type Emotion,
-} from '@/shared/kika/persona'
+} from '@/shared/yukai/persona'
 import { fetchTts, playViaBlob, playViaStream, type TtsVoice } from '@/features/tts/audio'
 import { extractSentences } from '@/features/tts/sentenceStream'
 import { executeMemoryTool } from '@/features/memory/executeMemoryTool'
-import type { KikaPlugin, ChatAttachment } from '@/features/plugin-system/types'
+import type { YukaiPlugin, ChatAttachment } from '@/features/plugin-system/types'
 
 // Триггер-слова, при которых разрешаем tool_use. В обычном разговоре tools выключены —
 // лишние tool_calls создают паузы 1-2с между фразами.
@@ -25,7 +25,7 @@ type UseChatOptions = {
   model: ChatModel                   // какая LLM используется
   voice: TtsVoice                    // голос для TTS
   profileMd: string                  // инжектится в [ПАМЯТЬ: profile.md]
-  plugins: KikaPlugin[]              // активные плагины — для injectSystemContext / onChatResponse
+  plugins: YukaiPlugin[]              // активные плагины — для injectSystemContext / onChatResponse
   audioElRef: React.RefObject<HTMLAudioElement | null>
   audioEl: HTMLAudioElement | null
   onEmotion: (e: Emotion) => void    // обновление лица персонажа

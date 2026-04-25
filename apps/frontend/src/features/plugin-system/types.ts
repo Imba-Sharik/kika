@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { Emotion } from '@/shared/kika/persona'
+import type { Emotion } from '@/shared/yukai/persona'
 
 // Разрешения, которые плагин может запросить. Юзер видит и одобряет.
 export type Permission =
@@ -21,7 +21,7 @@ export type ChatAttachment = {
 }
 
 // Core API — то что core предоставляет плагинам.
-export type KikaContext = {
+export type YukaiContext = {
   chat: {
     send: (text: string, attachments?: ChatAttachment[]) => Promise<string | void>
     // Подписка на финальные ответы Kika (когда стрим завершён)
@@ -52,7 +52,7 @@ export type KikaContext = {
 
 // Манифест плагина — метаданные + UI-слоты.
 // Для 3rd-party плагина весь этот объект будет сериализован (кроме компонентов).
-export type KikaPlugin = {
+export type YukaiPlugin = {
   id: string                      // уникальный: 'dictation', 'weather'
   name: string                    // "Диктовка"
   icon: string                    // '⌨️' (emoji или sprite id)
@@ -63,7 +63,7 @@ export type KikaPlugin = {
 
   // React-провайдер, оборачивающий children контекстом плагина (state/refs).
   // Если плагину не нужен state — можно не указывать.
-  Provider?: React.ComponentType<{ ctx: KikaContext; children: ReactNode }>
+  Provider?: React.ComponentType<{ ctx: YukaiContext; children: ReactNode }>
 
   // UI-слоты. Каждый рендерится в соответствующем месте overlay.
   slots?: {
@@ -71,14 +71,14 @@ export type KikaPlugin = {
     radial?: {
       angle: number               // угол в градусах (0 = справа, -90 = сверху)
       title: string
-      onClick: (ctx: KikaContext) => void
+      onClick: (ctx: YukaiContext) => void
     }
     // Полноэкранная панель (открывается через ctx.ui.openPanel(id))
-    panel?: React.ComponentType<{ ctx: KikaContext }>
+    panel?: React.ComponentType<{ ctx: YukaiContext }>
     // Компонент поверх персонажа (как MicBars)
-    characterOverlay?: React.ComponentType<{ ctx: KikaContext }>
+    characterOverlay?: React.ComponentType<{ ctx: YukaiContext }>
     // Секция в панели настроек
-    settings?: React.ComponentType<{ ctx: KikaContext }>
+    settings?: React.ComponentType<{ ctx: YukaiContext }>
   }
 
   // Хуки жизненного цикла — вызываются из core.
@@ -89,5 +89,5 @@ export type KikaPlugin = {
   // Перехватчик голосовых/текстовых команд юзера. Если вернул true —
   // команда "проглочена" плагином, обычная отправка в Claude пропускается.
   // Плагин отвечает за то чтобы сам сформулировать `ctx.chat.send(...)` с результатом.
-  handleCommand?: (userText: string, ctx: KikaContext) => boolean
+  handleCommand?: (userText: string, ctx: YukaiContext) => boolean
 }

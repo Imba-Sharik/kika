@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
-import type { KikaPlugin, KikaContext } from '@/features/plugin-system/types'
+import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 import { useDictation, type DictationItem } from './useDictation'
 import { DictationPanel } from './DictationPanel'
 
@@ -24,7 +24,7 @@ function useDictPlugin(): DictationPluginState {
 // чтобы useDictation сразу шёл на правильное устройство.
 const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
 
-function DictProvider({ children }: { ctx: KikaContext; children: ReactNode }) {
+function DictProvider({ children }: { ctx: YukaiContext; children: ReactNode }) {
   const [deviceId, setDeviceId] = useState<string>(() => {
     if (typeof window === 'undefined') return ''
     try { return localStorage.getItem(MIC_STORAGE_KEY) ?? '' } catch { return '' }
@@ -61,7 +61,7 @@ function DictProvider({ children }: { ctx: KikaContext; children: ReactNode }) {
   return <DictCtx.Provider value={value}>{children}</DictCtx.Provider>
 }
 
-function DictPanelSlot({ ctx }: { ctx: KikaContext }) {
+function DictPanelSlot({ ctx }: { ctx: YukaiContext }) {
   const dict = useDictPlugin()
   return <DictationPanel history={dict.history} onClose={() => ctx.ui.closePanel()} />
 }
@@ -102,7 +102,7 @@ function DictStatusBadge() {
   )
 }
 
-export const dictationPlugin: KikaPlugin = {
+export const dictationPlugin: YukaiPlugin = {
   id: 'dictation',
   name: 'Диктовка',
   icon: '⌨️',

@@ -1,6 +1,6 @@
 'use client'
 
-import { BUILTIN_VOICES } from '@/shared/kika/voices'
+import { BUILTIN_VOICES } from '@/shared/yukai/voices'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
 

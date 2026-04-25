@@ -1,11 +1,11 @@
 'use client'
 
 import { createContext, useContext, type ReactNode } from 'react'
-import type { KikaPlugin, KikaContext } from '@/features/plugin-system/types'
+import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 import { useEnglishVocabulary } from './useEnglishVocabulary'
 import { EnglishPanel } from './EnglishPanel'
 import { statusOf, type EnglishItem } from './english-md'
-import { extractMediaRequests } from '@/shared/kika/persona'
+import { extractMediaRequests } from '@/shared/yukai/persona'
 
 // Ref-based singleton для доступа извне (через injectSystemContext / onChatResponse).
 // Плагинные хуки (hooks жизненного цикла) не являются React-компонентами,
@@ -26,7 +26,7 @@ function useEngPlugin(): EnglishPluginState {
   return v
 }
 
-function EnglishProvider({ ctx, children }: { ctx: KikaContext; children: ReactNode }) {
+function EnglishProvider({ ctx, children }: { ctx: YukaiContext; children: ReactNode }) {
   const english = useEnglishVocabulary()
 
   // Каждый рендер обновляем singletons — последнее значение всегда актуально
@@ -38,12 +38,12 @@ function EnglishProvider({ ctx, children }: { ctx: KikaContext; children: ReactN
   return <EngCtx.Provider value={{ items: english.items }}>{children}</EngCtx.Provider>
 }
 
-function EnglishPanelSlot({ ctx }: { ctx: KikaContext }) {
+function EnglishPanelSlot({ ctx }: { ctx: YukaiContext }) {
   const eng = useEngPlugin()
   return <EnglishPanel items={eng.items} onClose={() => ctx.ui.closePanel()} />
 }
 
-export const englishPlugin: KikaPlugin = {
+export const englishPlugin: YukaiPlugin = {
   id: 'english',
   name: 'Изучение английского',
   icon: '🔤',

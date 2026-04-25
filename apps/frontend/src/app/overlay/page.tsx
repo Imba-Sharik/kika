@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { KikaFace } from '@/widgets/kika-face/KikaFace'
+import { YukaiFace } from '@/widgets/yukai-face/YukaiFace'
 import { useMicListener } from '@/features/mic-input/useMicListener'
 import { MicBars } from '@/features/mic-input/MicBars'
 import { EnglishImages } from '@/features/english-images/EnglishImages'
@@ -10,19 +10,19 @@ import { SettingsPanel } from '@/features/settings/SettingsPanel'
 import { RadialMenu } from '@/widgets/radial-menu/RadialMenu'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { useEnabledPlugins } from '@/features/plugin-system/useEnabledPlugins'
-import { KikaContextProvider } from '@/features/plugin-system/KikaContextProvider'
+import { YukaiContextProvider } from '@/features/plugin-system/YukaiContextProvider'
 import {
   PluginProviders,
   CharacterOverlayHost,
   PanelHost,
 } from '@/features/plugin-system/PluginHost'
-import type { KikaContext } from '@/features/plugin-system/types'
+import type { YukaiContext } from '@/features/plugin-system/types'
 import {
   stripMediaTags,
   type Emotion,
-} from '@/shared/kika/persona'
-import { BUILTIN_CHARACTERS } from '@/shared/kika/characters'
-import { DEFAULT_VOICE_ID, findVoice } from '@/shared/kika/voices'
+} from '@/shared/yukai/persona'
+import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
+import { DEFAULT_VOICE_ID, findVoice } from '@/shared/yukai/voices'
 
 // Фиксированные настройки — как в chat-test с дефолтами
 const CHARACTER = BUILTIN_CHARACTERS[0]
@@ -162,7 +162,7 @@ export default function OverlayPage() {
   // PluginProviders ниже, включая IPC-подписки и хоткеи.
 
   // Core API для плагинов
-  const kikaCtx: KikaContext = {
+  const kikaCtx: YukaiContext = {
     chat: {
       send: (text, attachments) => chat.send(text, attachments),
       onResponse: () => () => {}, // TODO: реализовать подписку на финальные ответы
@@ -379,7 +379,7 @@ export default function OverlayPage() {
   useEffect(() => { sendRef.current = send })
 
   return (
-    <KikaContextProvider value={kikaCtx}>
+    <YukaiContextProvider value={kikaCtx}>
       {/* Provider'ы ВСЕХ плагинов всегда монтируются — чтобы тогглы в настройках
           не перестраивали React-дерево и не сбрасывали скролл/фокус.
           Хосты ниже уже фильтруют по activePlugins — слоты отключенных
@@ -430,7 +430,7 @@ export default function OverlayPage() {
           setMenuOpen((v) => !v)
         }}
       >
-        <KikaFace emotion={emotion} audio={audioEl} size={180} />
+        <YukaiFace emotion={emotion} audio={audioEl} size={180} />
 
         {/* Онбординг: показывается один раз при первом запуске справа от персонажа.
             Объясняет главное — Ctrl+Z чтобы начать разговор. Dismiss → localStorage. */}
@@ -785,7 +785,7 @@ export default function OverlayPage() {
       />
     </div>
       </PluginProviders>
-    </KikaContextProvider>
+    </YukaiContextProvider>
   )
 }
 

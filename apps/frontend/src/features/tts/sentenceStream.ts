@@ -1,4 +1,4 @@
-import { EMOTIONS, type Emotion } from '@/shared/kika/persona'
+import { EMOTIONS, type Emotion } from '@/shared/yukai/persona'
 
 // Терминальные знаки предложения: точка, восклицание, вопрос, многоточие-одним-символом.
 const TERMINATORS = '.!?…'

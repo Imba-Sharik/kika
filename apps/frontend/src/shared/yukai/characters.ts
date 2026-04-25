@@ -1,4 +1,4 @@
-import { KIKA_DEFAULT_PERSONA } from './persona'
+import { YUKAI_DEFAULT_PERSONA } from './persona'
 
 export type Character = {
   id: string
@@ -11,7 +11,7 @@ export const BUILTIN_CHARACTERS: Character[] = [
   {
     id: 'yukai-default',
     name: 'Юкай',
-    persona: KIKA_DEFAULT_PERSONA,
+    persona: YUKAI_DEFAULT_PERSONA,
     voiceId: 'eleven-kika',
   },
 ]

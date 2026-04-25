@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, type ReactNode } from 'react'
-import type { KikaContext, KikaPlugin } from './types'
+import type { YukaiContext, YukaiPlugin } from './types'
 
 // Оборачивает children всеми Provider-компонентами включенных плагинов
 // рекурсивно. Каждый Provider получает ctx.
@@ -10,8 +10,8 @@ export function PluginProviders({
   ctx,
   children,
 }: {
-  plugins: KikaPlugin[]
-  ctx: KikaContext
+  plugins: YukaiPlugin[]
+  ctx: YukaiContext
   children: ReactNode
 }) {
   return plugins.reduceRight<ReactNode>((acc, plugin) => {
@@ -22,7 +22,7 @@ export function PluginProviders({
 }
 
 // Рендерит characterOverlay всех включенных плагинов поверх персонажа
-export function CharacterOverlayHost({ plugins, ctx }: { plugins: KikaPlugin[]; ctx: KikaContext }) {
+export function CharacterOverlayHost({ plugins, ctx }: { plugins: YukaiPlugin[]; ctx: YukaiContext }) {
   return (
     <>
       {plugins.map((p) => {
@@ -44,9 +44,9 @@ export function PanelHost({
   activeId,
   ctx,
 }: {
-  plugins: KikaPlugin[]
+  plugins: YukaiPlugin[]
   activeId: string | null
-  ctx: KikaContext
+  ctx: YukaiContext
 }) {
   if (!activeId) return null
   const plugin = plugins.find((p) => p.id === activeId)
@@ -56,7 +56,7 @@ export function PanelHost({
 }
 
 // Рендерит секции настроек всех включенных плагинов
-export function SettingsPluginsHost({ plugins, ctx }: { plugins: KikaPlugin[]; ctx: KikaContext }) {
+export function SettingsPluginsHost({ plugins, ctx }: { plugins: YukaiPlugin[]; ctx: YukaiContext }) {
   return (
     <>
       {plugins.map((p) => {

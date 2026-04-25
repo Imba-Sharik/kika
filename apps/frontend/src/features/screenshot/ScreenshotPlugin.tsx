@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { KikaPlugin, KikaContext } from '@/features/plugin-system/types'
+import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 
 
 // Явный запрос про аниме → запускаем trace.moe параллельно с Claude.
@@ -43,7 +43,7 @@ let updateItem: (ts: number, patch: Partial<ScreenshotItem>) => void = () => {}
 
 type ScreenshotState = {
   history: ScreenshotItem[]
-  capture: (ctx: KikaContext, opts?: { userText?: string; mode?: 'full' | 'region' }) => Promise<void>
+  capture: (ctx: YukaiContext, opts?: { userText?: string; mode?: 'full' | 'region' }) => Promise<void>
 }
 
 const ScreenCtx = createContext<ScreenshotState | null>(null)
@@ -70,7 +70,7 @@ async function identifyAnime(imageDataUrl: string): Promise<TraceMoeHit | null> 
 // mode: 'full' (весь экран) | 'region' (выделение мышкой). Если не указан —
 // смотрим userText на ключевики "выдели/обведи/..." → region, иначе full.
 async function doCapture(
-  ctx: KikaContext,
+  ctx: YukaiContext,
   opts?: { userText?: string; mode?: 'full' | 'region' },
 ): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -126,7 +126,7 @@ async function doCapture(
   void ctx.chat.send(prompt, [{ image: base64, mediaType }])
 }
 
-function ScreenProvider({ children }: { ctx: KikaContext; children: ReactNode }) {
+function ScreenProvider({ children }: { ctx: YukaiContext; children: ReactNode }) {
   const [history, setHistory] = useState<ScreenshotItem[]>([])
   pushItem = (item) => setHistory((prev) => [item, ...prev].slice(0, 10))
   updateItem = (ts, patch) => setHistory((prev) => prev.map((it) => (it.ts === ts ? { ...it, ...patch } : it)))
@@ -151,7 +151,7 @@ const actionBtnStyle: React.CSSProperties = {
   textAlign: 'left',
 }
 
-function ScreenshotPanel({ ctx }: { ctx: KikaContext }) {
+function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
   const state = useContext(ScreenCtx)
   const history = state?.history ?? []
   const [selectedTs, setSelectedTs] = useState<number | null>(null)
@@ -364,7 +364,7 @@ function ScreenshotPanel({ ctx }: { ctx: KikaContext }) {
   )
 }
 
-export const screenshotPlugin: KikaPlugin = {
+export const screenshotPlugin: YukaiPlugin = {
   id: 'screenshot',
   name: 'Скриншот + зрение',
   icon: '📸',

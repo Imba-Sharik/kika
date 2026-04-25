@@ -4,7 +4,7 @@ import { openai } from '@ai-sdk/openai'
 import { deepseek } from '@ai-sdk/deepseek'
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { KIKA_SYSTEM_PROMPT } from '@/shared/kika/persona'
+import { YUKAI_SYSTEM_PROMPT } from '@/shared/yukai/persona'
 
 export const runtime = 'nodejs'
 
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
 
   const result = streamText({
     model: pickModel(provider, model),
-    system: system ?? KIKA_SYSTEM_PROMPT,
+    system: system ?? YUKAI_SYSTEM_PROMPT,
     messages,
     tools: useTools ? memoryTools : undefined,
     // Max 3 шага: write + final response. Без длинных read→think→write цепочек.

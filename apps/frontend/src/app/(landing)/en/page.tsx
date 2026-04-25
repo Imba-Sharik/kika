@@ -77,7 +77,7 @@ export default function LandingPageEn() {
           <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
             <div className="flex items-center justify-center">
               <Image
-                src="/kika/emotions/happy.png"
+                src="/yukai/emotions/happy.png"
                 alt="Yukai"
                 width={928}
                 height={1232}
@@ -249,7 +249,7 @@ export default function LandingPageEn() {
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <div className="mx-auto mb-8 w-32">
           <Image
-            src="/kika/emotions/wink.png"
+            src="/yukai/emotions/wink.png"
             alt="Yukai winking"
             width={928}
             height={1232}
