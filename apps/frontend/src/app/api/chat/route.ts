@@ -1,4 +1,4 @@
-import { streamText, tool, stepCountIs, type LanguageModel, type ModelMessage } from 'ai'
+import { streamText, tool, stepCountIs, type LanguageModel, type ModelMessage, type ToolSet } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
 import { openai } from '@ai-sdk/openai'
 import { deepseek } from '@ai-sdk/deepseek'
@@ -26,7 +26,7 @@ function pickModel(provider: Provider, model?: string): LanguageModel {
       return deepseek(model ?? 'deepseek-chat')
     case 'anthropic':
     default:
-      return anthropic(model ?? 'claude-sonnet-4-20250514')
+      return anthropic(model ?? 'claude-haiku-4-5-20251001')
   }
 }
 
@@ -76,16 +76,28 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'messages required' }, { status: 400 })
   }
 
+  // Web search — server-side tool Anthropic. Модель сама решает когда искать.
+  // maxUses=2 чтобы не уходить в бесконечные итерации поиска и не съедать секунды latency.
+  // Версия 20250305: совместима с Haiku 4.5. Версия 20260209 требует programmatic
+  // tool calling (только Sonnet 4.5+/Opus 4.5+).
+  const combinedTools: ToolSet = {}
+  if (useTools) Object.assign(combinedTools, memoryTools)
+  if (provider === 'anthropic') {
+    combinedTools.web_search = anthropic.tools.webSearch_20250305({ maxUses: 2 })
+  }
+  const hasTools = Object.keys(combinedTools).length > 0
+
   const result = streamText({
     model: pickModel(provider, model),
     system: system ?? YUKAI_SYSTEM_PROMPT,
     messages,
-    tools: useTools ? memoryTools : undefined,
-    // Max 3 шага: write + final response. Без длинных read→think→write цепочек.
-    // AI SDK v6: maxSteps → stopWhen: stepCountIs(N)
-    stopWhen: useTools ? stepCountIs(3) : undefined,
+    tools: hasTools ? combinedTools : undefined,
+    // useTools=true → memory tools (max 3 шага: write + ответ).
+    // Иначе только web_search (max 4: до 2 поисков + ответ).
+    stopWhen: hasTools ? stepCountIs(useTools ? 3 : 4) : undefined,
   })
 
-  // Если tools включены — UI message stream (SSE, с tool_calls). Иначе — простой text stream.
+  // useTools (memory) → UI message stream с client-side tool_calls.
+  // Иначе → text stream (web_search server-side, юзер видит только финальный текст).
   return useTools ? result.toUIMessageStreamResponse() : result.toTextStreamResponse()
 }
