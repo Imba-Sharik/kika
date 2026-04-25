@@ -3,26 +3,34 @@
 import { useState } from 'react'
 import { EnglishHistoryGrid } from './EnglishCard'
 import { statusOf, type EnglishItem, type EnglishStatus } from './english-md'
-
-const STATUS_LABEL: Record<EnglishStatus, string> = {
-  new: 'Новое',
-  learning: 'Учу',
-  known: 'Знаю',
-}
+import type { Language } from '@/shared/yukai/persona'
+import { t } from '@/shared/yukai/i18n'
 
 type Props = {
   items: EnglishItem[]
   onClose: () => void
+  language: Language
 }
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 
-export function EnglishPanel({ items, onClose }: Props) {
+export function EnglishPanel({ items, onClose, language }: Props) {
   const [filter, setFilter] = useState<'all' | EnglishStatus>('all')
   const known = items.filter((it) => statusOf(it) === 'known').length
   const learning = items.filter((it) => statusOf(it) === 'learning').length
   const newish = items.filter((it) => statusOf(it) === 'new').length
   const filtered = filter === 'all' ? items : items.filter((it) => statusOf(it) === filter)
+
+  const STATUS_LABEL: Record<EnglishStatus, string> = {
+    new: t(language, 'english.tab.new'),
+    learning: t(language, 'english.tab.learning'),
+    known: t(language, 'english.tab.known'),
+  }
+
+  const stats = t(language, 'english.stats')
+    .replace('{known}', String(known))
+    .replace('{learning}', String(learning))
+    .replace('{newish}', String(newish))
 
   return (
     <div
@@ -57,11 +65,11 @@ export function EnglishPanel({ items, onClose }: Props) {
         <span style={{ fontSize: 14 }}>🔤</span>
         <span style={{ color: '#fbbf24', fontWeight: 600 }}>English</span>
         <span style={{ color: '#9ca3af', flex: 1, fontSize: 10 }}>
-          · {items.length} всего · {known} знаю · {learning} учу · {newish} новых
+          · {items.length} {stats}
         </span>
         <button
           onClick={onClose}
-          title="Закрыть"
+          title={t(language, 'common.close')}
           style={{
             width: 22,
             height: 22,
@@ -86,7 +94,7 @@ export function EnglishPanel({ items, onClose }: Props) {
         <div style={{ display: 'flex', gap: 4, padding: '6px 8px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           {(['all', 'new', 'learning', 'known'] as const).map((tab) => {
             const isActive = filter === tab
-            const label = tab === 'all' ? 'Все' : STATUS_LABEL[tab]
+            const label = tab === 'all' ? t(language, 'english.tab.all') : STATUS_LABEL[tab]
             const count = tab === 'all'
               ? items.length
               : items.filter((it) => statusOf(it) === tab).length
@@ -115,14 +123,14 @@ export function EnglishPanel({ items, onClose }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {items.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            Пока пусто.
+            {t(language, 'common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              Скажи Kika: &ldquo;давай поучим английский&rdquo; или &ldquo;попрактикуемся&rdquo; — изученные слова появятся здесь
+              {t(language, 'english.empty.hint')}
             </span>
           </div>
         ) : (
-          <EnglishHistoryGrid items={filtered} />
+          <EnglishHistoryGrid items={filtered} statusLabels={STATUS_LABEL} />
         )}
       </div>
 
@@ -135,7 +143,7 @@ export function EnglishPanel({ items, onClose }: Props) {
           textAlign: 'center',
         }}
       >
-        Скажи &ldquo;попрактикуемся&rdquo; — Kika покажет новые слова в режиме угадай
+        {t(language, 'english.bottom.hint')}
       </div>
     </div>
   )

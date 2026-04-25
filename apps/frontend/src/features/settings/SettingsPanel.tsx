@@ -253,8 +253,8 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            <option value="ru">🇷🇺 Русский</option>
-            <option value="en">🇬🇧 English</option>
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
           </select>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
             {t(language, 'settings.language.hint')}

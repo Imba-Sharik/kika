@@ -3,16 +3,23 @@
 import { useEffect, useState } from 'react'
 import { statusOf, type EnglishItem, type EnglishStatus } from './english-md'
 
-const STATUS_META: Record<EnglishStatus, { label: string; color: string; bg: string }> = {
-  new: { label: 'Новое', color: '#9ca3af', bg: 'rgba(156,163,175,0.2)' },
-  learning: { label: 'Учу', color: '#fbbf24', bg: 'rgba(251,191,36,0.25)' },
-  known: { label: 'Знаю', color: '#22c55e', bg: 'rgba(34,197,94,0.25)' },
+const STATUS_META: Record<EnglishStatus, { color: string; bg: string }> = {
+  new: { color: '#9ca3af', bg: 'rgba(156,163,175,0.2)' },
+  learning: { color: '#fbbf24', bg: 'rgba(251,191,36,0.25)' },
+  known: { color: '#22c55e', bg: 'rgba(34,197,94,0.25)' },
 }
 
-export function EnglishCard({ item }: { item: EnglishItem }) {
+type CardProps = {
+  item: EnglishItem
+  // Локализованные label'ы статусов передаются от EnglishPanel
+  statusLabels: Record<EnglishStatus, string>
+}
+
+export function EnglishCard({ item, statusLabels }: CardProps) {
   const { word, ts } = item
   const status = statusOf(item)
   const meta = STATUS_META[status]
+  const label = statusLabels[status]
   const [imgUrl, setImgUrl] = useState<string | null>(null)
   useEffect(() => {
     let cancelled = false
@@ -48,7 +55,7 @@ export function EnglishCard({ item }: { item: EnglishItem }) {
           zIndex: 2,
         }}
       >
-        {meta.label}
+        {label}
       </div>
       <div style={{ aspectRatio: '1 / 1', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {imgUrl ? (
@@ -75,11 +82,11 @@ export function EnglishCard({ item }: { item: EnglishItem }) {
   )
 }
 
-export function EnglishHistoryGrid({ items }: { items: EnglishItem[] }) {
+export function EnglishHistoryGrid({ items, statusLabels }: { items: EnglishItem[]; statusLabels: Record<EnglishStatus, string> }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 6 }}>
       {items.map((it) => (
-        <EnglishCard key={it.word} item={it} />
+        <EnglishCard key={it.word} item={it} statusLabels={statusLabels} />
       ))}
     </div>
   )

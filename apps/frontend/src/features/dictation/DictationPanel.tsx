@@ -1,6 +1,8 @@
 'use client'
 
 import type { DictationItem } from './useDictation'
+import type { Language } from '@/shared/yukai/persona'
+import { t } from '@/shared/yukai/i18n'
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 const kbdStyle: React.CSSProperties = {
@@ -17,9 +19,10 @@ const kbdStyle: React.CSSProperties = {
 type Props = {
   history: DictationItem[]
   onClose: () => void
+  language: Language
 }
 
-export function DictationPanel({ history, onClose }: Props) {
+export function DictationPanel({ history, onClose, language }: Props) {
   return (
     <div
       style={{
@@ -51,11 +54,11 @@ export function DictationPanel({ history, onClose }: Props) {
         }}
       >
         <span style={{ fontSize: 14 }}>⌨️</span>
-        <span style={{ color: '#fbbf24', fontWeight: 600 }}>Диктовка</span>
+        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t(language, 'dictation.title')}</span>
         <span style={{ color: '#9ca3af', flex: 1 }}>· {history.length}</span>
         <button
           onClick={onClose}
-          title="Закрыть"
+          title={t(language, 'common.close')}
           style={{
             width: 22,
             height: 22,
@@ -79,10 +82,10 @@ export function DictationPanel({ history, onClose }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {history.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            Пока пусто.
+            {t(language, 'common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              Зажми <kbd style={kbdStyle}>Right Alt</kbd> и говори — текст вставится и запишется сюда
+              {t(language, 'dictation.empty')}
             </span>
           </div>
         ) : (
@@ -106,7 +109,7 @@ export function DictationPanel({ history, onClose }: Props) {
                   const api = (window as any).electronAPI
                   api?.pasteText?.(it.text)
                 }}
-                title="Клик — вставить снова"
+                title={t(language, 'dictation.repaste-tooltip')}
               >
                 <div style={{ color: '#f3f4f6', whiteSpace: 'pre-wrap' }}>{it.text}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, fontSize: 10, color: '#6b7280' }}>
@@ -128,7 +131,7 @@ export function DictationPanel({ history, onClose }: Props) {
           textAlign: 'center',
         }}
       >
-        Зажми <kbd style={kbdStyle}>Right Alt</kbd> — надиктовать текст
+        {t(language, 'dictation.empty')}
       </div>
     </div>
   )

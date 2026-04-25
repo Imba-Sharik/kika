@@ -47,7 +47,7 @@ const DICT = {
     ru: 'Заливка = вероятность речи от VAD. Тащи оранжевый порог — где он, там и начинается «речь». Применяется сразу.',
     en: 'Fill = VAD speech probability. Drag the orange threshold — that\'s where "speech" starts. Applies instantly.',
   },
-  'settings.language': { ru: 'Язык / Language', en: 'Language / Язык' },
+  'settings.language': { ru: 'Язык', en: 'Language' },
   'settings.language.hint': {
     ru: 'Меняет язык, на котором отвечает Yukai. Голос подбирается автоматически.',
     en: 'Changes the language Yukai responds in. Voice auto-adjusts.',
@@ -77,10 +77,75 @@ const DICT = {
   // Plugins section
   'plugins.section': { ru: 'Плагины', en: 'Plugins' },
 
+  // Common buttons / states
+  'common.close': { ru: 'Закрыть', en: 'Close' },
+  'common.empty': { ru: 'Пока пусто.', en: 'Nothing here yet.' },
+
+  // English plugin panel
+  'english.stats': {
+    ru: 'всего · {known} знаю · {learning} учу · {newish} новых',
+    en: 'total · {known} known · {learning} learning · {newish} new',
+  },
+  'english.tab.all': { ru: 'Все', en: 'All' },
+  'english.tab.new': { ru: 'Новое', en: 'New' },
+  'english.tab.learning': { ru: 'Учу', en: 'Learning' },
+  'english.tab.known': { ru: 'Знаю', en: 'Known' },
+  'english.empty.hint': {
+    ru: 'Скажи Yukai: «давай поучим английский» или «попрактикуемся» — изученные слова появятся здесь',
+    en: 'Say to Yukai: "let\'s study English" or "let\'s practice" — learned words will appear here',
+  },
+  'english.bottom.hint': {
+    ru: 'Скажи «попрактикуемся» — Yukai покажет новые слова в режиме угадай',
+    en: 'Say "let\'s practice" — Yukai will show new words in guess mode',
+  },
+
+  // Plugin radial titles (set inside plugin manifests, used by registry → render via translate helpers)
+  'plugin.music.title': { ru: 'История песен', en: 'Song history' },
+  'plugin.dictation.title': { ru: 'История диктовки', en: 'Dictation history' },
+  'plugin.english.title': { ru: 'История английского', en: 'English history' },
+  'plugin.screenshot.title': { ru: 'Скриншоты + зрение', en: 'Screenshots + vision' },
+
+  // Music plugin panel
+  'music.history': { ru: 'История', en: 'History' },
+  'music.empty': {
+    ru: 'Зажми Alt+` чтобы распознать играющую песню',
+    en: 'Hold Alt+` to identify the playing song',
+  },
+
+  // Dictation plugin panel
+  'dictation.title': { ru: 'Диктовка', en: 'Dictation' },
+  'dictation.empty': {
+    ru: 'Зажми Right Alt и говори — текст вставится и запишется сюда',
+    en: 'Hold Right Alt and speak — text gets pasted and saved here',
+  },
+  'dictation.repaste-tooltip': { ru: 'Клик — вставить снова', en: 'Click to paste again' },
+
+  // Screenshot plugin panel
+  'screenshot.title': { ru: 'Скриншоты', en: 'Screenshots' },
+  'screenshot.region': { ru: '▭ область', en: '▭ region' },
+  'screenshot.full': { ru: '+ экран', en: '+ full' },
+  'screenshot.region-tooltip': { ru: 'Выделить область мышкой', en: 'Select region with mouse' },
+  'screenshot.full-tooltip': { ru: 'Скрин всего экрана', en: 'Capture full screen' },
+  'screenshot.anime-tooltip': {
+    ru: 'Точный поиск по кадрам аниме (эпизод + таймкод)',
+    en: 'Precise anime frame search (episode + timestamp)',
+  },
+  'screenshot.empty.hint': {
+    ru: 'Нажми «+ экран» или скажи «что на экране?» / «выдели область и скажи откуда это»',
+    en: 'Click "+ full" or say "what\'s on screen?" / "select region and tell me what it is"',
+  },
+
   // Radial menu
   'menu.chat': { ru: 'Чат', en: 'Chat' },
   'menu.memory': { ru: 'Память Yukai (открыть папку)', en: 'Yukai memory (open folder)' },
   'menu.settings': { ru: 'Настройки', en: 'Settings' },
+
+  // Overlay buttons
+  'overlay.close-chat': { ru: 'Закрыть чат', en: 'Close chat' },
+  'overlay.settings-btn': { ru: '⚙ Настройки', en: '⚙ Settings' },
+  'overlay.settings-title': { ru: 'Настройки', en: 'Settings' },
+  'overlay.send': { ru: 'Отправить', en: 'Send' },
+  'overlay.placeholder': { ru: 'Сообщение...', en: 'Message...' },
 
   // Plugins — individual
   'plugin.music.name': { ru: 'Распознавание песен', en: 'Music recognition' },
@@ -111,7 +176,7 @@ export function t(language: Language, key: I18nKey): string {
   return DICT[key][language]
 }
 
-// Перевод имени/описания плагина по его id. Если в словаре нет — возвращает оригинал.
+// Перевод имени/описания/радиал-тайтла плагина по его id. Если ключа нет — оригинал.
 export function translatePluginName(language: Language, id: string, fallback: string): string {
   const key = `plugin.${id}.name` as I18nKey
   if (key in DICT) return DICT[key][language]
@@ -120,6 +185,12 @@ export function translatePluginName(language: Language, id: string, fallback: st
 
 export function translatePluginDescription(language: Language, id: string, fallback: string): string {
   const key = `plugin.${id}.desc` as I18nKey
+  if (key in DICT) return DICT[key][language]
+  return fallback
+}
+
+export function translatePluginTitle(language: Language, id: string, fallback: string): string {
+  const key = `plugin.${id}.title` as I18nKey
   if (key in DICT) return DICT[key][language]
   return fallback
 }

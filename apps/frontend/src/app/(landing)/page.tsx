@@ -1,4 +1,8 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import LandingPageEn from './en/page'
 
 // Стабильная ссылка на последний .exe. Имя файла фиксировано через
 // electron-builder build.artifactName = "Yukai-Setup-${arch}.${ext}" — поэтому
@@ -8,6 +12,18 @@ const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/downlo
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
 export default function LandingPage() {
+  // На yukai.app/ показываем English-контент сразу (без редиректа на /en).
+  // На ru.yukai.app/, localhost, vercel preview-доменах — Russian (default).
+  // SSR рендерит Russian (Vercel видит Host: yukai.app у обоих проксированных
+  // запросов одинаково), client-side детект уже после маунта свапает на нужный.
+  const [showEn, setShowEn] = useState(false)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hostname === 'yukai.app') {
+      setShowEn(true)
+    }
+  }, [])
+  if (showEn) return <LandingPageEn />
+
   return (
     <main className="relative overflow-hidden">
       {/* Background glow */}

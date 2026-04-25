@@ -22,7 +22,7 @@ import {
   type Emotion,
   type Language,
 } from '@/shared/yukai/persona'
-import { t } from '@/shared/yukai/i18n'
+import { t, translatePluginTitle } from '@/shared/yukai/i18n'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
 import { DEFAULT_VOICE_ID, findVoice } from '@/shared/yukai/voices'
 
@@ -97,13 +97,39 @@ export default function OverlayPage() {
     setVadThreshold(v)
     try { localStorage.setItem(VAD_THRESHOLD_KEY, String(v)) } catch {}
   }
-  // Default 'ru' на SSR и первом рендере, useEffect подхватывает реальное значение
-  // из localStorage после маунта — иначе hydration mismatch.
+  // Default 'ru' на SSR — useEffect подхватывает реальное значение после маунта.
+  // Логика выбора:
+  //   1. Если юзер уже выбирал в Settings — берём из localStorage
+  //   2. Иначе по хосту: ru.yukai.app → ru, yukai.app → en
+  //   3. Если хост непонятный (localhost dev) — fallback на navigator.language
+  //   4. Сохраняем чтобы следующий запуск не пересчитывать
   const [language, setLanguage] = useState<Language>('ru')
   useEffect(() => {
     try {
       const saved = localStorage.getItem(LANGUAGE_KEY)
-      if (saved === 'en' || saved === 'ru') setLanguage(saved)
+      if (saved === 'en' || saved === 'ru') {
+        setLanguage(saved)
+        return
+      }
+      // Первый запуск — определяем по хосту, потом по системной локали
+      const host = window.location.hostname.toLowerCase()
+      let detected: Language
+      if (host.startsWith('ru.')) {
+        detected = 'ru'
+      } else if (host === 'yukai.app' || host.endsWith('.vercel.app')) {
+        detected = 'en'
+      } else {
+        // localhost / dev — fallback на системную локаль
+        const sys = (navigator.language || 'en').toLowerCase()
+        detected = sys.startsWith('ru') ? 'ru' : 'en'
+      }
+      setLanguage(detected)
+      localStorage.setItem(LANGUAGE_KEY, detected)
+      // Голос подбираем подходящий: EN → ElevenLabs, RU → Fish (default)
+      if (detected === 'en') {
+        setVoiceId('eleven-kika')
+        try { localStorage.setItem(VOICE_STORAGE_KEY, 'eleven-kika') } catch {}
+      }
     } catch {}
   }, [])
   function selectLanguage(l: Language) {
@@ -112,6 +138,17 @@ export default function OverlayPage() {
     // При смене RU↔EN авто-подбираем подходящий voice (Fish для русского, ElevenLabs для англ).
     if (l === 'en' && voiceId !== 'eleven-kika') selectVoice('eleven-kika')
     if (l === 'ru' && voiceId === 'eleven-kika') selectVoice(DEFAULT_VOICE_ID)
+    // Меняем домен под выбранный язык: ru.yukai.app для русского, yukai.app для английского.
+    // Только в production. Localhost / dev — никаких переходов, остаёмся где есть.
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname
+      const path = window.location.pathname + window.location.search
+      if (l === 'ru' && host === 'yukai.app') {
+        window.location.replace('https://ru.yukai.app' + path)
+      } else if (l === 'en' && host === 'ru.yukai.app') {
+        window.location.replace('https://yukai.app' + path)
+      }
+    }
   }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -221,6 +258,7 @@ export default function OverlayPage() {
       copyImageToClipboard: (dataUrl) => (window as any).electronAPI?.copyImageToClipboard?.(dataUrl),
       closeChat: () => setCompact(true),
     },
+    language,
   }
 
   function toggleCompact() {
@@ -574,7 +612,7 @@ export default function OverlayPage() {
             .filter((p) => p.slots?.radial)
             .map((p) => ({
               icon: p.icon,
-              title: p.slots!.radial!.title,
+              title: translatePluginTitle(language, p.id, p.slots!.radial!.title),
               action: () => { p.slots!.radial!.onClick(kikaCtx); setMenuOpen(false) },
             }))
           const rawItems = [
@@ -673,7 +711,7 @@ export default function OverlayPage() {
           )}
           <button
             onClick={() => togglePanel('chat')}
-            title="Закрыть чат"
+            title={t(language, 'overlay.close-chat')}
             style={{
               width: 22,
               height: 22,
@@ -696,12 +734,23 @@ export default function OverlayPage() {
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
           {chat.messages.length === 0 && !chat.streaming && (
-            <div style={{ color: '#888', fontStyle: 'italic', padding: '4px 0' }}>
-              {t(language, 'chat.empty.hint')} <kbd style={kbdStyle}>Ctrl+Z</kbd> {t(language, 'chat.empty.hint2')}
-              <br />
-              <span style={{ color: '#666', fontSize: 10 }}>
-                <kbd style={kbdStyle}>Right Alt</kbd> — {t(language, 'settings.hotkey.dictation')} ·{' '}
-                <kbd style={kbdStyle}>Alt+`</kbd> — {t(language, 'settings.hotkey.shazam')}
+            <div style={{ color: '#888', fontStyle: 'italic', padding: '8px 4px', lineHeight: 1.5 }}>
+              {t(language, 'onboarding.text1')} <kbd style={kbdStyle}>Ctrl+Z</kbd> {t(language, 'onboarding.text2')}
+              <span style={{
+                display: 'inline-flex',
+                gap: 2,
+                alignItems: 'center',
+                marginLeft: 4,
+                padding: '2px 6px',
+                background: 'rgba(0,0,0,0.3)',
+                borderRadius: 4,
+                verticalAlign: 'middle',
+              }}>
+                <span style={{ width: 2, height: 6, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 10, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 8, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 12, background: '#22c55e' }} />
+                <span style={{ width: 2, height: 7, background: '#22c55e' }} />
               </span>
             </div>
           )}
@@ -768,25 +817,8 @@ export default function OverlayPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Кнопка настроек — внизу чата */}
-        <div style={{ padding: 6, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'flex-end' }}>
-          <button
-            type="button"
-            onClick={() => togglePanel('settings')}
-            title="Настройки"
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: '#ccc',
-              padding: '4px 8px',
-              fontSize: 12,
-              borderRadius: 6,
-              cursor: 'pointer',
-            }}
-          >
-            ⚙ Настройки
-          </button>
-        </div>
+        {/* Кнопка настроек убрана — Settings доступны через радиал-меню (правый клик
+            на персонажа). В чате достаточно лишнего места без дублирующей кнопки. */}
       </div>
 
       <PanelHost plugins={activePlugins} activeId={activePluginPanel} ctx={kikaCtx} />

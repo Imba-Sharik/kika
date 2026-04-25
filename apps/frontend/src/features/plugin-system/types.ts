@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { Emotion } from '@/shared/yukai/persona'
+import type { Emotion, Language } from '@/shared/yukai/persona'
 
 // Разрешения, которые плагин может запросить. Юзер видит и одобряет.
 export type Permission =
@@ -48,6 +48,8 @@ export type YukaiContext = {
     // Свернуть чат Kika (compact mode) — удобно перед скрином экрана
     closeChat: () => void
   }
+  // Текущий язык интерфейса — плагины используют для локализации своих UI-строк.
+  language: Language
 }
 
 // Манифест плагина — метаданные + UI-слоты.

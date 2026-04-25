@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
+import { t } from '@/shared/yukai/i18n'
 
 
 // Явный запрос про аниме → запускаем trace.moe параллельно с Claude.
@@ -213,11 +214,11 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
         }}
       >
         <span style={{ fontSize: 14 }}>📸</span>
-        <span style={{ color: '#fbbf24', fontWeight: 600 }}>Скриншоты</span>
+        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t(ctx.language, 'screenshot.title')}</span>
         <span style={{ color: '#9ca3af', flex: 1 }}>· {history.length}</span>
         <button
           onClick={() => { void doCapture(ctx, { mode: 'region' }) }}
-          title="Выделить область мышкой"
+          title={t(ctx.language, 'screenshot.region-tooltip')}
           style={{
             background: 'rgba(59,130,246,0.2)',
             border: '1px solid rgba(59,130,246,0.4)',
@@ -228,11 +229,11 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
             borderRadius: 12,
           }}
         >
-          ▭ область
+          {t(ctx.language, 'screenshot.region')}
         </button>
         <button
           onClick={() => { void doCapture(ctx, { mode: 'full' }) }}
-          title="Скрин всего экрана"
+          title={t(ctx.language, 'screenshot.full-tooltip')}
           style={{
             background: 'rgba(236,72,153,0.2)',
             border: '1px solid rgba(236,72,153,0.4)',
@@ -243,11 +244,11 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
             borderRadius: 12,
           }}
         >
-          + экран
+          {t(ctx.language, 'screenshot.full')}
         </button>
         <button
           onClick={() => ctx.ui.closePanel()}
-          title="Закрыть"
+          title={t(ctx.language, 'common.close')}
           style={{
             width: 22,
             height: 22,
@@ -267,10 +268,10 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {history.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            Пока пусто.
+            {t(ctx.language, 'common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              Нажми «+ новый» или скажи «что на экране?» / «выдели область и скажи откуда это»
+              {t(ctx.language, 'screenshot.empty.hint')}
             </span>
           </div>
         ) : (
@@ -318,7 +319,7 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
                       <button
                         onClick={() => openSearchSite(item, 'https://trace.moe')}
                         style={actionBtnStyle}
-                        title="Точный поиск по кадрам аниме (эпизод + таймкод)"
+                        title={t(ctx.language, 'screenshot.anime-tooltip')}
                       >
                         🔗 trace.moe
                       </button>

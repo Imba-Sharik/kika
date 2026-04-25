@@ -40,7 +40,7 @@ function EnglishProvider({ ctx, children }: { ctx: YukaiContext; children: React
 
 function EnglishPanelSlot({ ctx }: { ctx: YukaiContext }) {
   const eng = useEngPlugin()
-  return <EnglishPanel items={eng.items} onClose={() => ctx.ui.closePanel()} />
+  return <EnglishPanel items={eng.items} onClose={() => ctx.ui.closePanel()} language={ctx.language} />
 }
 
 export const englishPlugin: YukaiPlugin = {
