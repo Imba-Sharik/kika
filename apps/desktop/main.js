@@ -113,7 +113,7 @@ ipcMain.handle('capture-region', async () => {
 
   try {
     // Запускаем modern Snipping Tool в режиме выделения области.
-    // Окно Kika НЕ прячем — персонаж остаётся видимым (юзер сможет обойти его при выделении).
+    // Окно Yukai НЕ прячем — персонаж остаётся видимым (юзер сможет обойти его при выделении).
     // Закрытие только панели скрина делает фронт через ctx.ui.closePanel().
     await shell.openExternal('ms-screenclip:')
   } catch (err) {
@@ -142,7 +142,7 @@ ipcMain.handle('capture-region', async () => {
 // Скриншот основного экрана → base64 PNG (для vision-плагина)
 // thumbnailSize = размер монитора → получаем "полноразмерный" thumbnail.
 ipcMain.handle('capture-screen', async () => {
-  // Окно Kika НЕ прячем — персонаж виден в скрине, чат и панель уже свёрнуты.
+  // Окно Yukai НЕ прячем — персонаж виден в скрине, чат и панель уже свёрнуты.
   try {
     const { width, height } = screen.getPrimaryDisplay().size
     const sources = await desktopCapturer.getSources({
@@ -158,7 +158,7 @@ ipcMain.handle('capture-screen', async () => {
   }
 })
 
-// Открывает папку с памятью Kika в OS-проводнике
+// Открывает папку с памятью Yukai в OS-проводнике
 ipcMain.on('open-memory-folder', () => {
   ensureMemoryDir()
   shell.openPath(MEMORY_DIR)
@@ -191,7 +191,7 @@ function resolveSafeMemoryPath(relPath) {
   return safe
 }
 
-// Читает файл из kika-memory
+// Читает файл из yukai-memory
 ipcMain.handle('read-memory-file', async (_event, relPath) => {
   ensureMemoryDir()
   try {
@@ -204,7 +204,7 @@ ipcMain.handle('read-memory-file', async (_event, relPath) => {
   }
 })
 
-// Записывает файл в kika-memory (создаёт вложенные папки)
+// Записывает файл в yukai-memory (создаёт вложенные папки)
 ipcMain.handle('write-memory-file', async (_event, relPath, content) => {
   ensureMemoryDir()
   try {
@@ -234,7 +234,7 @@ ipcMain.handle('append-memory-file', async (_event, relPath, text) => {
   }
 })
 
-// Возвращает список файлов в директории kika-memory/<dir>
+// Возвращает список файлов в директории yukai-memory/<dir>
 ipcMain.handle('list-memory-files', async (_event, relDir) => {
   ensureMemoryDir()
   try {
