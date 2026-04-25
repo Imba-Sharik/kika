@@ -5,6 +5,7 @@ import { BUILTIN_VOICES } from '@/shared/yukai/voices'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
 import type { Language } from '@/shared/yukai/persona'
+import { t } from '@/shared/yukai/i18n'
 
 type OriginPref = 'auto' | 'direct' | 'ru'
 
@@ -90,10 +91,10 @@ export function SettingsPanel({
         }}
       >
         <span style={{ fontSize: 14 }}>⚙</span>
-        <span style={{ color: '#e5e7eb', fontWeight: 600, flex: 1 }}>Настройки</span>
+        <span style={{ color: '#e5e7eb', fontWeight: 600, flex: 1 }}>{t(language, 'settings.title')}</span>
         <button
           onClick={onClose}
-          title="Закрыть"
+          title={t(language, 'settings.close')}
           style={{
             width: 22,
             height: 22,
@@ -113,7 +114,7 @@ export function SettingsPanel({
       <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            Микрофон
+            {t(language, 'settings.mic')}
           </label>
           <select
             value={micDeviceId}
@@ -128,7 +129,7 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            <option value="">По умолчанию</option>
+            <option value="">{t(language, 'settings.mic.default')}</option>
             {mics.map((m) => (
               <option key={m.deviceId} value={m.deviceId}>
                 {m.label || `device ${m.deviceId.slice(0, 8)}`}
@@ -139,7 +140,7 @@ export function SettingsPanel({
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            Голос Yukai
+            {t(language, 'settings.voice')}
           </label>
           <select
             value={voiceId}
@@ -161,13 +162,13 @@ export function SettingsPanel({
             ))}
           </select>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4 }}>
-            ElevenLabs — лучшее произношение английского. Fish — живой русский.
+            {t(language, 'settings.voice.hint')}
           </div>
         </div>
 
         <div>
           <label style={{ display: 'flex', justifyContent: 'space-between', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            <span>Чувствительность мика</span>
+            <span>{t(language, 'settings.sensitivity')}</span>
             <span style={{ color: '#f59e0b', fontVariantNumeric: 'tabular-nums' }}>
               {vadThreshold.toFixed(2)}
             </span>
@@ -231,14 +232,13 @@ export function SettingsPanel({
             />
           </div>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            Заливка = вероятность речи от VAD. Тащи оранжевый порог —
-            где он, там и начинается «речь». Применяется сразу.
+            {t(language, 'settings.sensitivity.hint')}
           </div>
         </div>
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            Язык / Language
+            {t(language, 'settings.language')}
           </label>
           <select
             value={language}
@@ -257,13 +257,13 @@ export function SettingsPanel({
             <option value="en">🇬🇧 English</option>
           </select>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            Меняет язык, на котором отвечает Yukai по умолчанию. Голос автоматически переключается на подходящий.
+            {t(language, 'settings.language.hint')}
           </div>
         </div>
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            Подключение
+            {t(language, 'settings.connection')}
           </label>
           <select
             value={originPref}
@@ -278,13 +278,12 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            <option value="auto">Авто (рекомендуется)</option>
-            <option value="direct">Прямое — yukai.app</option>
-            <option value="ru">РФ-зеркало — ru.yukai.app</option>
+            <option value="auto">{t(language, 'settings.connection.auto')}</option>
+            <option value="direct">{t(language, 'settings.connection.direct')}</option>
+            <option value="ru">{t(language, 'settings.connection.ru')}</option>
           </select>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            Если приложение не подключается — выбери РФ-зеркало.
-            При смене окно перезагружается.
+            {t(language, 'settings.connection.hint')}
           </div>
         </div>
 
@@ -292,13 +291,14 @@ export function SettingsPanel({
           plugins={BUILTIN_PLUGINS}
           isEnabled={isPluginEnabled}
           setEnabled={setPluginEnabled}
+          language={language}
         />
 
         <div style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.5, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12 }}>
-          <div style={{ marginBottom: 4 }}>Хоткеи:</div>
-          <div>• <b>Ctrl+Z</b> — hands-free вкл/выкл</div>
-          <div>• <b>Right Alt</b> — диктовка (hold)</div>
-          <div>• <b>Left Alt + `</b> — распознать песню</div>
+          <div style={{ marginBottom: 4 }}>{t(language, 'settings.hotkeys')}</div>
+          <div>• <b>Ctrl+Z</b> — {t(language, 'settings.hotkey.handsfree')}</div>
+          <div>• <b>Right Alt</b> — {t(language, 'settings.hotkey.dictation')}</div>
+          <div>• <b>Left Alt + `</b> — {t(language, 'settings.hotkey.shazam')}</div>
         </div>
 
         <a
@@ -330,9 +330,9 @@ export function SettingsPanel({
         >
           <span style={{ fontSize: 16 }}>💬</span>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, marginBottom: 2 }}>Чат с разработчиком</div>
+            <div style={{ fontWeight: 600, marginBottom: 2 }}>{t(language, 'settings.devchat.title')}</div>
             <div style={{ color: '#9ca3af', fontSize: 10 }}>
-              Напиши что сломалось, чего не хватает, что понравилось
+              {t(language, 'settings.devchat.hint')}
             </div>
           </div>
           <span style={{ color: '#6b7280' }}>→</span>
@@ -352,7 +352,7 @@ export function SettingsPanel({
             textDecoration: 'underline',
           }}
         >
-          Показать подсказку для новичков ещё раз
+          {t(language, 'settings.show-onboarding')}
         </button>
       </div>
     </div>

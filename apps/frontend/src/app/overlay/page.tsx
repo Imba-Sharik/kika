@@ -22,6 +22,7 @@ import {
   type Emotion,
   type Language,
 } from '@/shared/yukai/persona'
+import { t } from '@/shared/yukai/i18n'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
 import { DEFAULT_VOICE_ID, findVoice } from '@/shared/yukai/voices'
 
@@ -474,15 +475,15 @@ export default function OverlayPage() {
               zIndex: 10,
             }}
           >
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>Привет! 👋</div>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>{t(language, 'onboarding.greet')} 👋</div>
             <div style={{ marginBottom: 10 }}>
-              Чтобы поговорить голосом — зажми <kbd style={{
+              {t(language, 'onboarding.text1')} <kbd style={{
                 padding: '1px 6px',
                 borderRadius: 3,
                 background: 'rgba(0,0,0,0.3)',
                 fontFamily: 'ui-monospace, monospace',
                 fontSize: 11,
-              }}>Ctrl+Z</kbd> или кликни на полоски под Yukai:
+              }}>Ctrl+Z</kbd> {t(language, 'onboarding.text2')}
               <span style={{
                 display: 'inline-flex',
                 gap: 2,
@@ -500,7 +501,7 @@ export default function OverlayPage() {
                 <span style={{ width: 2, height: 7, background: '#22c55e' }} />
               </span>
               <br />
-              Повторное нажатие/клик — выключить.
+              {t(language, 'onboarding.text3')}
             </div>
             <button
               type="button"
@@ -517,7 +518,7 @@ export default function OverlayPage() {
                 cursor: 'pointer',
               }}
             >
-              Понятно
+              {t(language, 'onboarding.dismiss')}
             </button>
             {/* Стрелочка к персонажу */}
             <div style={{
@@ -570,11 +571,11 @@ export default function OverlayPage() {
               action: () => { p.slots!.radial!.onClick(kikaCtx); setMenuOpen(false) },
             }))
           const rawItems = [
-            { icon: '💬', title: 'Чат', action: () => { togglePanel('chat'); setMenuOpen(false) } },
+            { icon: '💬', title: t(language, 'menu.chat'), action: () => { togglePanel('chat'); setMenuOpen(false) } },
             ...pluginItems,
             {
               icon: '🧠',
-              title: 'Память Yukai (открыть папку)',
+              title: t(language, 'menu.memory'),
               action: () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const api = (window as any).electronAPI
@@ -582,7 +583,7 @@ export default function OverlayPage() {
                 setMenuOpen(false)
               },
             },
-            { icon: '⚙', title: 'Настройки', action: () => { togglePanel('settings'); setMenuOpen(false) } },
+            { icon: '⚙', title: t(language, 'menu.settings'), action: () => { togglePanel('settings'); setMenuOpen(false) } },
           ]
           const ARC_START = -90
           const ARC_END = 135
@@ -648,7 +649,7 @@ export default function OverlayPage() {
           <span style={{ color: '#fbbf24', fontWeight: 600 }}>Yukai</span>
           <span style={{ color: '#9ca3af' }}>·</span>
           <span style={{ color: '#d1d5db', flex: 1 }}>
-            {chat.error ? 'ошибка' : chat.speaking ? 'говорит' : chat.loading ? 'думает' : 'готова'}
+            {chat.error ? t(language, 'chat.status.error') : chat.speaking ? t(language, 'chat.status.speaking') : chat.loading ? t(language, 'chat.status.thinking') : t(language, 'chat.status.ready')}
           </span>
           {chat.lastTimings && (
             <span
@@ -689,11 +690,11 @@ export default function OverlayPage() {
         <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
           {chat.messages.length === 0 && !chat.streaming && (
             <div style={{ color: '#888', fontStyle: 'italic', padding: '4px 0' }}>
-              Зажми <kbd style={kbdStyle}>Ctrl+Z</kbd> чтобы поговорить
+              {t(language, 'chat.empty.hint')} <kbd style={kbdStyle}>Ctrl+Z</kbd> {t(language, 'chat.empty.hint2')}
               <br />
               <span style={{ color: '#666', fontSize: 10 }}>
-                <kbd style={kbdStyle}>Right Alt</kbd> — диктовка ·{' '}
-                <kbd style={kbdStyle}>Alt+`</kbd> — распознать песню
+                <kbd style={kbdStyle}>Right Alt</kbd> — {t(language, 'settings.hotkey.dictation')} ·{' '}
+                <kbd style={kbdStyle}>Alt+`</kbd> — {t(language, 'settings.hotkey.shazam')}
               </span>
             </div>
           )}
@@ -715,7 +716,7 @@ export default function OverlayPage() {
             return (
               <div key={i} style={{ marginBottom: 8 }}>
                 <div style={{ color: isAssistant ? '#fbbf24' : '#60a5fa', fontSize: 10 }}>
-                  {isAssistant ? 'Yukai' : 'ты'}
+                  {isAssistant ? 'Yukai' : t(language, 'chat.you')}
                 </div>
                 <div style={{ whiteSpace: 'pre-wrap' }}>{displayText}</div>
                 {imageParts.length > 0 && (

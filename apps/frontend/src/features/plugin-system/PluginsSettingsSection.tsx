@@ -1,20 +1,23 @@
 'use client'
 
 import type { YukaiPlugin } from './types'
+import type { Language } from '@/shared/yukai/persona'
+import { t, translatePluginName, translatePluginDescription } from '@/shared/yukai/i18n'
 
 type Props = {
   plugins: YukaiPlugin[]
   isEnabled: (id: string) => boolean
   setEnabled: (id: string, enabled: boolean) => void
+  language: Language
 }
 
 // Секция "Плагины" в настройках — список всех зарегистрированных плагинов
 // с чекбоксами и списком разрешений.
-export function PluginsSettingsSection({ plugins, isEnabled, setEnabled }: Props) {
+export function PluginsSettingsSection({ plugins, isEnabled, setEnabled, language }: Props) {
   return (
     <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12 }}>
       <label style={{ display: 'block', color: '#9ca3af', marginBottom: 8, fontSize: 11 }}>
-        Плагины
+        {t(language, 'plugins.section')}
       </label>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {plugins.map((p) => {
@@ -41,10 +44,12 @@ export function PluginsSettingsSection({ plugins, isEnabled, setEnabled }: Props
               />
               <div style={{ flex: 1 }}>
                 <div style={{ color: '#e5e7eb', fontSize: 12, fontWeight: 600 }}>
-                  {p.icon} {p.name}
+                  {p.icon} {translatePluginName(language, p.id, p.name)}
                 </div>
                 {p.description && (
-                  <div style={{ color: '#9ca3af', fontSize: 10, marginTop: 2 }}>{p.description}</div>
+                  <div style={{ color: '#9ca3af', fontSize: 10, marginTop: 2 }}>
+                    {translatePluginDescription(language, p.id, p.description)}
+                  </div>
                 )}
                 {p.permissions.length > 0 && (
                   <div style={{ marginTop: 4, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
