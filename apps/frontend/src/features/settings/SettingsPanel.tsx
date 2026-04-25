@@ -1,8 +1,12 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { BUILTIN_VOICES } from '@/shared/yukai/voices'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
+import type { Language } from '@/shared/yukai/persona'
+
+type OriginPref = 'auto' | 'direct' | 'ru'
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 
@@ -16,6 +20,8 @@ type Props = {
   vadThreshold: number
   onSelectVadThreshold: (v: number) => void
   onShowOnboardingAgain: () => void
+  language: Language
+  onSelectLanguage: (l: Language) => void
   isPluginEnabled: (id: string) => boolean
   setPluginEnabled: (id: string, enabled: boolean) => void
   onClose: () => void
@@ -31,10 +37,28 @@ export function SettingsPanel({
   vadThreshold,
   onSelectVadThreshold,
   onShowOnboardingAgain,
+  language,
+  onSelectLanguage,
   isPluginEnabled,
   setPluginEnabled,
   onClose,
 }: Props) {
+  // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
+  // Для пользователей с заблокированным Vercel в РФ или со своим VPN.
+  const [originPref, setOriginPref] = useState<OriginPref>('auto')
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const api = (window as any).electronAPI
+    api?.getOriginPref?.().then((p: OriginPref) => setOriginPref(p)).catch(() => {})
+  }, [])
+  function changeOriginPref(p: OriginPref) {
+    setOriginPref(p)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const api = (window as any).electronAPI
+    api?.setOriginPref?.(p)
+    // Electron сам перезагрузит окно с новым URL — рендер закроется.
+  }
+
   return (
     <div
       style={{
@@ -209,6 +233,58 @@ export function SettingsPanel({
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
             Заливка = вероятность речи от VAD. Тащи оранжевый порог —
             где он, там и начинается «речь». Применяется сразу.
+          </div>
+        </div>
+
+        <div>
+          <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
+            Язык / Language
+          </label>
+          <select
+            value={language}
+            onChange={(e) => onSelectLanguage(e.target.value as Language)}
+            style={{
+              width: '100%',
+              background: '#1f2937',
+              color: 'white',
+              border: '1px solid #374151',
+              padding: '6px 8px',
+              fontSize: 12,
+              borderRadius: 4,
+            }}
+          >
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="en">🇬🇧 English</option>
+          </select>
+          <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
+            Меняет язык, на котором отвечает Yukai по умолчанию. Голос автоматически переключается на подходящий.
+          </div>
+        </div>
+
+        <div>
+          <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
+            Подключение
+          </label>
+          <select
+            value={originPref}
+            onChange={(e) => changeOriginPref(e.target.value as OriginPref)}
+            style={{
+              width: '100%',
+              background: '#1f2937',
+              color: 'white',
+              border: '1px solid #374151',
+              padding: '6px 8px',
+              fontSize: 12,
+              borderRadius: 4,
+            }}
+          >
+            <option value="auto">Авто (рекомендуется)</option>
+            <option value="direct">Прямое — yukai.app</option>
+            <option value="ru">РФ-зеркало — ru.yukai.app</option>
+          </select>
+          <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
+            Если приложение не подключается — выбери РФ-зеркало.
+            При смене окно перезагружается.
           </div>
         </div>
 

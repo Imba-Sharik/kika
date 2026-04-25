@@ -36,6 +36,53 @@ function ensureMemoryDir() {
 // Скрыть dev-warning "Insecure Content-Security-Policy" — в проде его не видно
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
+// Origin preference — где хостится фронт. 'auto' (HEAD-проверка), 'direct' (yukai.app),
+// 'ru' (через Selectel-прокси для пользователей с заблокированным Vercel в РФ).
+// Сохраняется между запусками в userData/origin.json.
+const ORIGINS = {
+  direct: 'https://yukai.app',
+  ru: 'https://ru.yukai.app',
+}
+
+function originFile() {
+  return path.join(app.getPath('userData'), 'origin.json')
+}
+
+function getOriginPref() {
+  try {
+    const data = JSON.parse(fs.readFileSync(originFile(), 'utf8'))
+    return data.pref ?? 'auto'
+  } catch {
+    return 'auto'
+  }
+}
+
+function setOriginPref(pref) {
+  try {
+    fs.writeFileSync(originFile(), JSON.stringify({ pref }))
+  } catch (err) {
+    console.error('[main] setOriginPref failed:', err)
+  }
+}
+
+// Auto-режим — пингует yukai.app, если не отвечает за 2.5с — фолбэк на ru-зеркало.
+async function pickOriginUrl() {
+  const pref = getOriginPref()
+  if (pref === 'direct') return ORIGINS.direct
+  if (pref === 'ru') return ORIGINS.ru
+  // auto
+  try {
+    const ctrl = new AbortController()
+    const timeout = setTimeout(() => ctrl.abort(), 2500)
+    const res = await fetch(ORIGINS.direct, { method: 'HEAD', signal: ctrl.signal })
+    clearTimeout(timeout)
+    if (res.ok || res.status >= 300 && res.status < 500) return ORIGINS.direct
+  } catch (err) {
+    console.log('[main] yukai.app unavailable, falling back to ru.yukai.app:', err.message)
+  }
+  return ORIGINS.ru
+}
+
 let uIOhook = null
 try {
   uIOhook = require('uiohook-napi').uIOhook
@@ -84,16 +131,33 @@ function createWindow() {
   })
 
   // URL фронта: в dev-режиме localhost, в packaged билде — prod-домен.
-  // Переопределить можно через env KIKA_APP_URL (полезно для staging / custom-домена).
+  // YUKAI_APP_URL env-override используется для staging.
+  // Иначе — pickOriginUrl() с user preference (auto / direct / ru).
   const devUrl = 'http://localhost:3000/overlay'
-  const prodUrl = process.env.YUKAI_APP_URL || 'https://yukai.app/overlay'
-  mainWindow.loadURL(app.isPackaged ? prodUrl : devUrl)
+  if (!app.isPackaged) {
+    mainWindow.loadURL(devUrl)
+  } else if (process.env.YUKAI_APP_URL) {
+    mainWindow.loadURL(process.env.YUKAI_APP_URL + '/overlay')
+  } else {
+    pickOriginUrl().then((origin) => mainWindow.loadURL(origin + '/overlay'))
+  }
 
   // DevTools не открываем автоматически. Для отладки — запусти с KIKA_DEVTOOLS=1
   if (process.env.KIKA_DEVTOOLS === '1') {
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   }
 }
+
+// Origin-preference IPC — Settings panel читает/пишет, при смене перезагружаем окно
+ipcMain.handle('get-origin-pref', () => getOriginPref())
+ipcMain.handle('set-origin-pref', async (_event, pref) => {
+  setOriginPref(pref)
+  if (mainWindow && app.isPackaged) {
+    const origin = await pickOriginUrl()
+    mainWindow.loadURL(origin + '/overlay')
+  }
+  return getOriginPref()
+})
 
 // Для Shazam-фичи — отдаём ID источника системного аудио (loopback)
 ipcMain.handle('get-desktop-audio-source', async () => {

@@ -20,6 +20,7 @@ import type { YukaiContext } from '@/features/plugin-system/types'
 import {
   stripMediaTags,
   type Emotion,
+  type Language,
 } from '@/shared/yukai/persona'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
 import { DEFAULT_VOICE_ID, findVoice } from '@/shared/yukai/voices'
@@ -32,6 +33,7 @@ const EMOTION_STORAGE_KEY = 'kika:overlay:emotion'
 const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
 const VOICE_STORAGE_KEY = 'kika:overlay:voiceId'
 const VAD_THRESHOLD_KEY = 'kika:overlay:vadThreshold'
+const LANGUAGE_KEY = 'kika:overlay:language'
 const DEFAULT_VAD_THRESHOLD = 0.4
 
 // Устаревшие [APPEND:]/[WRITE:] текстовые теги больше не используются —
@@ -89,6 +91,20 @@ export default function OverlayPage() {
     setVadThreshold(v)
     try { localStorage.setItem(VAD_THRESHOLD_KEY, String(v)) } catch {}
   }
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window === 'undefined') return 'ru'
+    try {
+      const saved = localStorage.getItem(LANGUAGE_KEY)
+      return saved === 'en' || saved === 'ru' ? saved : 'ru'
+    } catch { return 'ru' }
+  })
+  function selectLanguage(l: Language) {
+    setLanguage(l)
+    try { localStorage.setItem(LANGUAGE_KEY, l) } catch {}
+    // При смене RU↔EN авто-подбираем подходящий voice (Fish для русского, ElevenLabs для англ).
+    if (l === 'en' && voiceId !== 'eleven-kika') selectVoice('eleven-kika')
+    if (l === 'ru' && voiceId === 'eleven-kika') selectVoice(DEFAULT_VOICE_ID)
+  }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
   // Показываем первую подсказку «как начать разговор» один раз. Ключ версионирован —
@@ -126,6 +142,7 @@ export default function OverlayPage() {
 
   const chat = useChat({
     persona: CHARACTER.persona,
+    language,
     model: MODEL,
     voice,
     profileMd,
@@ -773,6 +790,8 @@ export default function OverlayPage() {
           vadThreshold={vadThreshold}
           onSelectVadThreshold={selectVadThreshold}
           onShowOnboardingAgain={showOnboardingAgain}
+          language={language}
+          onSelectLanguage={selectLanguage}
           isPluginEnabled={isEnabled}
           setPluginEnabled={setEnabled}
           onClose={() => setSettingsOpen(false)}

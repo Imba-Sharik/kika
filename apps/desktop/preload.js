@@ -25,6 +25,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onMusicStart: listener('music-start'),
   onMusicStop: listener('music-stop'),
   onMicToggle: listener('mic-toggle'),
+  getOriginPref: () => ipcRenderer.invoke('get-origin-pref'),
+  setOriginPref: (pref) => ipcRenderer.invoke('set-origin-pref', pref),
   getDesktopAudioSource: () => ipcRenderer.invoke('get-desktop-audio-source'),
   captureScreen: () => ipcRenderer.invoke('capture-screen'),
   captureRegion: () => ipcRenderer.invoke('capture-region'),

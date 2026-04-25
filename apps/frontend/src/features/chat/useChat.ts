@@ -5,6 +5,7 @@ import type { ModelMessage } from 'ai'
 import {
   buildSystemPrompt,
   type Emotion,
+  type Language,
 } from '@/shared/yukai/persona'
 import { fetchTts, playViaBlob, playViaStream, type TtsVoice } from '@/features/tts/audio'
 import { extractSentences } from '@/features/tts/sentenceStream'
@@ -21,7 +22,8 @@ type ChatModel = {
 }
 
 type UseChatOptions = {
-  persona: string                    // характер Kika (для system prompt)
+  persona: string                    // характер Yukai (для system prompt)
+  language: Language                 // язык по умолчанию (ru / en) — меняет EMOTION_PROTOCOL
   model: ChatModel                   // какая LLM используется
   voice: TtsVoice                    // голос для TTS
   profileMd: string                  // инжектится в [ПАМЯТЬ: profile.md]
@@ -166,7 +168,7 @@ export function useChat(opts: UseChatOptions) {
     try {
       // Собираем system prompt: персона + profile + инъекции плагинов
       // (каждый плагин может добавить свою "память" типа английского словаря)
-      let systemPrompt = buildSystemPrompt(opts.persona)
+      let systemPrompt = buildSystemPrompt(opts.persona, opts.language)
       if (opts.profileMd && opts.profileMd.trim()) {
         systemPrompt += '\n\n---\n[ПАМЯТЬ: profile.md]\n' + opts.profileMd
       }
