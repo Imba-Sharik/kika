@@ -222,22 +222,6 @@ const MEDIA_TAG_RE = /\[(gif|sticker|meme|clip|img):\s*([^\]]+)\]/gi
 export type MediaType = 'gif' | 'sticker' | 'meme' | 'clip' | 'img'
 export type MediaRequest = { type: MediaType; query: string }
 
-const MEDIA_TO_KLIPY: Record<
-  Exclude<MediaType, 'img'>,
-  'gifs' | 'stickers' | 'memes' | 'clips'
-> = {
-  gif: 'gifs',
-  sticker: 'stickers',
-  meme: 'memes',
-  clip: 'clips',
-}
-
-export function klipyType(
-  media: Exclude<MediaType, 'img'>,
-): 'gifs' | 'stickers' | 'memes' | 'clips' {
-  return MEDIA_TO_KLIPY[media]
-}
-
 function isEmotion(tag: string): tag is Emotion {
   return (EMOTIONS as readonly string[]).includes(tag)
 }
