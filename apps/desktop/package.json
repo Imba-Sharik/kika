@@ -37,6 +37,7 @@
       "preload.js",
       "selection.html",
       "selection-preload.js",
+      "fallback.html",
       "assets/**/*",
       "!**/*.map",
       "!**/*.md"

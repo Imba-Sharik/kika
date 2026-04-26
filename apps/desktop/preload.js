@@ -30,4 +30,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getDesktopAudioSource: () => ipcRenderer.invoke('get-desktop-audio-source'),
   captureScreen: () => ipcRenderer.invoke('capture-screen'),
   captureRegion: () => ipcRenderer.invoke('capture-region'),
+  retryLoad: () => ipcRenderer.invoke('retry-load'),
 })

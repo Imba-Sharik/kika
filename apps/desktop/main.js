@@ -95,6 +95,22 @@ try {
 const WINDOW_SIZE = { width: 560, height: 400 }
 
 let mainWindow = null
+let loadedFallback = false
+
+// Single-instance lock — если приложение уже запущено, повторный клик по exe
+// не создаёт второе невидимое окно (баг: пустое прозрачное окно блокировало
+// взаимодействие с иконками рабочего стола в левом нижнем углу).
+if (!app.requestSingleInstanceLock()) {
+  app.quit()
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  })
+}
 
 function createWindow() {
   // Убираем дефолтное меню: оно держит роль Undo на Ctrl+Z, которая перехватывает
@@ -115,6 +131,7 @@ function createWindow() {
     skipTaskbar: false,
     resizable: true,
     hasShadow: false,
+    show: false,
     // focusable: false было проблематично — getUserMedia мог не работать
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -124,6 +141,45 @@ function createWindow() {
   })
 
   mainWindow.setAlwaysOnTop(true, 'screen-saver')
+
+  // Пока контент не загрузился, окно прозрачное И не перехватывает клики мыши.
+  // Иначе невидимое окно 560x400 блокирует иконки рабочего стола под ним.
+  // После did-finish-load фронт сам управляет интерактивностью.
+  mainWindow.setIgnoreMouseEvents(true)
+
+  mainWindow.once('ready-to-show', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show()
+  })
+
+  // loadedFallback на уровне модуля (не closure), чтобы retry-load из IPC мог сбросить флаг
+  loadedFallback = false
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.setIgnoreMouseEvents(false)
+  })
+
+  // Если фронт недоступен (нет интернета, провайдер блокирует Vercel и ru-зеркало) —
+  // грузим локальную fallback-страницу с кнопкой "Повторить", чтобы окно не висело
+  // пустым и не блокировало рабочий стол.
+  mainWindow.webContents.on('did-fail-load', (_e, errorCode, errorDesc, validatedURL) => {
+    if (errorCode === -3) return // ABORTED — нормально при быстрой смене URL
+    if (loadedFallback) return
+    console.error('[main] did-fail-load:', errorCode, errorDesc, validatedURL)
+    loadedFallback = true
+    mainWindow.loadFile(path.join(__dirname, 'fallback.html')).catch(() => {})
+  })
+
+  // Запасной таймер — если запрос висит без ошибки и без ответа.
+  const loadTimeout = setTimeout(() => {
+    if (loadedFallback) return
+    if (!mainWindow || mainWindow.isDestroyed()) return
+    const url = mainWindow.webContents.getURL()
+    if (mainWindow.webContents.isLoading() || url === '' || url === 'about:blank') {
+      console.error('[main] load timeout, switching to fallback')
+      loadedFallback = true
+      mainWindow.loadFile(path.join(__dirname, 'fallback.html')).catch(() => {})
+    }
+  }, 12000)
+  mainWindow.on('closed', () => clearTimeout(loadTimeout))
 
   // Блокируем системное контекст-меню Windows на drag-region (right-click)
   mainWindow.on('system-context-menu', (e) => {
@@ -147,6 +203,22 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   }
 }
+
+// Кнопка "Повторить" из fallback.html — повторяет попытку загрузки фронта
+ipcMain.handle('retry-load', async () => {
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  loadedFallback = false
+  if (!app.isPackaged) {
+    mainWindow.loadURL('http://localhost:3000/overlay')
+    return
+  }
+  if (process.env.YUKAI_APP_URL) {
+    mainWindow.loadURL(process.env.YUKAI_APP_URL + '/overlay')
+    return
+  }
+  const origin = await pickOriginUrl()
+  mainWindow.loadURL(origin + '/overlay')
+})
 
 // Origin-preference IPC — Settings panel читает/пишет, при смене перезагружаем окно
 ipcMain.handle('get-origin-pref', () => getOriginPref())
