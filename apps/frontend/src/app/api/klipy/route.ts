@@ -57,6 +57,10 @@ export async function GET(req: NextRequest) {
     return { urls: Array.from(new Set(allUrls)), raw: json, status: 200 }
   }
 
+  // Оборачиваем прямые URL медиа в /api/img прокси — РФ-провайдеры режут media.klipy.co.
+  // /api/img проксирует через Vercel, юзер не делает прямых запросов к Klipy CDN.
+  const proxify = (u: string) => `/api/img?url=${encodeURIComponent(u)}`
+
   try {
     let result = await fetchType(type)
 
@@ -65,10 +69,12 @@ export async function GET(req: NextRequest) {
       if (fb.urls.length > 0) result = fb
     }
 
+    const proxiedUrls = result.urls.map(proxify)
+
     if (debug) {
-      return Response.json({ urls: result.urls, raw: result.raw, status: result.status })
+      return Response.json({ urls: proxiedUrls, raw: result.raw, status: result.status })
     }
-    return Response.json({ urls: result.urls })
+    return Response.json({ urls: proxiedUrls })
   } catch (e) {
     return Response.json(
       { error: e instanceof Error ? e.message : String(e) },

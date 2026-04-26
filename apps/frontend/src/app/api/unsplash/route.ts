@@ -47,10 +47,13 @@ export async function GET(req: NextRequest) {
       )
     }
     const json = (await res.json()) as UnsplashSearchResponse
+    // Оборачиваем прямые URL картинок в /api/img прокси — иначе РФ-юзеры без VPN
+    // не получат изображения из-за блокировок images.unsplash.com у провайдеров.
+    const proxify = (u: string) => `/api/img?url=${encodeURIComponent(u)}`
     const photos = json.results.map((p) => ({
       id: p.id,
-      url: p.urls.small,
-      thumb: p.urls.thumb,
+      url: proxify(p.urls.small),
+      thumb: proxify(p.urls.thumb),
       alt: p.alt_description,
       author: p.user.name,
       authorUrl: `${p.user.links.html}?utm_source=anirum&utm_medium=referral`,
