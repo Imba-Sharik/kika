@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { getAiBaseUrl } from '@/shared/api/strapi'
 
 type Props = {
   onTranscript: (text: string) => void
@@ -78,7 +79,7 @@ export function ListenButton({ onTranscript, onSpeechChange, paused, language = 
       form.append('audio', new File([blob], 'speech.wav', { type: 'audio/wav' }))
       form.append('language', language)
 
-      const res = await fetch('/api/stt', { method: 'POST', body: form })
+      const res = await fetch(`${getAiBaseUrl()}/stt`, { method: 'POST', body: form })
       if (!res.ok) throw new Error(await res.text())
       const { text } = (await res.json()) as { text: string }
       if (text?.trim()) onTranscriptRef.current(text.trim())

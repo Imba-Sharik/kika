@@ -39,7 +39,19 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Middlewar
   },
   'strapi::poweredBy',
   'strapi::query',
-  'strapi::body',
+  {
+    name: 'strapi::body',
+    config: {
+      // STT принимает webm/opus аудио (~до 1-2 МБ), vision — base64 PNG (до ~10 МБ).
+      // Дефолт 200kb рубит запросы.
+      jsonLimit: '20mb',
+      formLimit: '20mb',
+      textLimit: '20mb',
+      formidable: {
+        maxFileSize: 25 * 1024 * 1024, // 25 МБ хватит для голосового turn любой длины
+      },
+    },
+  },
   'strapi::session',
   'strapi::favicon',
   'strapi::public',

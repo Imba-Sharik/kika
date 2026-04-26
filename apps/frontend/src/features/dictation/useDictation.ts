@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { getAiBaseUrl } from '@/shared/api/strapi'
 
 export type DictationItem = {
   ts: number
@@ -84,7 +85,7 @@ export function useDictation({ deviceId, onTranscript }: Options) {
           form.append('audio', new File([blob], 'dictation.webm', { type: mimeType }))
           form.append('language', 'ru')
           form.append('clean', 'true') // LLM чистит слова-паразиты + пунктуация
-          const res = await fetch('/api/stt', { method: 'POST', body: form })
+          const res = await fetch(`${getAiBaseUrl()}/stt`, { method: 'POST', body: form })
           if (!res.ok) throw new Error(await res.text())
           const { text } = (await res.json()) as { text: string }
           const trimmed = text?.trim() ?? ''

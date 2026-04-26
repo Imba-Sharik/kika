@@ -2,6 +2,8 @@
 // Логика очереди и управления потоком остаётся на вызывающей стороне (пока —
 // в overlay page.tsx в функции send, потом вынесем в useTTSPipeline).
 
+import { getAiBaseUrl } from '@/shared/api/strapi'
+
 export type TtsVoice = {
   provider: 'fish' | 'elevenlabs'
   voiceId: string
@@ -10,7 +12,7 @@ export type TtsVoice = {
 // POST /api/tts → Response с mp3-потоком (может быть streaming, может быть полное тело).
 export async function fetchTts(text: string, voice: TtsVoice): Promise<Response> {
   const ttsText = text.replace(/\*\*?|__?|~~|`/g, '').replace(/\s+/g, ' ').trim()
-  const res = await fetch('/api/tts', {
+  const res = await fetch(`${getAiBaseUrl()}/tts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
