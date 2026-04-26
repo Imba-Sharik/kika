@@ -48,39 +48,47 @@ function originFile() {
   return path.join(app.getPath('userData'), 'origin.json')
 }
 
-function getOriginPref() {
+function readOriginData() {
   try {
-    const data = JSON.parse(fs.readFileSync(originFile(), 'utf8'))
-    return data.pref ?? 'auto'
+    return JSON.parse(fs.readFileSync(originFile(), 'utf8'))
   } catch {
-    return 'auto'
+    return {}
   }
+}
+
+function getOriginPref() {
+  return readOriginData().pref ?? 'auto'
 }
 
 function setOriginPref(pref) {
   try {
-    fs.writeFileSync(originFile(), JSON.stringify({ pref }))
+    fs.writeFileSync(originFile(), JSON.stringify({ ...readOriginData(), pref }))
   } catch (err) {
     console.error('[main] setOriginPref failed:', err)
   }
 }
 
-// Auto-режим — пингует yukai.app, если не отвечает за 2.5с — фолбэк на ru-зеркало.
-async function pickOriginUrl() {
+// Какой origin последний раз успешно загрузился — следующий запуск начинаем с него.
+// HEAD-проверку убрали: у юзеров с DPI она ложно проходит для yukai.app, но GET режется.
+function getLastWorkingOrigin() {
+  return readOriginData().lastWorking ?? null
+}
+
+function setLastWorkingOrigin(origin) {
+  try {
+    fs.writeFileSync(originFile(), JSON.stringify({ ...readOriginData(), lastWorking: origin }))
+  } catch (err) {
+    console.error('[main] setLastWorkingOrigin failed:', err)
+  }
+}
+
+// В auto-режиме: если есть lastWorking — стартуем с него, иначе с direct.
+// При фейле логика try-next автоматически переключит на альтернативный origin.
+function pickOriginUrl() {
   const pref = getOriginPref()
   if (pref === 'direct') return ORIGINS.direct
   if (pref === 'ru') return ORIGINS.ru
-  // auto
-  try {
-    const ctrl = new AbortController()
-    const timeout = setTimeout(() => ctrl.abort(), 2500)
-    const res = await fetch(ORIGINS.direct, { method: 'HEAD', signal: ctrl.signal })
-    clearTimeout(timeout)
-    if (res.ok || res.status >= 300 && res.status < 500) return ORIGINS.direct
-  } catch (err) {
-    console.log('[main] yukai.app unavailable, falling back to ru.yukai.app:', err.message)
-  }
-  return ORIGINS.ru
+  return getLastWorkingOrigin() || ORIGINS.direct
 }
 
 let uIOhook = null
@@ -96,6 +104,8 @@ const WINDOW_SIZE = { width: 560, height: 400 }
 
 let mainWindow = null
 let loadedFallback = false
+const triedOrigins = new Set()
+let currentLoadTimer = null
 
 // Single-instance lock — если приложение уже запущено, повторный клик по exe
 // не создаёт второе невидимое окно (баг: пустое прозрачное окно блокировало
@@ -110,6 +120,44 @@ if (!app.requestSingleInstanceLock()) {
       mainWindow.focus()
     }
   })
+}
+
+// Грузит конкретный origin с таймаутом 12с. По таймауту — переключается на следующий
+// непробованный origin. По did-fail-load это делает обработчик в createWindow.
+function tryLoadOrigin(origin) {
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  triedOrigins.add(origin)
+  console.log('[main] loading origin:', origin)
+  if (currentLoadTimer) clearTimeout(currentLoadTimer)
+  currentLoadTimer = setTimeout(() => {
+    currentLoadTimer = null
+    if (!mainWindow || mainWindow.isDestroyed()) return
+    if (loadedFallback) return
+    if (mainWindow.webContents.isLoading()) {
+      console.error('[main] load timeout for', origin)
+      try { mainWindow.webContents.stop() } catch {}
+      tryNextOriginOrFallback()
+    }
+  }, 12000)
+  mainWindow.loadURL(origin + '/overlay').catch((err) => {
+    console.error('[main] loadURL rejected for', origin, err.message)
+  })
+}
+
+// Подбирает первый origin из списка, который ещё не пробовали. Если все пробовали —
+// показывает локальный fallback.html.
+function tryNextOriginOrFallback() {
+  if (loadedFallback) return
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  const candidates = [ORIGINS.direct, ORIGINS.ru]
+  const next = candidates.find((o) => !triedOrigins.has(o))
+  if (next) {
+    tryLoadOrigin(next)
+    return
+  }
+  if (currentLoadTimer) { clearTimeout(currentLoadTimer); currentLoadTimer = null }
+  loadedFallback = true
+  mainWindow.loadFile(path.join(__dirname, 'fallback.html')).catch(() => {})
 }
 
 function createWindow() {
@@ -151,35 +199,28 @@ function createWindow() {
     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show()
   })
 
-  // loadedFallback на уровне модуля (не closure), чтобы retry-load из IPC мог сбросить флаг
   loadedFallback = false
+  triedOrigins.clear()
+
   mainWindow.webContents.on('did-finish-load', () => {
+    if (currentLoadTimer) { clearTimeout(currentLoadTimer); currentLoadTimer = null }
     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.setIgnoreMouseEvents(false)
+    // Запоминаем рабочий origin — следующий запуск начнём с него
+    const url = mainWindow?.webContents.getURL() || ''
+    if (url.startsWith(ORIGINS.direct)) setLastWorkingOrigin(ORIGINS.direct)
+    else if (url.startsWith(ORIGINS.ru)) setLastWorkingOrigin(ORIGINS.ru)
   })
 
-  // Если фронт недоступен (нет интернета, провайдер блокирует Vercel и ru-зеркало) —
-  // грузим локальную fallback-страницу с кнопкой "Повторить", чтобы окно не висело
-  // пустым и не блокировало рабочий стол.
   mainWindow.webContents.on('did-fail-load', (_e, errorCode, errorDesc, validatedURL) => {
     if (errorCode === -3) return // ABORTED — нормально при быстрой смене URL
     if (loadedFallback) return
     console.error('[main] did-fail-load:', errorCode, errorDesc, validatedURL)
-    loadedFallback = true
-    mainWindow.loadFile(path.join(__dirname, 'fallback.html')).catch(() => {})
+    tryNextOriginOrFallback()
   })
 
-  // Запасной таймер — если запрос висит без ошибки и без ответа.
-  const loadTimeout = setTimeout(() => {
-    if (loadedFallback) return
-    if (!mainWindow || mainWindow.isDestroyed()) return
-    const url = mainWindow.webContents.getURL()
-    if (mainWindow.webContents.isLoading() || url === '' || url === 'about:blank') {
-      console.error('[main] load timeout, switching to fallback')
-      loadedFallback = true
-      mainWindow.loadFile(path.join(__dirname, 'fallback.html')).catch(() => {})
-    }
-  }, 12000)
-  mainWindow.on('closed', () => clearTimeout(loadTimeout))
+  mainWindow.on('closed', () => {
+    if (currentLoadTimer) { clearTimeout(currentLoadTimer); currentLoadTimer = null }
+  })
 
   // Блокируем системное контекст-меню Windows на drag-region (right-click)
   mainWindow.on('system-context-menu', (e) => {
@@ -188,14 +229,13 @@ function createWindow() {
 
   // URL фронта: в dev-режиме localhost, в packaged билде — prod-домен.
   // YUKAI_APP_URL env-override используется для staging.
-  // Иначе — pickOriginUrl() с user preference (auto / direct / ru).
-  const devUrl = 'http://localhost:3000/overlay'
+  // Иначе — pickOriginUrl() с user preference (auto / direct / ru) + auto-fallback при фейле.
   if (!app.isPackaged) {
-    mainWindow.loadURL(devUrl)
+    mainWindow.loadURL('http://localhost:3000/overlay')
   } else if (process.env.YUKAI_APP_URL) {
     mainWindow.loadURL(process.env.YUKAI_APP_URL + '/overlay')
   } else {
-    pickOriginUrl().then((origin) => mainWindow.loadURL(origin + '/overlay'))
+    tryLoadOrigin(pickOriginUrl())
   }
 
   // DevTools не открываем автоматически. Для отладки — запусти с KIKA_DEVTOOLS=1
@@ -204,10 +244,12 @@ function createWindow() {
   }
 }
 
-// Кнопка "Повторить" из fallback.html — повторяет попытку загрузки фронта
-ipcMain.handle('retry-load', async () => {
+// Кнопка "Повторить" из fallback.html — повторяет попытку загрузки фронта,
+// сбрасывая список пробованных origin'ов и стартуя цикл заново.
+ipcMain.handle('retry-load', () => {
   if (!mainWindow || mainWindow.isDestroyed()) return
   loadedFallback = false
+  triedOrigins.clear()
   if (!app.isPackaged) {
     mainWindow.loadURL('http://localhost:3000/overlay')
     return
@@ -216,17 +258,17 @@ ipcMain.handle('retry-load', async () => {
     mainWindow.loadURL(process.env.YUKAI_APP_URL + '/overlay')
     return
   }
-  const origin = await pickOriginUrl()
-  mainWindow.loadURL(origin + '/overlay')
+  tryLoadOrigin(pickOriginUrl())
 })
 
 // Origin-preference IPC — Settings panel читает/пишет, при смене перезагружаем окно
 ipcMain.handle('get-origin-pref', () => getOriginPref())
-ipcMain.handle('set-origin-pref', async (_event, pref) => {
+ipcMain.handle('set-origin-pref', (_event, pref) => {
   setOriginPref(pref)
-  if (mainWindow && app.isPackaged) {
-    const origin = await pickOriginUrl()
-    mainWindow.loadURL(origin + '/overlay')
+  if (mainWindow && !mainWindow.isDestroyed() && app.isPackaged) {
+    loadedFallback = false
+    triedOrigins.clear()
+    tryLoadOrigin(pickOriginUrl())
   }
   return getOriginPref()
 })
