@@ -37,3 +37,12 @@ export function getAiBaseUrl(): string {
   }
   return STRAPI_API_URL
 }
+
+/**
+ * Origin (без /api) бэка — для вставки в `<img src>` когда бэк возвращает
+ * относительный путь типа `/api/img?url=...`. Браузер иначе резолвит
+ * относительный URL против origin страницы (yukai.app), а там endpoint'а нет.
+ */
+export function getAssetBaseUrl(): string {
+  return getAiBaseUrl().replace(/\/api$/, '')
+}

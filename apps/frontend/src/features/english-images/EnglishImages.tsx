@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { extractMediaRequests } from '@/shared/yukai/persona'
+import { getAiBaseUrl, getAssetBaseUrl } from '@/shared/api/strapi'
 
 type ImageHit = {
   word: string
@@ -18,7 +19,7 @@ async function fetchImage(word: string): Promise<ImageHit> {
   if (cached) return cached
 
   try {
-    const res = await fetch(`/api/unsplash?q=${encodeURIComponent(key)}&per_page=1`)
+    const res = await fetch(`${getAiBaseUrl()}/unsplash?q=${encodeURIComponent(key)}&per_page=1`)
     if (!res.ok) {
       const miss: ImageHit = { word: key, url: null }
       cache.set(key, miss)
@@ -28,8 +29,11 @@ async function fetchImage(word: string): Promise<ImageHit> {
       photos: { url: string; author: string; authorUrl: string }[]
     }
     const first = json.photos[0]
+    // Бэк возвращает относительный /api/img?url=... — префиксим origin'ом бэка
+    // (для РФ это relay.yukai.app, иначе api.yukai.app), чтобы img-тег резолвил правильно
+    const assetBase = getAssetBaseUrl()
     const hit: ImageHit = first
-      ? { word: key, url: first.url, author: first.author, authorUrl: first.authorUrl }
+      ? { word: key, url: `${assetBase}${first.url}`, author: first.author, authorUrl: first.authorUrl }
       : { word: key, url: null }
     cache.set(key, hit)
     return hit
