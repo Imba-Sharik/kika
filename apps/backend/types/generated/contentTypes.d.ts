@@ -430,6 +430,43 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiUsageUsage extends Struct.CollectionTypeSchema {
+  collectionName: 'usages';
+  info: {
+    description: '\u041B\u043E\u0433\u0438 AI-\u0437\u0430\u043F\u0440\u043E\u0441\u043E\u0432: \u0442\u043E\u043A\u0435\u043D\u044B, \u0441\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C, \u0434\u043B\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C. \u041F\u0438\u0448\u0443\u0442\u0441\u044F fire-and-forget \u0438\u0437 \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u043B\u0435\u0440\u043E\u0432 chat/stt/tts/vision.';
+    displayName: 'Usage';
+    pluralName: 'usages';
+    singularName: 'usage';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    costUsd: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    durationMs: Schema.Attribute.Integer;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::usage.usage'> &
+      Schema.Attribute.Private;
+    meta: Schema.Attribute.JSON;
+    model: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    tokensIn: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    tokensOut: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    type: Schema.Attribute.Enumeration<['chat', 'stt', 'tts', 'vision']> &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -941,6 +978,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::usage.usage': ApiUsageUsage;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

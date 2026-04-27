@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "usages",
+  "info": {
+    "singularName": "usage",
+    "pluralName": "usages",
+    "displayName": "Usage",
+    "description": "Логи AI-запросов: токены, стоимость, длительность. Пишутся fire-and-forget из контроллеров chat/stt/tts/vision."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["chat", "stt", "tts", "vision"],
+      "required": true
+    },
+    "model": {
+      "type": "string"
+    },
+    "tokensIn": {
+      "type": "integer",
+      "default": 0
+    },
+    "tokensOut": {
+      "type": "integer",
+      "default": 0
+    },
+    "costUsd": {
+      "type": "decimal",
+      "default": 0
+    },
+    "durationMs": {
+      "type": "integer"
+    },
+    "meta": {
+      "type": "json"
+    }
+  }
+}

@@ -1,6 +1,12 @@
-import { readFile } from 'node:fs/promises'
+import { readFile, stat } from 'node:fs/promises'
 import { experimental_transcribe as transcribe, generateText } from 'ai'
 import { groq } from '@ai-sdk/groq'
+import {
+  logUsage,
+  groqWhisperCost,
+  groqLlamaCost,
+  estimateAudioDurationSec,
+} from '../../../utils/log-usage'
 
 const DEFAULT_PROMPT =
   'Юкай, Yukai, AI-компаньон, робот, аниме, персонаж, голос, эмоция, подписка, ElevenLabs, Fish Audio.'
@@ -53,6 +59,8 @@ async function cleanText(raw: string): Promise<string> {
 
 export default {
   async transcribe(ctx) {
+    const startedAt = Date.now()
+    const userId = ctx.state.user?.id
     try {
       // Strapi body parser кладёт файлы из multipart в ctx.request.files
       const files = (ctx.request.files || {}) as Record<
@@ -75,6 +83,8 @@ export default {
       const clean = body.clean === 'true'
 
       const bytes = await readFile(filepath)
+      const audioBytes = audioFile.size ?? (await stat(filepath)).size
+      const durationSec = estimateAudioDurationSec(audioBytes)
 
       const { text } = await transcribe({
         model: groq.transcription('whisper-large-v3-turbo'),
@@ -82,12 +92,32 @@ export default {
         providerOptions: { groq: { language, prompt } },
       })
 
-      if (isHallucination(text)) {
+      const hallucinated = isHallucination(text)
+      if (hallucinated) {
         strapi.log.info(`[stt] hallucination filtered: ${JSON.stringify(text)}`)
-        return { text: '' }
       }
+      const finalText = hallucinated
+        ? ''
+        : clean
+          ? await cleanText(text)
+          : text
 
-      return { text: clean ? await cleanText(text) : text }
+      // Логируем после получения результата, перед return — но fire-and-forget
+      // через queueMicrotask чтоб не блокировать ответ юзеру.
+      queueMicrotask(() => {
+        logUsage({
+          userId,
+          type: 'stt',
+          model: 'whisper-large-v3-turbo',
+          tokensIn: 0,
+          tokensOut: finalText.length,
+          costUsd: groqWhisperCost(durationSec) + (clean ? groqLlamaCost(text.length, finalText.length) : 0),
+          durationMs: Date.now() - startedAt,
+          meta: { audioBytes, language, clean, hallucinated },
+        })
+      })
+
+      return { text: finalText }
     } catch (e) {
       strapi.log.error('[stt] failed', e)
       ctx.status = 500

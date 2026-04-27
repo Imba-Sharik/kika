@@ -1,5 +1,6 @@
 import { generateText } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
+import { logUsage, anthropicHaikuCost } from '../../../utils/log-usage'
 
 type Body = {
   image: string // data:image/...;base64,...
@@ -20,6 +21,10 @@ export default {
       return ctx.badRequest('image (data URL) required')
     }
 
+    const startedAt = Date.now()
+    const userId = ctx.state.user?.id
+    const usedModel = 'claude-haiku-4-5-20251001'
+
     try {
       const match = image.match(/^data:(image\/\w+);base64,(.+)$/)
       if (!match) {
@@ -27,8 +32,8 @@ export default {
       }
       const [, mediaType, base64] = match
 
-      const { text } = await generateText({
-        model: anthropic('claude-haiku-4-5-20251001'),
+      const { text, usage } = await generateText({
+        model: anthropic(usedModel),
         messages: [
           {
             role: 'user',
@@ -38,6 +43,20 @@ export default {
             ],
           },
         ],
+      })
+
+      queueMicrotask(() => {
+        const tokensIn = usage?.inputTokens ?? 0
+        const tokensOut = usage?.outputTokens ?? 0
+        logUsage({
+          userId,
+          type: 'vision',
+          model: usedModel,
+          tokensIn,
+          tokensOut,
+          costUsd: anthropicHaikuCost(tokensIn, tokensOut),
+          durationMs: Date.now() - startedAt,
+        })
       })
 
       return { text }

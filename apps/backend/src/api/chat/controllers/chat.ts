@@ -3,6 +3,7 @@ import { streamText, tool, stepCountIs, type LanguageModel, type ModelMessage, t
 import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import { YUKAI_SYSTEM_PROMPT } from '../../../shared/yukai/persona'
+import { logUsage, anthropicHaikuCost } from '../../../utils/log-usage'
 
 type Provider = 'anthropic'
 
@@ -62,6 +63,10 @@ export default {
     }
     const hasTools = Object.keys(combinedTools).length > 0
 
+    const startedAt = Date.now()
+    const userId = ctx.state.user?.id
+    const usedModel = model ?? 'claude-haiku-4-5-20251001'
+
     const result = streamText({
       model: pickModel(provider, model),
       system: system ?? YUKAI_SYSTEM_PROMPT,
@@ -69,6 +74,29 @@ export default {
       tools: hasTools ? combinedTools : undefined,
       stopWhen: hasTools ? stepCountIs(useTools ? 3 : 4) : undefined,
     })
+
+    // result.usage — Promise который зарезолвится КОГДА Anthropic закончит стрим.
+    // К этому моменту юзер уже получил весь ответ (мы вернули body=stream выше).
+    // Логируем в фоне, не блокируем response. .catch чтоб не было unhandled rejection.
+    // result.usage — PromiseLike<void> в типах ai-sdk, поэтому передаём
+    // обработчики через 2 аргумента then() вместо .catch()
+    result.usage.then(
+      (usage) => {
+        logUsage({
+          userId,
+          type: 'chat',
+          model: usedModel,
+          tokensIn: usage.inputTokens ?? 0,
+          tokensOut: usage.outputTokens ?? 0,
+          costUsd: anthropicHaikuCost(usage.inputTokens ?? 0, usage.outputTokens ?? 0),
+          durationMs: Date.now() - startedAt,
+          meta: { useTools: !!useTools },
+        })
+      },
+      () => {
+        // Стрим прерван клиентом или ошибка Anthropic — usage не пришёл, пропускаем
+      },
+    )
 
     // useTools (memory) → UI-message stream с tool_calls для клиента.
     // Иначе → текстовый stream.

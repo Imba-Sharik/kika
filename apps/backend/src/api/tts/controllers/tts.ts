@@ -1,6 +1,7 @@
 import { Readable } from 'node:stream'
 import { experimental_generateSpeech as generateSpeech } from 'ai'
 import { elevenlabs } from '@ai-sdk/elevenlabs'
+import { logUsage, elevenlabsTurboCost, fishCost } from '../../../utils/log-usage'
 
 type Provider = 'elevenlabs' | 'fish'
 type Model = 'eleven_v3' | 'eleven_multilingual_v2' | 'eleven_turbo_v2_5' | 'eleven_flash_v2_5'
@@ -88,12 +89,29 @@ export default {
       return ctx.badRequest('voiceId not provided')
     }
 
+    const startedAt = Date.now()
+    const userId = ctx.state.user?.id
+    const chars = text.length
+
     try {
       if (provider === 'fish') {
         await ttsFishStream(ctx, text, voice)
       } else {
         await ttsElevenLabs(ctx, text, voice, model)
       }
+      // Аудио уже в ctx.body (стримом или buffer'ом). Логируем в фоне.
+      queueMicrotask(() => {
+        logUsage({
+          userId,
+          type: 'tts',
+          model: provider === 'fish' ? 'fish-s2-pro' : model,
+          tokensIn: chars,
+          tokensOut: 0,
+          costUsd: provider === 'fish' ? fishCost(chars) : elevenlabsTurboCost(chars),
+          durationMs: Date.now() - startedAt,
+          meta: { provider, voice },
+        })
+      })
     } catch (e) {
       strapi.log.error('[tts] failed', e)
       ctx.status = 500
