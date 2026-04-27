@@ -48,6 +48,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    // Гейт для protected роутов через proxy.ts. Без этого NextAuth не редиректит
+    // анонимов — auth() просто прикрепляется к request но никого не блокирует.
+    // Возвращаем false → редирект на pages.signIn (/login).
+    authorized({ auth }) {
+      return !!auth
+    },
     jwt({ token, user }) {
       if (user) {
         token.strapiJwt = user.strapiJwt ?? ''

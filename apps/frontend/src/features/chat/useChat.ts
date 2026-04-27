@@ -11,7 +11,7 @@ import { fetchTts, playViaBlob, playViaStream, type TtsVoice } from '@/features/
 import { extractSentences } from '@/features/tts/sentenceStream'
 import { executeMemoryTool } from '@/features/memory/executeMemoryTool'
 import type { YukaiPlugin, ChatAttachment } from '@/features/plugin-system/types'
-import { getAiBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 // Триггер-слова, при которых разрешаем tool_use. В обычном разговоре tools выключены —
 // лишние tool_calls создают паузы 1-2с между фразами.
@@ -187,7 +187,7 @@ export function useChat(opts: UseChatOptions) {
       const MAX_STEPS = 5
 
       while (stepCount++ < MAX_STEPS) {
-        const res = await fetch(`${getAiBaseUrl()}/chat`, {
+        const res = await aiFetch('/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

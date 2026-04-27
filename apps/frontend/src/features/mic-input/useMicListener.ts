@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { getAiBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 export type VadState = 'off' | 'loading' | 'listening' | 'speech' | 'transcribing' | 'error'
 
@@ -119,7 +119,7 @@ export function useMicListener({
       form.append('audio', new File([blob], 'speech.wav', { type: 'audio/wav' }))
       form.append('language', language)
 
-      const res = await fetch(`${getAiBaseUrl()}/stt`, { method: 'POST', body: form })
+      const res = await aiFetch('/stt', { method: 'POST', body: form })
       if (!res.ok) throw new Error(await res.text())
       const { text } = (await res.json()) as { text: string }
       if (text?.trim()) onTranscriptRef.current(text.trim())

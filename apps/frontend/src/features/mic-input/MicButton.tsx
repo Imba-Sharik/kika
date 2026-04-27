@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { getAiBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 type Props = {
   onTranscript: (text: string) => void
@@ -47,7 +47,7 @@ export function MicButton({ onTranscript, onRecordingChange, disabled, language 
           const form = new FormData()
           form.append('audio', new File([blob], 'audio.webm', { type: mimeType }))
           form.append('language', language)
-          const res = await fetch(`${getAiBaseUrl()}/stt`, { method: 'POST', body: form })
+          const res = await aiFetch('/stt', { method: 'POST', body: form })
           if (!res.ok) throw new Error(await res.text())
           const { text } = (await res.json()) as { text: string }
           if (text?.trim()) onTranscript(text.trim())

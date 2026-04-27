@@ -5,7 +5,7 @@ export default {
       path: '/vision',
       handler: 'vision.describe',
       config: {
-        auth: false,
+        auth: {},
       },
     },
   ],

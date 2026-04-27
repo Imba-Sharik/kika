@@ -5,7 +5,7 @@ export default {
       path: '/stt',
       handler: 'stt.transcribe',
       config: {
-        auth: false,
+        auth: {},
       },
     },
   ],

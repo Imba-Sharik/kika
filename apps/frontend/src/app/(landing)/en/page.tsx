@@ -1,4 +1,8 @@
+'use client'
+
 import Image from 'next/image'
+import { UserNav } from '@/widgets/header/ui/UserNav'
+import { setLanguagePreference } from '@/shared/yukai/useLanguage'
 
 // Stable download URL — filename is pinned via electron-builder artifactName,
 // so this link always points to the latest release without any updates to the landing.
@@ -27,8 +31,19 @@ export default function LandingPageEn() {
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
             Chat with dev
           </a>
-          <a href="/" className="text-sm text-white/50 hover:text-white transition" title="Русский">RU</a>
-          <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium hover:bg-white/15 transition">
+          <a
+            href="/"
+            onClick={() => setLanguagePreference('ru')}
+            className="text-sm text-white/50 hover:text-white transition"
+            title="Русский"
+          >
+            RU
+          </a>
+          <UserNav />
+          <a
+            href={DOWNLOAD_URL}
+            className="rounded-lg bg-linear-to-r from-pink-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
+          >
             Download
           </a>
         </div>

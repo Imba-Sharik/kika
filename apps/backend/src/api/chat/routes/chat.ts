@@ -5,7 +5,9 @@ export default {
       path: '/chat',
       handler: 'chat.stream',
       config: {
-        auth: false, // TODO: включить is-authenticated после миграции клиента
+        // auth: {} = требует валидный JWT в Authorization: Bearer ...
+        // Без него Strapi вернёт 401. Юзер должен быть зарегистрирован.
+        auth: {},
       },
     },
   ],

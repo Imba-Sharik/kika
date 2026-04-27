@@ -168,6 +168,70 @@ const DICT = {
     ru: 'Захват экрана → Claude описывает что видит. Скажи "что на экране", "выдели область", "из какого это аниме".',
     en: 'Screen capture → Claude describes what it sees. Say "what\'s on screen", "select region", "what anime is this".',
   },
+
+  // Header / nav
+  'nav.pricing': { ru: 'Цена', en: 'Pricing' },
+  'nav.faq': { ru: 'FAQ', en: 'FAQ' },
+  'nav.devchat': { ru: 'Чат', en: 'Chat' },
+  // unused: 'nav.signup' — оставлено в словаре, на лендинге регистрация скрыта
+  // (юзер регится в app после скачивания)
+  'nav.download': { ru: 'Скачать', en: 'Download' },
+  'nav.signin': { ru: 'Войти', en: 'Sign in' },
+  'nav.signup': { ru: 'Регистрация', en: 'Sign up' },
+  'nav.openApp': { ru: 'Открыть Yukai', en: 'Open Yukai' },
+  'nav.signout': { ru: 'Выйти', en: 'Sign out' },
+
+  // Login page
+  'login.title': { ru: 'С возвращением', en: 'Welcome back' },
+  'login.subtitle': {
+    ru: 'Войди, чтобы продолжить разговор с Yukai',
+    en: 'Sign in to continue chatting with Yukai',
+  },
+  'login.email': { ru: 'Email', en: 'Email' },
+  'login.password': { ru: 'Пароль', en: 'Password' },
+  'login.forgot': { ru: 'Забыл пароль?', en: 'Forgot password?' },
+  'login.submit': { ru: 'Войти', en: 'Sign in' },
+  'login.submitting': { ru: 'Входим...', en: 'Signing in...' },
+  'login.noAccount': { ru: 'Нет аккаунта?', en: 'No account?' },
+  'login.noAccount.cta': { ru: 'Зарегистрироваться', en: 'Sign up' },
+  'login.error.invalid': {
+    ru: 'Неверный email или пароль',
+    en: 'Invalid email or password',
+  },
+
+  // Register page
+  'register.title': { ru: 'Давай знакомиться', en: "Let's meet" },
+  'register.subtitle': {
+    ru: 'Создай аккаунт за минуту и начни общаться с Yukai',
+    en: 'Create an account in a minute and start chatting with Yukai',
+  },
+  'register.username': { ru: 'Имя пользователя', en: 'Username' },
+  'register.email': { ru: 'Email', en: 'Email' },
+  'register.password': { ru: 'Пароль', en: 'Password' },
+  'register.password.hint': {
+    ru: 'Минимум 8 символов',
+    en: 'At least 8 characters',
+  },
+  'register.confirmPassword': {
+    ru: 'Подтвердить пароль',
+    en: 'Confirm password',
+  },
+  'register.submit': { ru: 'Зарегистрироваться', en: 'Sign up' },
+  'register.submitting': { ru: 'Создаём...', en: 'Creating...' },
+  'register.haveAccount': { ru: 'Уже есть аккаунт?', en: 'Already have an account?' },
+  'register.haveAccount.cta': { ru: 'Войти', en: 'Sign in' },
+  'register.error.passwordMismatch': {
+    ru: 'Пароли не совпадают',
+    en: 'Passwords do not match',
+  },
+  'register.error.failed': {
+    ru: 'Не удалось создать аккаунт',
+    en: 'Failed to create account',
+  },
+  'register.error.loginAfter': {
+    ru: 'Аккаунт создан, но войти не получилось — попробуй на странице входа',
+    en: 'Account created but auto-login failed — try the sign in page',
+  },
 } as const
 
 export type I18nKey = keyof typeof DICT

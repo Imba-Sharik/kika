@@ -5,7 +5,7 @@ export default {
       path: '/tts',
       handler: 'tts.speak',
       config: {
-        auth: false,
+        auth: {},
       },
     },
   ],

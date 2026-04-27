@@ -1,8 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import LandingPageEn from './en/page'
+import { UserNav } from '@/widgets/header/ui/UserNav'
+import { setLanguagePreference, useLanguage } from '@/shared/yukai/useLanguage'
 
 // Стабильная ссылка на последний .exe. Имя файла фиксировано через
 // electron-builder build.artifactName = "Yukai-Setup-${arch}.${ext}" — поэтому
@@ -12,17 +13,11 @@ const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/downlo
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
 export default function LandingPage() {
-  // На yukai.app/ показываем English-контент сразу (без редиректа на /en).
-  // На ru.yukai.app/, localhost, vercel preview-доменах — Russian (default).
-  // SSR рендерит Russian (Vercel видит Host: yukai.app у обоих проксированных
-  // запросов одинаково), client-side детект уже после маунта свапает на нужный.
-  const [showEn, setShowEn] = useState(false)
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hostname === 'yukai.app') {
-      setShowEn(true)
-    }
-  }, [])
-  if (showEn) return <LandingPageEn />
+  // Единая точка правды для языка — useLanguage() (тот же что в overlay/header/UserNav).
+  // На yukai.app/ детект по hostname сразу свапнёт на English; на ru.yukai.app/ —
+  // оставит Russian. localStorage юзера (выбор в Settings) перебивает host.
+  const lang = useLanguage()
+  if (lang === 'en') return <LandingPageEn />
 
   return (
     <main className="relative overflow-hidden">
@@ -44,8 +39,19 @@ export default function LandingPage() {
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
             Чат с разработчиком
           </a>
-          <a href="/en" className="text-sm text-white/50 hover:text-white transition" title="English">EN</a>
-          <a href={DOWNLOAD_URL} className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium hover:bg-white/15 transition">
+          <a
+            href="/en"
+            onClick={() => setLanguagePreference('en')}
+            className="text-sm text-white/50 hover:text-white transition"
+            title="English"
+          >
+            EN
+          </a>
+          <UserNav />
+          <a
+            href={DOWNLOAD_URL}
+            className="rounded-lg bg-linear-to-r from-pink-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
+          >
             Скачать
           </a>
         </div>
