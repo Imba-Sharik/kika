@@ -205,6 +205,8 @@ const DICT = {
   'nav.pricing': { ru: 'Цена', en: 'Pricing' },
   'nav.faq': { ru: 'FAQ', en: 'FAQ' },
   'nav.devchat': { ru: 'Чат', en: 'Chat' },
+  'nav.privacy': { ru: 'Приватность', en: 'Privacy' },
+  'nav.terms': { ru: 'Условия', en: 'Terms' },
   // unused: 'nav.signup' — оставлено в словаре, на лендинге регистрация скрыта
   // (юзер регится в app после скачивания)
   'nav.download': { ru: 'Скачать', en: 'Download' },

@@ -31,6 +31,8 @@ export default function LandingPageEn() {
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
             Chat with dev
           </a>
+          <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Privacy</a>
+          <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Terms</a>
           <a
             href="/"
             onClick={() => setLanguagePreference('ru')}
@@ -295,8 +297,10 @@ export default function LandingPageEn() {
             {' · '}
             © 2026
           </div>
-          <div className="flex items-center gap-6 text-sm text-white/50">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
             <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Telegram</a>
+            <a href="/privacy" className="hover:text-white transition">Privacy</a>
+            <a href="/terms" className="hover:text-white transition">Terms</a>
           </div>
         </div>
       </footer>

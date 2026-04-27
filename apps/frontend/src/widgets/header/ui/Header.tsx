@@ -37,6 +37,12 @@ export function Header() {
             >
               {t(lang, 'nav.devchat')}
             </a>
+            <Link href="/privacy" className="hover:text-white transition">
+              {t(lang, 'nav.privacy')}
+            </Link>
+            <Link href="/terms" className="hover:text-white transition">
+              {t(lang, 'nav.terms')}
+            </Link>
           </div>
 
           {/* Разделитель */}

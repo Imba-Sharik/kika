@@ -39,6 +39,8 @@ export default function LandingPage() {
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
             Чат с разработчиком
           </a>
+          <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Приватность</a>
+          <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Условия</a>
           <a
             href="/en"
             onClick={() => setLanguagePreference('en')}
@@ -303,10 +305,10 @@ export default function LandingPage() {
             {' · '}
             © 2026
           </div>
-          <div className="flex items-center gap-6 text-sm text-white/50">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
             <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Telegram</a>
-            {/* <a href="https://discord.gg/kika" className="hover:text-white transition">Discord</a> */}
-            {/* <a href="mailto:hello@kika.ai" className="hover:text-white transition">Support</a> */}
+            <a href="/privacy" className="hover:text-white transition">Конфиденциальность</a>
+            <a href="/terms" className="hover:text-white transition">Условия</a>
           </div>
         </div>
       </footer>
