@@ -21,9 +21,6 @@ export default (_config: any, { strapi }: { strapi: Core.Strapi }) => {
       return next()
     }
 
-    // Paid юзеру с активной подпиской квота не применяется (если tier=paid).
-    // Сейчас все новые на 'trial', через 7 дней cron переключит на 'free'.
-    // 'paid' — будущее (после интеграции NOWPayments/etc).
     const limit = Number(user.dailyLimitUsd ?? 0.5)
     if (limit <= 0) {
       ctx.status = 429
@@ -35,16 +32,17 @@ export default (_config: any, { strapi }: { strapi: Core.Strapi }) => {
     startOfToday.setUTCHours(0, 0, 0, 0)
     const resetsAt = new Date(startOfToday.getTime() + DAY_MS)
 
-    const knex = strapi.db.connection
-    const usageTable = strapi.db.metadata.get('api::usage.usage').tableName
-
-    const row: any = await knex(usageTable)
-      .where('user_id', user.id)
-      .where('created_at', '>=', startOfToday)
-      .sum({ total: 'cost_usd' })
-      .first()
-
-    const spent = Number(row?.total || 0)
+    // Используем Strapi query API — он сам разруливает связи через join-table.
+    // Raw knex по `usages.user_id` не работает: в Strapi 5 связи живут
+    // в отдельной таблице usages_user_links.
+    const usages = await strapi.db.query('api::usage.usage').findMany({
+      where: {
+        user: user.id,
+        createdAt: { $gte: startOfToday },
+      },
+      select: ['costUsd'],
+    })
+    const spent = usages.reduce((s: number, u: any) => s + Number(u.costUsd || 0), 0)
 
     if (spent >= limit) {
       ctx.status = 429
@@ -52,8 +50,6 @@ export default (_config: any, { strapi }: { strapi: Core.Strapi }) => {
       return
     }
 
-    // Прокидываем в state — контроллер может отрендерить остаток в response
-    // headers если захочет. Сейчас не используем.
     ctx.state.quota = { spent, limit, resetsAt }
 
     await next()

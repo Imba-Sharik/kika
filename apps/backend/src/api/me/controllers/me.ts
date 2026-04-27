@@ -13,25 +13,24 @@ export default {
     const user = ctx.state.user
     if (!user?.id) return ctx.unauthorized('not authenticated')
 
-    const knex = strapi.db.connection
-    const usageTable = strapi.db.metadata.get('api::usage.usage').tableName
-
     const startOfToday = new Date()
     startOfToday.setUTCHours(0, 0, 0, 0)
     const resetsAt = new Date(startOfToday.getTime() + DAY_MS)
 
-    const row: any = await knex(usageTable)
-      .where('user_id', user.id)
-      .where('created_at', '>=', startOfToday)
-      .sum({ total: 'cost_usd' })
-      .first()
+    // Strapi query API через relation — раздулирует через join-table
+    const usages = await strapi.db.query('api::usage.usage').findMany({
+      where: {
+        user: user.id,
+        createdAt: { $gte: startOfToday },
+      },
+      select: ['costUsd'],
+    })
+    const spent = usages.reduce((s: number, u: any) => s + Number(u.costUsd || 0), 0)
 
-    const spent = Number(row?.total || 0)
     const limit = Number(user.dailyLimitUsd ?? 0.5)
     const remaining = Math.max(0, limit - spent)
     const percentage = limit > 0 ? Math.min(100, Math.round((spent / limit) * 100)) : 100
 
-    // Trial countdown
     let trialDaysLeft: number | null = null
     if (user.trialStartedAt && user.subscriptionTier === 'trial') {
       const trialEndsAt = new Date(new Date(user.trialStartedAt).getTime() + TRIAL_DAYS * DAY_MS)
