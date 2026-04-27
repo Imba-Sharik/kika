@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { YukaiFace } from '@/widgets/yukai-face/YukaiFace'
+import { AuthGateBubble } from '@/features/auth/ui/AuthGateBubble'
 import { useMicListener } from '@/features/mic-input/useMicListener'
 import { MicBars } from '@/features/mic-input/MicBars'
 import { EnglishImages } from '@/features/english-images/EnglishImages'
@@ -62,6 +64,10 @@ const kbdStyle: React.CSSProperties = {
 }
 
 export default function OverlayPage() {
+  // Auth-state — если юзер не залогинен, поверх персонажа покажется AuthGateBubble
+  // (паттерн как у onboarding-tooltip'а). До login AI-вызовы возвращают 403,
+  // так что overlay рендерится но юзер не может говорить пока не зарегается.
+  const { data: session, status: sessionStatus } = useSession()
   // messages/streaming/loading/speaking/error живут в useChat (см. ниже)
   const [emotion, setEmotion] = useState<Emotion>('neutral')
   const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null)
@@ -499,9 +505,17 @@ export default function OverlayPage() {
       >
         <YukaiFace emotion={emotion} audio={audioEl} size={180} />
 
+        {/* AuthGate: пока юзер не залогинен — показываем баббл с регистрацией/входом
+            рядом с персонажем. Onboarding ниже скрыт пока auth не пройден.
+            sessionStatus 'loading' → ничего не показываем (избегаем flash). */}
+        {sessionStatus !== 'loading' && !session && (
+          <AuthGateBubble language={language} onLanguageChange={selectLanguage} />
+        )}
+
         {/* Онбординг: показывается один раз при первом запуске справа от персонажа.
-            Объясняет главное — Ctrl+Z чтобы начать разговор. Dismiss → localStorage. */}
-        {showOnboarding && (
+            Объясняет главное — Ctrl+Z чтобы начать разговор. Dismiss → localStorage.
+            Скрыт пока юзер не залогинен — иначе перекроется AuthGateBubble. */}
+        {session && showOnboarding && (
           <div
             onMouseDown={(e) => e.stopPropagation()}
             style={{
