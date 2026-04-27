@@ -19,6 +19,31 @@ async function cleanupOldUsage(strapi: Core.Strapi) {
   }
 }
 
+/**
+ * Идемпотентно создаёт роль Manager (type='manager') если её ещё нет.
+ * Менеджер видит /analytics — данные по юзерам и тратам.
+ * Назначается super-admin'ом через Strapi admin (Content Manager → User → role).
+ */
+async function ensureManagerRole(strapi: Core.Strapi) {
+  try {
+    const existing = await strapi.db
+      .query('plugin::users-permissions.role')
+      .findOne({ where: { type: 'manager' } })
+    if (existing) return
+
+    await strapi.db.query('plugin::users-permissions.role').create({
+      data: {
+        name: 'Manager',
+        description: 'Доступ к /analytics: usage по юзерам, токены, траты',
+        type: 'manager',
+      },
+    })
+    strapi.log.info('[bootstrap] создана роль Manager')
+  } catch (err) {
+    strapi.log.warn(`[bootstrap] ensureManagerRole failed: ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -30,7 +55,8 @@ export default {
    * Bootstrap — после старта запускаем периодический cleanup старых Usage-логов.
    * setInterval а не Strapi cron — проще и без зависимостей.
    */
-  bootstrap({ strapi }: { strapi: Core.Strapi }) {
+  async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    await ensureManagerRole(strapi)
     // Первый прогон через 5 минут после старта (даём БД миграциям отработать),
     // дальше — раз в сутки.
     setTimeout(() => cleanupOldUsage(strapi), 5 * 60 * 1000)

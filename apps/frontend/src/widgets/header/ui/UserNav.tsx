@@ -65,6 +65,11 @@ export function UserNav() {
         <DropdownMenuItem asChild className="text-white focus:bg-white/10 focus:text-white">
           <Link href="/overlay">{t(lang, 'nav.openApp')}</Link>
         </DropdownMenuItem>
+        {session.user?.role === 'manager' && (
+          <DropdownMenuItem asChild className="text-white focus:bg-white/10 focus:text-white">
+            <Link href="/analytics">{t(lang, 'nav.analytics')}</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuItem
           onClick={() => signOut({ callbackUrl: '/' })}

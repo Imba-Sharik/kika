@@ -197,6 +197,7 @@ const DICT = {
   'nav.signin': { ru: 'Войти', en: 'Sign in' },
   'nav.signup': { ru: 'Регистрация', en: 'Sign up' },
   'nav.openApp': { ru: 'Открыть Yukai', en: 'Open Yukai' },
+  'nav.analytics': { ru: '📊 Аналитика', en: '📊 Analytics' },
   'nav.signout': { ru: 'Выйти', en: 'Sign out' },
 
   // Login page
