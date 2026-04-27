@@ -26,6 +26,38 @@ async function cleanupOldUsage(strapi: Core.Strapi) {
  */
 const TRIAL_DAYS = 7
 const FREE_TIER_LIMIT_USD = 0.05
+const DEFAULT_TRIAL_LIMIT_USD = 0.5
+
+/**
+ * Backfill для юзеров которые регистрировались ДО ввода quota-системы —
+ * у них trial_started_at, subscription_tier, daily_limit_usd = NULL,
+ * lifecycle на них не сработал. Без этих полей middleware применяет
+ * default 0.5, но UI не показывает trial-countdown.
+ *
+ * Идемпотентно: апдейтим только тех у кого subscription_tier IS NULL.
+ * Trial считаем от текущего момента (а не от createdAt) — даём всем
+ * существующим юзерам честные 7 дней с момента введения системы.
+ */
+async function backfillExistingUsers(strapi: Core.Strapi) {
+  try {
+    const knex = strapi.db.connection
+    const userTable = strapi.db.metadata.get('plugin::users-permissions.user').tableName
+
+    const updated = await knex(userTable)
+      .whereNull('subscription_tier')
+      .update({
+        trial_started_at: new Date(),
+        subscription_tier: 'trial',
+        daily_limit_usd: DEFAULT_TRIAL_LIMIT_USD,
+      })
+
+    if (updated > 0) {
+      strapi.log.info(`[backfill] проставлены trial-поля для ${updated} существующих юзеров`)
+    }
+  } catch (err) {
+    strapi.log.warn(`[backfill] ошибка: ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
 
 async function expireTrials(strapi: Core.Strapi) {
   try {
@@ -87,6 +119,7 @@ export default {
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     await ensureManagerRole(strapi)
+    await backfillExistingUsers(strapi)
     // Первый прогон через 5 минут после старта (даём БД миграциям отработать),
     // дальше — раз в сутки.
     setTimeout(() => cleanupOldUsage(strapi), 5 * 60 * 1000)
