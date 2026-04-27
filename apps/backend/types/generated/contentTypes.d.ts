@@ -453,8 +453,10 @@ export interface ApiUsageUsage extends Struct.CollectionTypeSchema {
     meta: Schema.Attribute.JSON;
     model: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    sessionId: Schema.Attribute.UID;
     tokensIn: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     tokensOut: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    turnId: Schema.Attribute.UID;
     type: Schema.Attribute.Enumeration<['chat', 'stt', 'tts', 'vision']> &
       Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -937,6 +939,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    lastUsageAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -955,6 +958,12 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    totalCostUsd: Schema.Attribute.Decimal &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
+    totalTurnsCount: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

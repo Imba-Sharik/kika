@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-04-27T10:44:06.579Z"
+    "x-generation-date": "2026-04-27T11:14:47.570Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -1832,6 +1832,12 @@
               "durationMs": {
                 "type": "integer"
               },
+              "turnId": {
+                "type": "string"
+              },
+              "sessionId": {
+                "type": "string"
+              },
               "meta": {},
               "locale": {
                 "type": "string"
@@ -2523,6 +2529,17 @@
                   }
                 }
               },
+              "totalCostUsd": {
+                "type": "number",
+                "format": "float"
+              },
+              "totalTurnsCount": {
+                "type": "integer"
+              },
+              "lastUsageAt": {
+                "type": "string",
+                "format": "date-time"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -2621,6 +2638,12 @@
           },
           "durationMs": {
             "type": "integer"
+          },
+          "turnId": {
+            "type": "string"
+          },
+          "sessionId": {
+            "type": "string"
           },
           "meta": {},
           "createdAt": {
@@ -2734,6 +2757,12 @@
                 },
                 "durationMs": {
                   "type": "integer"
+                },
+                "turnId": {
+                  "type": "string"
+                },
+                "sessionId": {
+                  "type": "string"
                 },
                 "meta": {},
                 "createdAt": {

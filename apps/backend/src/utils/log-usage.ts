@@ -12,6 +12,8 @@ export type UsageLogInput = {
   tokensOut?: number
   costUsd: number
   durationMs?: number
+  turnId?: string
+  sessionId?: string
   meta?: Record<string, unknown>
 }
 
@@ -25,9 +27,11 @@ export function logUsage(input: UsageLogInput): void {
   const s = (globalThis as any).strapi
   if (!s) return
 
-  s.db
-    .query('api::usage.usage')
-    .create({
+  // 1. Insert raw event в Usage (для дебага/audit, gc через 90 дней)
+  // 2. Atomic increment counters на User (для quota и быстрых дашбордов)
+  // Обе операции fire-and-forget — не блокируют response юзера.
+  Promise.all([
+    s.db.query('api::usage.usage').create({
       data: {
         user: input.userId,
         type: input.type,
@@ -36,12 +40,37 @@ export function logUsage(input: UsageLogInput): void {
         tokensOut: input.tokensOut ?? 0,
         costUsd: input.costUsd,
         durationMs: input.durationMs,
+        turnId: input.turnId,
+        sessionId: input.sessionId,
         meta: input.meta,
         publishedAt: new Date(),
       },
-    })
-    .catch((err: Error) => {
-      s.log.warn(`[usage] log failed (${input.type}): ${err.message}`)
+    }),
+    incrementUserCounters(s, input.userId, input.costUsd),
+  ]).catch((err: Error) => {
+    s.log.warn(`[usage] log failed (${input.type}): ${err.message}`)
+  })
+}
+
+/**
+ * Atomic increment counters на User. Использует knex raw SQL — это работает
+ * и в SQLite (local), и в PostgreSQL (prod). Стандартный strapi.db.query().update
+ * сначала читает, потом пишет — race condition на параллельных запросах.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function incrementUserCounters(strapi: any, userId: string | number, costUsd: number) {
+  const meta = strapi.db.metadata.get('plugin::users-permissions.user')
+  const tableName: string = meta.tableName // 'up_users'
+  const knex = strapi.db.connection
+
+  // COALESCE на случай если поле NULL (например для юзеров до миграции схемы).
+  // last_usage_at — Strapi сам сконвертит camelCase → snake_case.
+  await knex(tableName)
+    .where('id', userId)
+    .update({
+      total_cost_usd: knex.raw('COALESCE(total_cost_usd, 0) + ?', [costUsd]),
+      total_turns_count: knex.raw('COALESCE(total_turns_count, 0) + 1'),
+      last_usage_at: new Date(),
     })
 }
 

@@ -40,6 +40,12 @@
     "durationMs": {
       "type": "integer"
     },
+    "turnId": {
+      "type": "uid"
+    },
+    "sessionId": {
+      "type": "uid"
+    },
     "meta": {
       "type": "json"
     }
