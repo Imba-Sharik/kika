@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { signOut, useSession } from 'next-auth/react'
 import { BUILTIN_VOICES } from '@/shared/yukai/voices'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
@@ -112,6 +113,7 @@ export function SettingsPanel({
       </div>
 
       <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto' }}>
+        <AccountSection language={language} />
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t(language, 'settings.mic')}
@@ -355,6 +357,106 @@ export function SettingsPanel({
           {t(language, 'settings.show-onboarding')}
         </button>
       </div>
+    </div>
+  )
+}
+
+/**
+ * Секция аккаунта — статус сессии, имя юзера, кнопка выхода.
+ * Если не залогинен — подсказка что без auth Yukai не может отвечать
+ * (AI-эндпоинты на бэке требуют JWT).
+ */
+function AccountSection({ language }: { language: Language }) {
+  const { data: session, status } = useSession()
+
+  // Loading — невидимый placeholder, чтобы не дёргать layout
+  if (status === 'loading') {
+    return <div style={{ minHeight: 48 }} aria-hidden />
+  }
+
+  return (
+    <div>
+      <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
+        {t(language, 'settings.account')}
+      </label>
+      {session ? (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '8px 10px',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 6,
+          }}
+        >
+          <div
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 12,
+              fontWeight: 700,
+              color: 'white',
+              flexShrink: 0,
+            }}
+          >
+            {(session.user?.name ?? session.user?.email ?? '?').charAt(0).toUpperCase()}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 11, color: '#9ca3af' }}>
+              {t(language, 'settings.account.signedIn')}
+            </div>
+            <div
+              style={{
+                fontSize: 12,
+                color: '#e5e7eb',
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+              title={session.user?.email ?? undefined}
+            >
+              {session.user?.name ?? session.user?.email ?? 'User'}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: '/' })}
+            style={{
+              padding: '4px 10px',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: 4,
+              color: '#e5e7eb',
+              fontSize: 11,
+              cursor: 'pointer',
+              flexShrink: 0,
+            }}
+          >
+            {t(language, 'settings.account.signout')}
+          </button>
+        </div>
+      ) : (
+        <div
+          style={{
+            padding: '8px 10px',
+            background: 'rgba(236,72,153,0.1)',
+            border: '1px solid rgba(236,72,153,0.3)',
+            borderRadius: 6,
+            fontSize: 11,
+            color: '#fda4af',
+          }}
+        >
+          {t(language, 'settings.account.notSignedIn')}
+        </div>
+      )}
     </div>
   )
 }

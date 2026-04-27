@@ -562,6 +562,43 @@ export default function OverlayPage() {
               <br />
               {t(language, 'onboarding.text3')}
             </div>
+            {/* Подсказка про микрофон — частая боль на старте: дефолтный девайс
+                может быть не тот, permission в Windows не дан, VAD threshold
+                выкручен. Лёгкий путь к ⚙ Настройкам прямо отсюда. */}
+            <div
+              style={{
+                marginBottom: 8,
+                padding: '6px 8px',
+                background: 'rgba(0,0,0,0.25)',
+                borderRadius: 6,
+                fontSize: 11,
+                lineHeight: 1.35,
+              }}
+            >
+              <div style={{ marginBottom: 4, opacity: 0.85 }}>
+                {t(language, 'onboarding.mic.hint')}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSettingsOpen(true)
+                  dismissOnboarding()
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  padding: 0,
+                  color: 'white',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 2,
+                  cursor: 'pointer',
+                }}
+              >
+                ⚙ {t(language, 'onboarding.mic.cta')}
+              </button>
+            </div>
             <button
               type="button"
               onClick={dismissOnboarding}

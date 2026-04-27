@@ -31,6 +31,24 @@ const DICT = {
     en: 'Press/click again to turn off.',
   },
   'onboarding.dismiss': { ru: 'Понятно', en: 'Got it' },
+  'onboarding.mic.hint': {
+    ru: 'Полоски не двигаются?',
+    en: "Bars not moving?",
+  },
+  'onboarding.mic.cta': {
+    ru: 'Открыть настройки микрофона',
+    en: 'Open mic settings',
+  },
+
+  // Settings — аккаунт
+  'settings.account': { ru: 'Аккаунт', en: 'Account' },
+  'settings.account.signedIn': { ru: 'Вошёл как', en: 'Signed in as' },
+  'settings.account.notSignedIn': {
+    ru: 'Не авторизован — Юкай не сможет отвечать',
+    en: 'Not signed in — Yukai can\'t respond',
+  },
+  'settings.account.signin': { ru: 'Войти', en: 'Sign in' },
+  'settings.account.signout': { ru: 'Выйти', en: 'Sign out' },
 
   // Settings panel — sections
   'settings.title': { ru: 'Настройки', en: 'Settings' },
