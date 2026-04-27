@@ -6,6 +6,7 @@ export default {
       handler: 'tts.speak',
       config: {
         auth: {},
+        middlewares: ['global::quota-check'],
       },
     },
   ],

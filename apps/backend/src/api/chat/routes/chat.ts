@@ -8,6 +8,7 @@ export default {
         // auth: {} = требует валидный JWT в Authorization: Bearer ...
         // Без него Strapi вернёт 401. Юзер должен быть зарегистрирован.
         auth: {},
+        middlewares: ['global::quota-check'],
       },
     },
   ],

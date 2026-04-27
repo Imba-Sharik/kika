@@ -6,6 +6,7 @@ export default {
       handler: 'vision.describe',
       config: {
         auth: {},
+        middlewares: ['global::quota-check'],
       },
     },
   ],

@@ -6,6 +6,7 @@ export default {
       handler: 'stt.transcribe',
       config: {
         auth: {},
+        middlewares: ['global::quota-check'],
       },
     },
   ],

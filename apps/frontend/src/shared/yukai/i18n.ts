@@ -50,6 +50,20 @@ const DICT = {
   'settings.account.signin': { ru: 'Войти', en: 'Sign in' },
   'settings.account.signout': { ru: 'Выйти', en: 'Sign out' },
 
+  // Quota widget
+  'quota.today': { ru: 'Сегодня:', en: 'Today:' },
+  'quota.tier.trial': { ru: 'Trial', en: 'Trial' },
+  'quota.tier.free': { ru: 'Free', en: 'Free' },
+  'quota.tier.paid': { ru: 'Paid', en: 'Paid' },
+  'quota.trialLeft': {
+    ru: 'Бесплатный период: {days} дн.',
+    en: 'Free trial: {days} days left',
+  },
+  'quota.trialExpired': {
+    ru: 'Trial закончился — оплата скоро будет',
+    en: 'Trial expired — payment coming soon',
+  },
+
   // Settings panel — sections
   'settings.title': { ru: 'Настройки', en: 'Settings' },
   'settings.close': { ru: 'Закрыть', en: 'Close' },

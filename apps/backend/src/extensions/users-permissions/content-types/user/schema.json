@@ -79,6 +79,25 @@
     "lastUsageAt": {
       "type": "datetime",
       "private": true
+    },
+    "trialStartedAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "subscriptionTier": {
+      "type": "enumeration",
+      "enum": ["trial", "free", "paid"],
+      "default": "trial",
+      "private": true
+    },
+    "dailyLimitUsd": {
+      "type": "decimal",
+      "default": 0.5,
+      "private": true
+    },
+    "subscriptionUntil": {
+      "type": "datetime",
+      "private": true
     }
   }
 }

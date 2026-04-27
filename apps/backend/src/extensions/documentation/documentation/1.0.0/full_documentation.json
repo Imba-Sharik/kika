@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-04-27T12:17:28.045Z"
+    "x-generation-date": "2026-04-27T14:27:44.263Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -2537,6 +2537,26 @@
                 "type": "integer"
               },
               "lastUsageAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "trialStartedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "subscriptionTier": {
+                "type": "string",
+                "enum": [
+                  "trial",
+                  "free",
+                  "paid"
+                ]
+              },
+              "dailyLimitUsd": {
+                "type": "number",
+                "format": "float"
+              },
+              "subscriptionUntil": {
                 "type": "string",
                 "format": "date-time"
               },

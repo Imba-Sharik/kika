@@ -47,15 +47,18 @@ export default function AnalyticsPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // session reference меняется при каждом рендере → infinite loop если зависеть
+  // от объекта. Берём только role + status (string'и со стабильной identity).
+  const role = session?.user?.role
+  const isAuthed = !!session
+
   useEffect(() => {
-    // Не-менеджеров отправляем на главную. UserNav и так не показывает им
-    // ссылку, но если кто-то перейдёт по URL вручную — gate тут.
     if (status === "loading") return
-    if (!session) {
+    if (!isAuthed) {
       router.replace("/login")
       return
     }
-    if (session.user?.role !== "manager") {
+    if (role !== "manager") {
       router.replace("/")
       return
     }
@@ -70,7 +73,7 @@ export default function AnalyticsPage() {
       .then((json) => setData(json))
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false))
-  }, [session, status, router])
+  }, [status, isAuthed, role, router])
 
   if (loading || status === "loading") {
     return (

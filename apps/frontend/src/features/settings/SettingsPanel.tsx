@@ -7,6 +7,7 @@ import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
 import type { Language } from '@/shared/yukai/persona'
 import { t } from '@/shared/yukai/i18n'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 type OriginPref = 'auto' | 'direct' | 'ru'
 
@@ -366,8 +367,30 @@ export function SettingsPanel({
  * Если не залогинен — подсказка что без auth Yukai не может отвечать
  * (AI-эндпоинты на бэке требуют JWT).
  */
+type Quota = {
+  spent: number
+  limit: number
+  remaining: number
+  percentage: number
+  resetsAt: string
+  tier: 'trial' | 'free' | 'paid'
+  trialDaysLeft: number | null
+}
+
 function AccountSection({ language }: { language: Language }) {
   const { data: session, status } = useSession()
+  const [quota, setQuota] = useState<Quota | null>(null)
+
+  // Подгружаем квоту когда юзер залогинен. Без polling — обновится на следующем
+  // открытии Settings. Этого достаточно: юзер видит свежие цифры на каждом
+  // открытии панели.
+  useEffect(() => {
+    if (status !== 'authenticated') return
+    aiFetch('/me/quota')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((q: Quota | null) => setQuota(q))
+      .catch(() => setQuota(null))
+  }, [status])
 
   // Loading — невидимый placeholder, чтобы не дёргать layout
   if (status === 'loading') {
@@ -383,7 +406,7 @@ function AccountSection({ language }: { language: Language }) {
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
+            flexDirection: 'column',
             gap: 8,
             padding: '8px 10px',
             background: 'rgba(255,255,255,0.04)',
@@ -391,6 +414,7 @@ function AccountSection({ language }: { language: Language }) {
             borderRadius: 6,
           }}
         >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div
             style={{
               width: 28,
@@ -442,6 +466,8 @@ function AccountSection({ language }: { language: Language }) {
           >
             {t(language, 'settings.account.signout')}
           </button>
+          </div>
+          {quota && <QuotaWidget quota={quota} language={language} />}
         </div>
       ) : (
         <div
@@ -455,6 +481,78 @@ function AccountSection({ language }: { language: Language }) {
           }}
         >
           {t(language, 'settings.account.notSignedIn')}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function QuotaWidget({ quota, language }: { quota: Quota; language: Language }) {
+  const tierLabel = {
+    trial: t(language, 'quota.tier.trial'),
+    free: t(language, 'quota.tier.free'),
+    paid: t(language, 'quota.tier.paid'),
+  }[quota.tier]
+
+  const barColor =
+    quota.percentage >= 90
+      ? 'linear-gradient(90deg, #ef4444, #dc2626)'
+      : quota.percentage >= 70
+        ? 'linear-gradient(90deg, #f59e0b, #ec4899)'
+        : 'linear-gradient(90deg, #ec4899, #8b5cf6)'
+
+  return (
+    <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 8 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 4,
+          fontSize: 11,
+        }}
+      >
+        <span style={{ color: '#9ca3af' }}>
+          {t(language, 'quota.today')}{' '}
+          <span style={{ color: '#e5e7eb', fontWeight: 600 }}>
+            ${quota.spent.toFixed(quota.spent < 0.01 ? 4 : 2)} / ${quota.limit.toFixed(2)}
+          </span>
+        </span>
+        <span
+          style={{
+            fontSize: 9,
+            padding: '1px 6px',
+            borderRadius: 8,
+            background: quota.tier === 'trial' ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.08)',
+            color: quota.tier === 'trial' ? '#fbcfe8' : '#9ca3af',
+            fontWeight: 600,
+          }}
+        >
+          {tierLabel}
+        </span>
+      </div>
+      <div
+        style={{
+          height: 4,
+          background: 'rgba(255,255,255,0.08)',
+          borderRadius: 2,
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            width: `${quota.percentage}%`,
+            height: '100%',
+            background: barColor,
+            transition: 'width 200ms',
+          }}
+        />
+      </div>
+      {quota.tier === 'trial' && quota.trialDaysLeft !== null && (
+        <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 6 }}>
+          {quota.trialDaysLeft > 0
+            ? t(language, 'quota.trialLeft').replace('{days}', String(quota.trialDaysLeft))
+            : t(language, 'quota.trialExpired')}
         </div>
       )}
     </div>

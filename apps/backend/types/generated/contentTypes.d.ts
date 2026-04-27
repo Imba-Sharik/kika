@@ -934,6 +934,9 @@ export interface PluginUsersPermissionsUser
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    dailyLimitUsd: Schema.Attribute.Decimal &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0.5>;
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -958,12 +961,17 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    subscriptionTier: Schema.Attribute.Enumeration<['trial', 'free', 'paid']> &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'trial'>;
+    subscriptionUntil: Schema.Attribute.DateTime & Schema.Attribute.Private;
     totalCostUsd: Schema.Attribute.Decimal &
       Schema.Attribute.Private &
       Schema.Attribute.DefaultTo<0>;
     totalTurnsCount: Schema.Attribute.Integer &
       Schema.Attribute.Private &
       Schema.Attribute.DefaultTo<0>;
+    trialStartedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

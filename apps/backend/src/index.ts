@@ -20,6 +20,36 @@ async function cleanupOldUsage(strapi: Core.Strapi) {
 }
 
 /**
+ * Перевод юзеров с trial на free тариф через 7 дней. Идемпотентный — обновляет
+ * только тех у кого tier='trial' и trial истёк. Платные не трогает.
+ * После этого dailyLimitUsd снижается до $0.05 (демо-режим).
+ */
+const TRIAL_DAYS = 7
+const FREE_TIER_LIMIT_USD = 0.05
+
+async function expireTrials(strapi: Core.Strapi) {
+  try {
+    const cutoff = new Date(Date.now() - TRIAL_DAYS * 24 * 60 * 60 * 1000)
+    const knex = strapi.db.connection
+    const userTable = strapi.db.metadata.get('plugin::users-permissions.user').tableName
+
+    const updated = await knex(userTable)
+      .where('subscription_tier', 'trial')
+      .where('trial_started_at', '<', cutoff)
+      .update({
+        subscription_tier: 'free',
+        daily_limit_usd: FREE_TIER_LIMIT_USD,
+      })
+
+    if (updated > 0) {
+      strapi.log.info(`[trial-expiry] переведено ${updated} юзеров на free тариф ($${FREE_TIER_LIMIT_USD}/день)`)
+    }
+  } catch (err) {
+    strapi.log.warn(`[trial-expiry] ошибка: ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
+
+/**
  * Идемпотентно создаёт роль Manager (type='manager') если её ещё нет.
  * Менеджер видит /analytics — данные по юзерам и тратам.
  * Назначается super-admin'ом через Strapi admin (Content Manager → User → role).
@@ -61,5 +91,8 @@ export default {
     // дальше — раз в сутки.
     setTimeout(() => cleanupOldUsage(strapi), 5 * 60 * 1000)
     setInterval(() => cleanupOldUsage(strapi), CLEANUP_INTERVAL_MS)
+    // Trial-expiry — раз в 6 часов (быстрее реагируем на истёкшие триалы)
+    setTimeout(() => expireTrials(strapi), 5 * 60 * 1000)
+    setInterval(() => expireTrials(strapi), 6 * 60 * 60 * 1000)
   },
 }
