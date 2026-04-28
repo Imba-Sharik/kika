@@ -56,12 +56,24 @@ function SelectContent({
   position = "popper",
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
+  // Кастомные кнопки скролла вместо SelectScrollUp/DownButton от Radix —
+  // те автоскроллят на hover (имитируют native macOS), что воспринимается
+  // как баг. Наши работают по клику и скроллят Viewport через ref.
+  const viewportRef = React.useRef<HTMLDivElement | null>(null)
+  const scrollBy = (delta: number) => {
+    viewportRef.current?.scrollBy({ top: delta, behavior: 'smooth' })
+  }
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         data-slot="select-content"
+        // SelectPrimitive.Portal рендерит контент на document.body — вне
+        // SettingsPanel/Header иерархии. Без data-interactive overlay click-through
+        // считает target неинтерактивным → setMouseIgnore(true) → клик
+        // проваливается на десктоп → Radix закрывает popover как "click outside".
+        data-interactive="true"
         className={cn(
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-32 origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border shadow-md",
+          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-32 origin-(--radix-select-content-transform-origin) rounded-md border shadow-md",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className
@@ -69,8 +81,22 @@ function SelectContent({
         position={position}
         {...props}
       >
-        <SelectScrollUpButton />
+        <div
+          role="button"
+          tabIndex={-1}
+          // Native <button> получает фокус при клике → Radix Select теряет
+          // item-focus и закрывает popover. <div role="button"> не получает
+          // автофокус. preventDefault на pointerDown — стандартный Radix-паттерн
+          // чтобы остаться в фокус-управлении popover'а.
+          onPointerDown={(e) => e.preventDefault()}
+          onClick={() => scrollBy(-80)}
+          aria-label="Scroll up"
+          className="flex w-full cursor-pointer items-center justify-center py-1 hover:bg-white/5 select-none"
+        >
+          <ChevronUpIcon className="size-4" />
+        </div>
         <SelectPrimitive.Viewport
+          ref={viewportRef}
           className={cn(
             "p-1",
             position === "popper" &&
@@ -79,7 +105,16 @@ function SelectContent({
         >
           {children}
         </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
+        <div
+          role="button"
+          tabIndex={-1}
+          onPointerDown={(e) => e.preventDefault()}
+          onClick={() => scrollBy(80)}
+          aria-label="Scroll down"
+          className="flex w-full cursor-pointer items-center justify-center py-1 hover:bg-white/5 select-none"
+        >
+          <ChevronDownIcon className="size-4" />
+        </div>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )

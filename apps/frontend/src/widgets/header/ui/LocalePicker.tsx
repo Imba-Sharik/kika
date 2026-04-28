@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import {
@@ -21,30 +20,9 @@ export function LocalePicker({ className }: { className?: string }) {
   const locale = useLocale() as LocaleCode
   const router = useRouter()
   const pathname = usePathname()
-  // Radix Select генерит уникальные id через useId() — рендер до mount
-  // даёт hydration mismatch (server и client получают разные id).
-  // Откладываем монтирование Select до клиента, чтобы id совпали.
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
 
   function onChange(newLocale: string) {
     router.replace(pathname, { locale: newLocale as LocaleCode })
-  }
-
-  if (!mounted) {
-    const current = ALL_LOCALES.find((l) => l.code === locale)
-    return (
-      <div
-        className={
-          className ??
-          'flex h-8 items-center gap-2 rounded-md border border-white/10 bg-white/5 px-2 text-xs text-white/70'
-        }
-        aria-label="Language"
-      >
-        {current && <FlagIcon code={current.code} flag={current.flag} flagPng={current.flagPng} />}
-        <span>{current?.label}</span>
-      </div>
-    )
   }
 
   return (
@@ -59,7 +37,12 @@ export function LocalePicker({ className }: { className?: string }) {
       >
         <SelectValue />
       </SelectTrigger>
-      <SelectContent className="border-white/10 bg-[#0F0E15] text-white">
+      <SelectContent
+        side="top"
+        align="end"
+        avoidCollisions={false}
+        className="border-white/10 bg-[#0F0E15] text-white"
+      >
         {ALL_LOCALES.map((l) => (
           <SelectItem
             key={l.code}

@@ -10,6 +10,16 @@ import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettings
 import type { Language } from '@/shared/yukai/persona'
 import { aiFetch } from '@/shared/api/aiFetch'
 import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select'
+import { Loader2, Play, Square } from 'lucide-react'
 
 type OriginPref = 'auto' | 'direct' | 'ru'
 
@@ -198,8 +208,6 @@ export function SettingsPanel({
       setPreviewingId((cur) => (cur === id ? null : cur))
     }
   }
-  // Открыт ли список голосов
-  const [voiceListOpen, setVoiceListOpen] = useState(false)
 
   // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
   // Для пользователей с заблокированным Vercel в РФ или со своим VPN.
@@ -304,8 +312,6 @@ export function SettingsPanel({
             voiceId={voiceId}
             onSelectVoice={onSelectVoice}
             languageGroups={voiceGroups.languageGroups}
-            open={voiceListOpen}
-            onOpenChange={setVoiceListOpen}
             previewingId={previewingId}
             previewLoading={previewLoading}
             onPreview={previewVoiceById}
@@ -494,16 +500,16 @@ type Quota = {
 }
 
 /**
- * Voice picker — кастомный popover dropdown с inline ▶ в каждой строке.
- * Native <select> не позволяет интерактивные кнопки внутри option, поэтому свой.
+ * Voice picker через shadcn Select (как LocalePicker). Сохраняет inline ▶
+ * в каждой строке — кнопка превью без выбора голоса. Чтобы Radix не закрывал
+ * popover при клике на ▶, используется div role="button" + preventDefault на
+ * pointerDown (тот же паттерн что у scroll-стрелок).
  */
 type VoiceGroup = { lang: string; label: string; voices: typeof BUILTIN_VOICES }
 function VoiceSelect({
   voiceId,
   onSelectVoice,
   languageGroups,
-  open,
-  onOpenChange,
   previewingId,
   previewLoading,
   onPreview,
@@ -511,132 +517,106 @@ function VoiceSelect({
   voiceId: string
   onSelectVoice: (id: string) => void
   languageGroups: VoiceGroup[]
-  open: boolean
-  onOpenChange: (v: boolean) => void
   previewingId: string | null
   previewLoading: string | null
   onPreview: (id: string) => void
 }) {
-  const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const selected = findVoice(voiceId, [])
-  const selectedLabel = selected.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')
-
-  // Закрытие при клике вне
-  useEffect(() => {
-    if (!open) return
-    function onClick(e: MouseEvent) {
-      if (!wrapperRef.current?.contains(e.target as Node)) onOpenChange(false)
-    }
-    document.addEventListener('mousedown', onClick)
-    return () => document.removeEventListener('mousedown', onClick)
-  }, [open, onOpenChange])
-
   return (
-    <div ref={wrapperRef} style={{ position: 'relative', width: '100%' }}>
-      <button
-        type="button"
-        onClick={() => onOpenChange(!open)}
-        style={{
-          width: '100%',
-          background: '#1f2937',
-          color: 'white',
-          border: '1px solid #374151',
-          padding: '6px 28px 6px 8px',
-          fontSize: 12,
-          borderRadius: 4,
-          textAlign: 'left',
-          cursor: 'pointer',
-          position: 'relative',
-        }}
+    <Select value={voiceId} onValueChange={onSelectVoice}>
+      <SelectTrigger
+        size="sm"
+        className="h-9 w-full gap-2 rounded border-[#374151] bg-[#1f2937] px-2 text-xs text-white hover:bg-[#374151]"
+        aria-label="Voice"
       >
-        {selectedLabel}
-        <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', fontSize: 10, color: '#9ca3af' }}>▾</span>
-      </button>
-      {open && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            right: 0,
-            maxHeight: 320,
-            overflowY: 'auto',
-            background: '#0f1115',
-            border: '1px solid #374151',
-            borderRadius: 4,
-            zIndex: 10,
-            boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
-          }}
-        >
-          {languageGroups.map((g) => (
-            <div key={g.lang}>
-              <div style={{ padding: '6px 10px', fontSize: 10, color: '#9ca3af', fontWeight: 600, background: '#1a1d24', position: 'sticky', top: 0, zIndex: 1 }}>
-                {g.label}
-              </div>
-              {g.voices.map((v) => {
-                const isSelected = v.id === voiceId
-                const isPlaying = previewingId === v.id
-                const isLoading = previewLoading === v.id
-                const label = v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '').replace(/\s\([^)]+\)$/, '')
-                return (
-                  <div
-                    key={v.id}
-                    onClick={() => {
-                      onSelectVoice(v.id)
-                      onOpenChange(false)
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      padding: '6px 8px',
-                      cursor: 'pointer',
-                      background: isSelected ? 'rgba(244, 114, 182, 0.15)' : 'transparent',
-                      borderLeft: isSelected ? '2px solid #f472b6' : '2px solid transparent',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSelected) e.currentTarget.style.background = 'transparent'
-                    }}
-                  >
-                    <span style={{ flex: 1, fontSize: 12, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
-                    <button
-                      type="button"
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent
+        side="top"
+        align="end"
+        avoidCollisions={false}
+        className="border-white/10 bg-[#0F0E15] text-white"
+      >
+        {languageGroups.map((g) => (
+          <SelectGroup key={g.lang}>
+            <SelectLabel className="text-[10px] uppercase tracking-wide text-white/50">
+              {g.label}
+            </SelectLabel>
+            {g.voices.map((v) => {
+              const isPlaying = previewingId === v.id
+              const isLoading = previewLoading === v.id
+              const label = v.label
+                .replace(/^(Fish|ElevenLabs)\s—\s/, '')
+                .replace(/\s\([^)]+\)$/, '')
+              const isSelected = v.id === voiceId
+              return (
+                <SelectItem
+                  key={v.id}
+                  value={v.id}
+                  className="relative pr-10 text-white focus:bg-white/10 focus:text-white"
+                >
+                  <span className="block truncate">{label}</span>
+                  {!isSelected && (
+                    <div
+                      role="button"
+                      tabIndex={-1}
+                      aria-label={isPlaying ? 'Stop' : 'Preview'}
+                      // Radix SelectItem ловит выбор в pointerUp (mouse) и click
+                      // (keyboard). stopPropagation на обоих — обязательно, иначе
+                      // bubble дойдёт до Item и popover закроется. preventDefault
+                      // дополнительно блокирует фокус-shift.
+                      onPointerDown={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
+                      onPointerUp={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
                       onClick={(e) => {
+                        e.preventDefault()
                         e.stopPropagation()
                         onPreview(v.id)
                       }}
-                      title={isPlaying ? 'Stop' : 'Preview'}
                       style={{
+                        position: 'absolute',
+                        right: 6,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
                         width: 22,
                         height: 22,
-                        background: isPlaying || isLoading ? 'rgba(244, 114, 182, 0.4)' : 'rgba(244, 114, 182, 0.18)',
-                        color: '#f9a8d4',
-                        border: '1px solid rgba(244, 114, 182, 0.5)',
-                        borderRadius: 3,
+                        background:
+                          isPlaying || isLoading
+                            ? 'rgba(244, 114, 182, 0.55)'
+                            : 'rgba(244, 114, 182, 0.28)',
+                        color: '#fff',
+                        border: '1px solid rgba(244, 114, 182, 0.7)',
+                        borderRadius: 4,
                         cursor: isLoading ? 'wait' : 'pointer',
                         fontSize: 11,
                         lineHeight: 1,
-                        padding: 0,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontWeight: 600,
-                        flexShrink: 0,
+                        userSelect: 'none',
                       }}
                     >
-                      {isLoading ? '…' : isPlaying ? '■' : '▶'}
-                    </button>
-                  </div>
-                )
-              })}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                      {isLoading ? (
+                        <Loader2 className="size-3 animate-spin" />
+                      ) : isPlaying ? (
+                        <Square className="size-3" fill="currentColor" />
+                      ) : (
+                        <Play className="size-3" fill="currentColor" />
+                      )}
+                    </div>
+                  )}
+                </SelectItem>
+              )
+            })}
+          </SelectGroup>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
 
