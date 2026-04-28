@@ -5,21 +5,36 @@ import { logUsage, anthropicHaikuCost } from '../../../utils/log-usage'
 type Body = {
   image: string // data:image/...;base64,...
   prompt?: string
+  language?: string // ISO 639-1: ru, en, ja, ... — для адаптации языка ответа
 }
 
+// Универсальный prompt на английском — фронт может override через body.prompt
+// (там уже инжектится UI-локаль). Раньше был жёстко "Пиши по-русски" — ломало
+// все локали кроме ru.
 const DEFAULT_PROMPT =
-  'Опиши коротко что на этом скриншоте (1-3 предложения). ' +
-  'Если это аниме/игра/фильм — попробуй угадать название. ' +
-  'Если это вопрос/тест — дай правильный ответ. ' +
-  'Если код/ошибка — кратко объясни что не так. ' +
-  'Пиши по-русски, живо, без воды.'
+  'Describe briefly what is on this screenshot (1-3 sentences). ' +
+  'If it is anime/game/movie — try to guess the title. ' +
+  'If it is a question/test — give the correct answer. ' +
+  'If code/error — briefly explain. ' +
+  'Be lively, no fluff.'
+
+const LANG_NAME: Record<string, string> = {
+  en: 'English', ru: 'Russian', ja: 'Japanese', ko: 'Korean', zh: 'Chinese',
+  de: 'German', fr: 'French', pt: 'Portuguese', es: 'Spanish',
+}
 
 export default {
   async describe(ctx) {
-    const { image, prompt }: Body = ctx.request.body || {}
+    const { image, prompt, language }: Body = ctx.request.body || {}
     if (!image || !image.startsWith('data:image/')) {
       return ctx.badRequest('image (data URL) required')
     }
+    // Адаптируем язык ответа под UI-локаль (если фронт передал). Без этого
+    // Claude видел английский prompt и отвечал на английском даже когда юзер ru.
+    const langSuffix = language && LANG_NAME[language]
+      ? ` Reply in ${LANG_NAME[language]}.`
+      : ''
+    const finalPrompt = (prompt ?? DEFAULT_PROMPT) + langSuffix
 
     const startedAt = Date.now()
     const userId = ctx.state.user?.id
@@ -38,7 +53,7 @@ export default {
           {
             role: 'user',
             content: [
-              { type: 'text', text: prompt ?? DEFAULT_PROMPT },
+              { type: 'text', text: finalPrompt },
               { type: 'image', image: base64, mediaType },
             ],
           },

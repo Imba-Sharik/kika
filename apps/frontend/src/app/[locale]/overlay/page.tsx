@@ -259,6 +259,9 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     },
     deviceId: micDeviceId || undefined,
     vadThreshold,
+    // Язык STT = текущая UI-локаль. Без этого Whisper получал 'ru' (default)
+    // и транскрибировал английскую речь как русские фонемы → Claude отвечал на ru.
+    language: currentLocale,
     // Когда Settings открыты и мик авто-поднят — крутим VAD для UI-бара,
     // но не шлём речь в STT/Клода (иначе каждое тестовое «привет» = разговор).
     // eslint-disable-next-line react-hooks/refs -- ref-чтение в config-объекте useMicListener; передаётся в effect внутри хука

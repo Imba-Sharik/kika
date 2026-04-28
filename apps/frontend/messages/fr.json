@@ -127,7 +127,8 @@
     "animeTooltip": "Recherche précise de frame anime (épisode + timestamp)",
     "empty": {
       "hint": "Clique \"+ écran\" ou dis \"qu'est-ce qui est à l'écran?\" / \"sélectionne une zone et dis-moi ce que c'est\""
-    }
+    },
+    "fallbackPrompt": "Regarde la capture d'écran et décris brièvement ce qui s'y trouve. Si c'est un contenu connu (film, série, jeu, site, app) — donne le nom. Si c'est une question/test — donne la réponse. Si c'est du code/une erreur — explique brièvement."
   },
   "menu": {
     "chat": "Chat",

@@ -127,7 +127,8 @@
     "animeTooltip": "Precise anime frame search (episode + timestamp)",
     "empty": {
       "hint": "Click \"+ full\" or say \"what's on screen?\" / \"select region and tell me what it is\""
-    }
+    },
+    "fallbackPrompt": "Look at the screenshot and briefly describe what is there. If it is known content (movie, show, game, site, app) — name it. If it is a test/task — give the answer. If code/error — briefly explain."
   },
   "menu": {
     "chat": "Chat",

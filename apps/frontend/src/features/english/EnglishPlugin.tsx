@@ -66,16 +66,18 @@ export const englishPlugin: YukaiPlugin = {
       (it) => `${it.word}(${it.correct}✓${it.wrong}✗${it.hard ? ' HARD' : ''})`,
     )
     const newish = currentItems.filter((it) => statusOf(it) === 'new').map((it) => it.word)
+    // Инжект на английском — иначе bias к ru в Claude system prompt при
+    // не-русской UI-локали. Сами слова словаря — английские, инструкции тоже.
     return [
-      '[ПАМЯТЬ: английский словарь]',
-      known.length > 0 ? `Знаю (${known.length}): ${known.join(', ')}` : null,
-      learning.length > 0 ? `Учу (${learning.length}): ${learning.join(', ')}` : null,
-      newish.length > 0 ? `Новое (${newish.length}): ${newish.join(', ')}` : null,
+      '[MEMORY: English vocabulary]',
+      known.length > 0 ? `Known (${known.length}): ${known.join(', ')}` : null,
+      learning.length > 0 ? `Learning (${learning.length}): ${learning.join(', ')}` : null,
+      newish.length > 0 ? `New (${newish.length}): ${newish.join(', ')}` : null,
       '',
-      'Правила выбора следующего слова для практики:',
-      '- НЕ показывай слово из "Знаю" (пользователь уже выучил)',
-      '- ЧАЩЕ возвращайся к "Учу" — особенно к HARD словам',
-      '- Иногда добавляй новое слово для расширения словаря',
+      'Rules for picking the next practice word:',
+      '- Do NOT show words from "Known" (user already learned them)',
+      '- Return to "Learning" more often, especially HARD words',
+      '- Occasionally add a new word to grow vocabulary',
     ].filter(Boolean).join('\n')
   },
   // После ответа Kika: извлекаем [img: word] и теги [correct/wrong/hard]

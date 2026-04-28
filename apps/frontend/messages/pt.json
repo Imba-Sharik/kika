@@ -127,7 +127,8 @@
     "animeTooltip": "Busca precisa de frame de anime (episódio + timestamp)",
     "empty": {
       "hint": "Clique \"+ tela cheia\" ou diga \"o que está na tela?\" / \"selecione uma região e diga o que é\""
-    }
+    },
+    "fallbackPrompt": "Olha a captura de tela e descreve brevemente o que está aí. Se for conteúdo conhecido (filme, série, jogo, site, app) — diga o nome. Se for pergunta/teste — dê a resposta. Se for código/erro — explique brevemente."
   },
   "menu": {
     "chat": "Chat",

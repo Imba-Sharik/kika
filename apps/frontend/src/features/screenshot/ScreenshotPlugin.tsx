@@ -42,6 +42,9 @@ export type ScreenshotItem = {
 // Singleton-сеттеры — doCapture и handlers в панели пушат/обновляют историю.
 let pushItem: (item: ScreenshotItem) => void = () => {}
 let updateItem: (ts: number, patch: Partial<ScreenshotItem>) => void = () => {}
+// Локализованный fallback prompt — Provider обновляет через useTranslations
+// каждый рендер. doCapture (вне React-tree) читает актуальную версию.
+let currentFallbackPrompt = ''
 
 type ScreenshotState = {
   history: ScreenshotItem[]
@@ -108,8 +111,10 @@ async function doCapture(
   // Пушим в историю плагина (отображается в панели + может быть переиспользован)
   pushItem({ ts: Date.now(), dataUrl, trace: traceHit })
 
-  const userQuestion = userText?.trim()
-    || 'Посмотри на скриншот и коротко опиши что там. Если это известный контент (фильм, сериал, игра, сайт, приложение) — назови. Если тест/задача — дай ответ. Если код/ошибка — объясни суть.'
+  // Fallback prompt берётся из messages JSON по текущей UI-локали через
+  // module-level singleton (Provider обновляет на каждом рендере). На /ja юзер
+  // увидит в чат-истории японский prompt, на /en — английский, и т.д.
+  const userQuestion = userText?.trim() || currentFallbackPrompt
 
   let traceContext = ''
   if (traceHit?.found && traceHit.title) {
@@ -130,8 +135,12 @@ async function doCapture(
 
 function ScreenProvider({ children }: { ctx: YukaiContext; children: ReactNode }) {
   const [history, setHistory] = useState<ScreenshotItem[]>([])
+  const t = useTranslations()
   pushItem = (item) => setHistory((prev) => [item, ...prev].slice(0, 10))
   updateItem = (ts, patch) => setHistory((prev) => prev.map((it) => (it.ts === ts ? { ...it, ...patch } : it)))
+  // Обновляем module-level singleton на каждом рендере — doCapture
+  // (вне React-tree) читает актуальную версию для текущей UI-локали.
+  currentFallbackPrompt = t('screenshot.fallbackPrompt')
 
   const value: ScreenshotState = {
     history,

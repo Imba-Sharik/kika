@@ -13,13 +13,15 @@ type Options = {
   deviceId?: string
   // Вызывается когда распознанный текст вставлен — для истории
   onTranscript?: (text: string) => void
+  // Язык распознавания (ISO 639-1: ru, en, ja, ...). Default — 'ru'.
+  language?: string
 }
 
 const STORAGE_KEY = 'kika:dictation-history'
 
 // Диктовка через Right Alt hold-to-talk (Wispr Flow-style).
 // Запись → STT с LLM-очисткой → вставка в активное поле через clipboard + keybd_event.
-export function useDictation({ deviceId, onTranscript }: Options) {
+export function useDictation({ deviceId, onTranscript, language = 'ru' }: Options) {
   const [recording, setRecording] = useState(false)
   const [transcribing, setTranscribing] = useState(false)
   const [history, setHistory] = useState<DictationItem[]>(() => {
@@ -83,7 +85,7 @@ export function useDictation({ deviceId, onTranscript }: Options) {
         try {
           const form = new FormData()
           form.append('audio', new File([blob], 'dictation.webm', { type: mimeType }))
-          form.append('language', 'ru')
+          form.append('language', language)
           form.append('clean', 'true') // LLM чистит слова-паразиты + пунктуация
           const res = await aiFetch('/stt', { method: 'POST', body: form })
           if (!res.ok) throw new Error(await res.text())

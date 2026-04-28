@@ -8,8 +8,22 @@ import {
   estimateAudioDurationSec,
 } from '../../../utils/log-usage'
 
-const DEFAULT_PROMPT =
-  'Юкай, Yukai, AI-компаньон, робот, аниме, персонаж, голос, эмоция, подписка, ElevenLabs, Fish Audio.'
+// Whisper использует prompt как контекстный hint (стиль, имена собственные).
+// Per-language prompts: brand keywords + characteristic слова на нужном языке —
+// помогают распознать "Yukai" / "Юкай" / "愉快" правильно. Default RU оставлен для
+// backward-совместимости когда language не передан.
+const PROMPTS: Record<string, string> = {
+  ru: 'Юкай, Yukai, AI-компаньон, робот, аниме, персонаж, голос, эмоция, подписка.',
+  en: 'Yukai, AI companion, robot, anime, character, voice, emotion, subscription.',
+  ja: '愉快、Yukai、AIコンパニオン、ロボット、アニメ、キャラクター、声、感情。',
+  ko: 'Yukai, AI 컴패니언, 로봇, 애니메이션, 캐릭터, 목소리, 감정.',
+  zh: '愉快, Yukai, AI伴侣, 机器人, 动漫, 角色, 声音, 情感。',
+  de: 'Yukai, KI-Begleiter, Roboter, Anime, Charakter, Stimme, Emotion.',
+  fr: 'Yukai, compagnon IA, robot, anime, personnage, voix, émotion.',
+  pt: 'Yukai, companheira IA, robô, anime, personagem, voz, emoção.',
+  es: 'Yukai, compañera IA, robot, anime, personaje, voz, emoción.',
+}
+const DEFAULT_PROMPT = PROMPTS.ru
 
 // Whisper галлюцинирует знакомые фразы при тишине/шуме (обучен на YouTube-субтитрах).
 const HALLUCINATION_PATTERNS: RegExp[] = [
@@ -29,16 +43,19 @@ function isHallucination(text: string): boolean {
   return HALLUCINATION_PATTERNS.some((re) => re.test(trimmed))
 }
 
-const CLEAN_SYSTEM_PROMPT = `Ты чистишь голосовую диктовку на русском языке для последующей вставки в текстовое поле.
+// Универсальный prompt — Llama чистит на любом языке. Слова-паразиты
+// перечисляем generically ("filler words" на английском, конкретные примеры
+// для топ-локалей), но основное правило — сохранить язык input'а.
+const CLEAN_SYSTEM_PROMPT = `You clean voice dictation for pasting into a text field.
 
-Правила:
-- Убирай слова-паразиты: "эм", "ну", "как бы", "типа", "вот", "это самое", "короче", "значит", "так сказать"
-- Ставь правильные знаки препинания
-- Исправляй падежи, согласования, грамматические ошибки
-- Сохраняй смысл, стиль и интонацию
-- НЕ добавляй пояснений, кавычек, префиксов
-- Верни ТОЛЬКО очищенный текст
-- Если текст уже чистый — верни как есть`
+Rules:
+- Keep the original language of the input — do NOT translate
+- Remove filler words ("эм", "ну", "типа" / "um", "uh", "like" / "えっと", "あの" / etc.)
+- Add proper punctuation and capitalization
+- Fix grammar, agreement, conjugation
+- Preserve meaning, style, tone
+- NO explanations, quotes, prefixes — return ONLY the cleaned text
+- If text is already clean, return as-is`
 
 async function cleanText(raw: string): Promise<string> {
   const trimmed = raw.trim()
@@ -79,7 +96,9 @@ export default {
 
       const body = (ctx.request.body || {}) as Record<string, string>
       const language = body.language || 'ru'
-      const prompt = body.prompt || DEFAULT_PROMPT
+      // Per-language prompt — клиент может override через body.prompt, иначе
+      // берётся из карты по language. Без этого Whisper bias'ил к русскому.
+      const prompt = body.prompt || PROMPTS[language] || DEFAULT_PROMPT
       const clean = body.clean === 'true'
 
       const bytes = await readFile(filepath)

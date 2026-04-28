@@ -127,7 +127,8 @@
     "animeTooltip": "Búsqueda precisa de fotograma de anime (episodio + marca de tiempo)",
     "empty": {
       "hint": "Haz clic en \"+ completa\" o di \"¿qué hay en pantalla?\" / \"selecciona zona y dime qué es\""
-    }
+    },
+    "fallbackPrompt": "Mira la captura y describe brevemente qué hay ahí. Si es contenido conocido (película, serie, juego, sitio, app) — di el nombre. Si es pregunta/test — da la respuesta. Si es código/error — explica brevemente."
   },
   "menu": {
     "chat": "Chat",

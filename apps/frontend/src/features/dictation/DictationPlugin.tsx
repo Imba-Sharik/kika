@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useLocale } from 'next-intl'
 import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 import { useDictation, type DictationItem } from './useDictation'
 import { DictationPanel } from './DictationPanel'
@@ -29,7 +30,8 @@ function DictProvider({ children }: { ctx: YukaiContext; children: ReactNode }) 
     if (typeof window === 'undefined') return ''
     try { return localStorage.getItem(MIC_STORAGE_KEY) ?? '' } catch { return '' }
   })
-  const dict = useDictation({ deviceId })
+  const locale = useLocale()
+  const dict = useDictation({ deviceId, language: locale })
 
   // Слушаем смену микрофона через storage event (Settings-панель пишет туда)
   useEffect(() => {

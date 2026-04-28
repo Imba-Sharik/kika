@@ -59,7 +59,28 @@ function SelectContent({
   // Кастомные кнопки скролла вместо SelectScrollUp/DownButton от Radix —
   // те автоскроллят на hover (имитируют native macOS), что воспринимается
   // как баг. Наши работают по клику и скроллят Viewport через ref.
+  // Стрелки показываются только когда реально есть overflow (как в оригинальной
+  // Radix логике canScrollUp/canScrollDown) — иначе на коротком списке стрелки
+  // лишние (например LocalePicker с 9 локалями помещается без скролла).
   const viewportRef = React.useRef<HTMLDivElement | null>(null)
+  const [canScrollUp, setCanScrollUp] = React.useState(false)
+  const [canScrollDown, setCanScrollDown] = React.useState(false)
+  React.useEffect(() => {
+    const v = viewportRef.current
+    if (!v) return
+    const update = () => {
+      setCanScrollUp(v.scrollTop > 0)
+      setCanScrollDown(Math.ceil(v.scrollTop + v.clientHeight) < v.scrollHeight)
+    }
+    update()
+    v.addEventListener('scroll', update)
+    const ro = new ResizeObserver(update)
+    ro.observe(v)
+    return () => {
+      v.removeEventListener('scroll', update)
+      ro.disconnect()
+    }
+  }, [])
   const scrollBy = (delta: number) => {
     viewportRef.current?.scrollBy({ top: delta, behavior: 'smooth' })
   }
@@ -81,20 +102,22 @@ function SelectContent({
         position={position}
         {...props}
       >
-        <div
-          role="button"
-          tabIndex={-1}
-          // Native <button> получает фокус при клике → Radix Select теряет
-          // item-focus и закрывает popover. <div role="button"> не получает
-          // автофокус. preventDefault на pointerDown — стандартный Radix-паттерн
-          // чтобы остаться в фокус-управлении popover'а.
-          onPointerDown={(e) => e.preventDefault()}
-          onClick={() => scrollBy(-80)}
-          aria-label="Scroll up"
-          className="flex w-full cursor-pointer items-center justify-center py-1 hover:bg-white/5 select-none"
-        >
-          <ChevronUpIcon className="size-4" />
-        </div>
+        {canScrollUp && (
+          <div
+            role="button"
+            tabIndex={-1}
+            // Native <button> получает фокус при клике → Radix Select теряет
+            // item-focus и закрывает popover. <div role="button"> не получает
+            // автофокус. preventDefault на pointerDown — стандартный Radix-паттерн
+            // чтобы остаться в фокус-управлении popover'а.
+            onPointerDown={(e) => e.preventDefault()}
+            onClick={() => scrollBy(-80)}
+            aria-label="Scroll up"
+            className="flex w-full cursor-pointer items-center justify-center py-1 hover:bg-white/5 select-none"
+          >
+            <ChevronUpIcon className="size-4" />
+          </div>
+        )}
         <SelectPrimitive.Viewport
           ref={viewportRef}
           className={cn(
@@ -105,16 +128,18 @@ function SelectContent({
         >
           {children}
         </SelectPrimitive.Viewport>
-        <div
-          role="button"
-          tabIndex={-1}
-          onPointerDown={(e) => e.preventDefault()}
-          onClick={() => scrollBy(80)}
-          aria-label="Scroll down"
-          className="flex w-full cursor-pointer items-center justify-center py-1 hover:bg-white/5 select-none"
-        >
-          <ChevronDownIcon className="size-4" />
-        </div>
+        {canScrollDown && (
+          <div
+            role="button"
+            tabIndex={-1}
+            onPointerDown={(e) => e.preventDefault()}
+            onClick={() => scrollBy(80)}
+            aria-label="Scroll down"
+            className="flex w-full cursor-pointer items-center justify-center py-1 hover:bg-white/5 select-none"
+          >
+            <ChevronDownIcon className="size-4" />
+          </div>
+        )}
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
