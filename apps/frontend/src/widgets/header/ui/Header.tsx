@@ -36,12 +36,6 @@ export function Header() {
             >
               {t('devchat')}
             </a>
-            <Link href="/privacy" className="hover:text-white transition">
-              {t('privacy')}
-            </Link>
-            <Link href="/terms" className="hover:text-white transition">
-              {t('terms')}
-            </Link>
           </div>
 
           <span className="hidden md:inline-block h-5 w-px bg-white/10" aria-hidden />

@@ -32,8 +32,6 @@ export default function Landing() {
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
             {tNav('devchat')}
           </a>
-          <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">{tNav('privacy')}</a>
-          <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">{tNav('terms')}</a>
           <LocalePicker />
           <UserNav />
           <a
