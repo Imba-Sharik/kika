@@ -1,0 +1,187 @@
+{
+  "chat": {
+    "you": "you",
+    "status": {
+      "error": "error",
+      "speaking": "speaking",
+      "thinking": "thinking",
+      "ready": "ready"
+    },
+    "empty": {
+      "hint": "Press",
+      "hint2": "to talk"
+    },
+    "timing": {
+      "label": "total"
+    }
+  },
+  "onboarding": {
+    "greet": "Hi there!",
+    "text1": "To talk by voice — press",
+    "text2": "or click the bars below Yukai:",
+    "text3": "Press/click again to turn off.",
+    "dismiss": "Got it",
+    "mic": {
+      "hint": "Bars not moving?",
+      "cta": "Open mic settings"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close",
+    "mic": "Microphone",
+    "mic_default": "Default",
+    "voice": "Yukai voice",
+    "voice_hint": "ElevenLabs — best for English. Fish — natural Russian.",
+    "sensitivity": "Mic sensitivity",
+    "sensitivity_hint": "Fill = VAD speech probability. Drag the orange threshold — that's where \"speech\" starts. Applies instantly.",
+    "language": "Language",
+    "language_hint": "Changes the language Yukai responds in. Voice auto-adjusts.",
+    "connection": "Connection",
+    "connection_auto": "Auto (recommended)",
+    "connection_direct": "Direct — yukai.app",
+    "connection_ru": "RU mirror — ru.yukai.app",
+    "connection_hint": "If the app fails to connect — try the RU mirror. Window reloads on change.",
+    "hotkeys": "Hotkeys:",
+    "hotkey_handsfree": "hands-free on/off",
+    "hotkey_dictation": "dictation (hold)",
+    "hotkey_shazam": "recognize song",
+    "devchat_title": "Chat with the developer",
+    "devchat_hint": "Tell me what broke, what's missing, what you liked",
+    "show_onboarding": "Show beginner tooltip again",
+    "account": {
+      "title": "Account",
+      "signedIn": "Signed in as",
+      "notSignedIn": "Not signed in — Yukai can't respond",
+      "signin": "Sign in",
+      "signout": "Sign out"
+    }
+  },
+  "quota": {
+    "today": "Today:",
+    "tier": {
+      "trial": "Trial",
+      "free": "Free",
+      "paid": "Paid"
+    },
+    "trialLeft": "Free trial: {days} days left",
+    "trialExpired": "Trial expired — payment coming soon"
+  },
+  "plugins": {
+    "section": "Plugins"
+  },
+  "common": {
+    "close": "Close",
+    "empty": "Nothing here yet."
+  },
+  "english": {
+    "stats": "total · {known} known · {learning} learning · {newish} new",
+    "tab": {
+      "all": "All",
+      "new": "New",
+      "learning": "Learning",
+      "known": "Known"
+    },
+    "empty": {
+      "hint": "Say to Yukai: \"let's study English\" or \"let's practice\" — learned words will appear here"
+    },
+    "bottom": {
+      "hint": "Say \"let's practice\" — Yukai will show new words in guess mode"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "Song history",
+      "name": "Music recognition",
+      "desc": "Shazam-style: hold Left Alt + ` for Yukai to identify what's playing"
+    },
+    "dictation": {
+      "title": "Dictation history",
+      "name": "Dictation",
+      "desc": "Hold Right Alt and speak — text is transcribed and pasted into the active field"
+    },
+    "english": {
+      "title": "English history",
+      "name": "English learning",
+      "desc": "Flashcards with SRS spaced repetition. [img: word] → image + Yukai asks."
+    },
+    "screenshot": {
+      "title": "Screenshots + vision",
+      "name": "Screenshot + vision",
+      "desc": "Screen capture → Claude describes what it sees. Say \"what's on screen\", \"select region\", \"what anime is this\"."
+    }
+  },
+  "music": {
+    "history": "History",
+    "empty": "Hold Alt+` to identify the playing song"
+  },
+  "dictation": {
+    "title": "Dictation",
+    "empty": "Hold Right Alt and speak — text gets pasted and saved here",
+    "repaste_tooltip": "Click to paste again"
+  },
+  "screenshot": {
+    "title": "Screenshots",
+    "region": "▭ region",
+    "full": "+ full",
+    "region_tooltip": "Select region with mouse",
+    "full_tooltip": "Capture full screen",
+    "anime_tooltip": "Precise anime frame search (episode + timestamp)",
+    "empty": {
+      "hint": "Click \"+ full\" or say \"what's on screen?\" / \"select region and tell me what it is\""
+    }
+  },
+  "menu": {
+    "chat": "Chat",
+    "memory": "Yukai memory (open folder)",
+    "settings": "Settings"
+  },
+  "overlay": {
+    "close_chat": "Close chat",
+    "settings_btn": "⚙ Settings",
+    "settings_title": "Settings",
+    "send": "Send",
+    "placeholder": "Message..."
+  },
+  "nav": {
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "devchat": "Chat",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "download": "Download",
+    "signin": "Sign in",
+    "signup": "Sign up",
+    "openApp": "Open Yukai",
+    "analytics": "📊 Analytics",
+    "signout": "Sign out"
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to continue chatting with Yukai",
+    "email": "Email",
+    "password": "Password",
+    "forgot": "Forgot password?",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "noAccount": "No account?",
+    "noAccountCta": "Sign up",
+    "errorInvalid": "Invalid email or password"
+  },
+  "register": {
+    "title": "Let's meet",
+    "subtitle": "Create an account in a minute and start chatting with Yukai",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters",
+    "confirmPassword": "Confirm password",
+    "submit": "Sign up",
+    "submitting": "Creating...",
+    "haveAccount": "Already have an account?",
+    "haveAccountCta": "Sign in",
+    "errorPasswordMismatch": "Passwords do not match",
+    "errorFailed": "Failed to create account",
+    "errorLoginAfter": "Account created but auto-login failed — try the sign in page"
+  }
+}

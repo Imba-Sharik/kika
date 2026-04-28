@@ -1,0 +1,189 @@
+{
+  "chat": {
+    "you": "você",
+    "status": {
+      "error": "erro",
+      "speaking": "falando",
+      "thinking": "pensando",
+      "ready": "pronta"
+    },
+    "empty": {
+      "hint": "Pressione",
+      "hint2": "para falar"
+    },
+    "timing": {
+      "label": "total"
+    }
+  },
+  "onboarding": {
+    "greet": "Olá!",
+    "text1": "Para falar por voz — pressione",
+    "text2": "ou clique nas barras abaixo de Yukai:",
+    "text3": "Pressione/clique novamente para desligar.",
+    "dismiss": "Entendi",
+    "mic": {
+      "hint": "Barras não se movem?",
+      "cta": "Abrir configurações do microfone"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "close": "Fechar",
+    "account": "Conta",
+    "account.signedIn": "Conectado como",
+    "account.notSignedIn": "Não conectado — Yukai não pode responder",
+    "account.signin": "Entrar",
+    "account.signout": "Sair",
+    "mic": "Microfone",
+    "mic.default": "Padrão",
+    "voice": "Voz da Yukai",
+    "voice.hint": "ElevenLabs — melhor para inglês. Fish — russo natural.",
+    "sensitivity": "Sensibilidade do microfone",
+    "sensitivity.hint": "Preenchimento = probabilidade de fala VAD. Arraste o limite laranja — é onde a 'fala' começa. Aplica instantaneamente.",
+    "language": "Idioma",
+    "language.hint": "Muda o idioma em que Yukai responde. Voz se ajusta automaticamente.",
+    "connection": "Conexão",
+    "connection.auto": "Auto (recomendado)",
+    "connection.direct": "Direto — yukai.app",
+    "connection.ru": "Espelho RU — ru.yukai.app",
+    "connection.hint": "Se o app não conectar — tente o espelho RU. A janela recarrega ao mudar.",
+    "hotkeys": "Atalhos:",
+    "hotkey.handsfree": "mãos livres on/off",
+    "hotkey.dictation": "ditado (segurar)",
+    "hotkey.shazam": "reconhecer música",
+    "devchat.title": "Chat com o desenvolvedor",
+    "devchat.hint": "Diga-me o que quebrou, o que falta, o que você gostou",
+    "show-onboarding": "Mostrar dica para iniciantes novamente"
+  },
+  "quota": {
+    "today": "Hoje:",
+    "tier": {
+      "trial": "Teste",
+      "free": "Grátis",
+      "paid": "Pago"
+    },
+    "trialLeft": "Teste grátis: {days} dias restantes",
+    "trialExpired": "Teste expirado — pagamento em breve"
+  },
+  "plugins": {
+    "section": "Plugins"
+  },
+  "common": {
+    "close": "Fechar",
+    "empty": "Nada aqui ainda."
+  },
+  "english": {
+    "stats": "total · {known} conhecidas · {learning} aprendendo · {newish} novas",
+    "tab": {
+      "all": "Todas",
+      "new": "Novas",
+      "learning": "Aprendendo",
+      "known": "Conhecidas"
+    },
+    "empty": {
+      "hint": "Diga para Yukai: \"vamos estudar inglês\" ou \"vamos praticar\" — palavras aprendidas aparecerão aqui"
+    },
+    "bottom": {
+      "hint": "Diga \"vamos praticar\" — Yukai mostrará novas palavras em modo adivinhação"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "Histórico de músicas",
+      "name": "Reconhecimento de música",
+      "desc": "Estilo Shazam: segure Alt esquerdo + ` para Yukai identificar o que está tocando"
+    },
+    "dictation": {
+      "title": "Histórico de ditado",
+      "name": "Ditado",
+      "desc": "Segure Alt direito e fale — o texto é transcrito e colado no campo ativo"
+    },
+    "english": {
+      "title": "Histórico de inglês",
+      "name": "Aprendizado de inglês",
+      "desc": "Flashcards com repetição espaçada SRS. [img: word] → imagem + Yukai pergunta."
+    },
+    "screenshot": {
+      "title": "Capturas + visão",
+      "name": "Captura + visão",
+      "desc": "Captura de tela → Claude descreve o que vê. Diga \"o que está na tela\", \"selecionar área\", \"que anime é esse\"."
+    }
+  },
+  "music": {
+    "history": "Histórico",
+    "empty": "Segure Alt+` para identificar a música tocando"
+  },
+  "dictation": {
+    "title": "Ditado",
+    "empty": "Segure Alt direito e fale — o texto é colado e salvo aqui",
+    "repaste-tooltip": "Clique para colar novamente"
+  },
+  "screenshot": {
+    "title": "Capturas de tela",
+    "region": "▭ região",
+    "full": "+ tela cheia",
+    "region-tooltip": "Selecionar região com mouse",
+    "full-tooltip": "Capturar tela inteira",
+    "anime-tooltip": "Busca precisa de frame de anime (episódio + timestamp)",
+    "empty": {
+      "hint": "Clique \"+ tela cheia\" ou diga \"o que está na tela?\" / \"selecione uma região e diga o que é\""
+    }
+  },
+  "menu": {
+    "chat": "Chat",
+    "memory": "Memória Yukai (abrir pasta)",
+    "settings": "Configurações"
+  },
+  "overlay": {
+    "close-chat": "Fechar chat",
+    "settings-btn": "⚙ Configurações",
+    "settings-title": "Configurações",
+    "send": "Enviar",
+    "placeholder": "Mensagem..."
+  },
+  "nav": {
+    "pricing": "Preços",
+    "faq": "FAQ",
+    "devchat": "Chat",
+    "privacy": "Privacidade",
+    "terms": "Termos",
+    "download": "Baixar",
+    "signin": "Entrar",
+    "signup": "Cadastro",
+    "openApp": "Abrir Yukai",
+    "analytics": "📊 Análise",
+    "signout": "Sair"
+  },
+  "login": {
+    "title": "Bem-vindo de volta",
+    "subtitle": "Entre para continuar conversando com Yukai",
+    "email": "Email",
+    "password": "Senha",
+    "forgot": "Esqueceu a senha?",
+    "submit": "Entrar",
+    "submitting": "Entrando...",
+    "noAccount": "Sem conta?",
+    "noAccount.cta": "Cadastre-se",
+    "error": {
+      "invalid": "Email ou senha inválidos"
+    }
+  },
+  "register": {
+    "title": "Vamos nos conhecer",
+    "subtitle": "Crie uma conta em um minuto e comece a conversar com Yukai",
+    "username": "Nome de usuário",
+    "email": "Email",
+    "password": "Senha",
+    "password.hint": "Mínimo 8 caracteres",
+    "confirmPassword": "Confirmar senha",
+    "submit": "Cadastrar",
+    "submitting": "Criando...",
+    "haveAccount": "Já tem uma conta?",
+    "haveAccount.cta": "Entrar",
+    "error": {
+      "passwordMismatch": "Senhas não coincidem",
+      "failed": "Falha ao criar conta",
+      "loginAfter": "Conta criada mas login automático falhou — tente na página de entrada"
+    }
+  }
+}

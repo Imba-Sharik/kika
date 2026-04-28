@@ -1,0 +1,189 @@
+{
+  "chat": {
+    "you": "toi",
+    "status": {
+      "error": "erreur",
+      "speaking": "parle",
+      "thinking": "réfléchit",
+      "ready": "prête"
+    },
+    "empty": {
+      "hint": "Appuie",
+      "hint2": "pour parler"
+    },
+    "timing": {
+      "label": "total"
+    }
+  },
+  "onboarding": {
+    "greet": "Salut!",
+    "text1": "Pour parler avec la voix — appuie",
+    "text2": "ou clique sur les barres sous Yukai:",
+    "text3": "Appuie/clique à nouveau pour désactiver.",
+    "dismiss": "Compris",
+    "mic": {
+      "hint": "Les barres ne bougent pas?",
+      "cta": "Ouvrir les paramètres du micro"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "close": "Fermer",
+    "account": "Compte",
+    "account.signedIn": "Connecté en tant que",
+    "account.notSignedIn": "Non connecté — Yukai ne peut pas répondre",
+    "account.signin": "Se connecter",
+    "account.signout": "Se déconnecter",
+    "mic": "Microphone",
+    "mic.default": "Par défaut",
+    "voice": "Voix de Yukai",
+    "voice.hint": "ElevenLabs — meilleur pour l'anglais. Fish — russe naturel.",
+    "sensitivity": "Sensibilité du micro",
+    "sensitivity.hint": "Remplissage = probabilité de parole VAD. Glisse le seuil orange — c'est là que commence la 'parole'. Application immédiate.",
+    "language": "Langue",
+    "language.hint": "Change la langue dans laquelle Yukai répond. La voix s'ajuste automatiquement.",
+    "connection": "Connexion",
+    "connection.auto": "Auto (recommandé)",
+    "connection.direct": "Direct — yukai.app",
+    "connection.ru": "Miroir RU — ru.yukai.app",
+    "connection.hint": "Si l'app ne se connecte pas — essaie le miroir RU. La fenêtre se recharge au changement.",
+    "hotkeys": "Raccourcis:",
+    "hotkey.handsfree": "mains libres on/off",
+    "hotkey.dictation": "dictée (maintenir)",
+    "hotkey.shazam": "reconnaître la chanson",
+    "devchat.title": "Chat avec le développeur",
+    "devchat.hint": "Dis-moi ce qui est cassé, ce qui manque, ce qui te plaît",
+    "show-onboarding": "Réafficher le tutoriel débutant"
+  },
+  "quota": {
+    "today": "Aujourd'hui:",
+    "tier": {
+      "trial": "Essai",
+      "free": "Gratuit",
+      "paid": "Payant"
+    },
+    "trialLeft": "Essai gratuit: {days} jours restants",
+    "trialExpired": "Essai expiré — paiement bientôt disponible"
+  },
+  "plugins": {
+    "section": "Plugins"
+  },
+  "common": {
+    "close": "Fermer",
+    "empty": "Rien ici pour l'instant."
+  },
+  "english": {
+    "stats": "total · {known} connus · {learning} en cours · {newish} nouveaux",
+    "tab": {
+      "all": "Tous",
+      "new": "Nouveau",
+      "learning": "En cours",
+      "known": "Connus"
+    },
+    "empty": {
+      "hint": "Dis à Yukai: \"étudions l'anglais\" ou \"pratiquons\" — les mots appris apparaîtront ici"
+    },
+    "bottom": {
+      "hint": "Dis \"pratiquons\" — Yukai montrera de nouveaux mots en mode devinette"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "Historique des chansons",
+      "name": "Reconnaissance musicale",
+      "desc": "Style Shazam: maintiens Alt gauche + ` pour que Yukai identifie ce qui joue"
+    },
+    "dictation": {
+      "title": "Historique de dictée",
+      "name": "Dictée",
+      "desc": "Maintiens Alt droit et parle — le texte est transcrit et collé dans le champ actif"
+    },
+    "english": {
+      "title": "Historique d'anglais",
+      "name": "Apprentissage de l'anglais",
+      "desc": "Cartes avec répétition espacée SRS. [img: word] → image + Yukai demande."
+    },
+    "screenshot": {
+      "title": "Captures + vision",
+      "name": "Capture + vision",
+      "desc": "Capture d'écran → Claude décrit ce qu'il voit. Dis \"qu'est-ce qui est à l'écran\", \"sélectionne une zone\", \"quel anime est-ce\"."
+    }
+  },
+  "music": {
+    "history": "Historique",
+    "empty": "Maintiens Alt+` pour identifier la chanson en cours"
+  },
+  "dictation": {
+    "title": "Dictée",
+    "empty": "Maintiens Alt droit et parle — le texte est collé et sauvegardé ici",
+    "repaste-tooltip": "Clic pour recoller"
+  },
+  "screenshot": {
+    "title": "Captures d'écran",
+    "region": "▭ zone",
+    "full": "+ écran",
+    "region-tooltip": "Sélectionner zone avec souris",
+    "full-tooltip": "Capturer écran entier",
+    "anime-tooltip": "Recherche précise de frame anime (épisode + timestamp)",
+    "empty": {
+      "hint": "Clique \"+ écran\" ou dis \"qu'est-ce qui est à l'écran?\" / \"sélectionne une zone et dis-moi ce que c'est\""
+    }
+  },
+  "menu": {
+    "chat": "Chat",
+    "memory": "Mémoire Yukai (ouvrir dossier)",
+    "settings": "Paramètres"
+  },
+  "overlay": {
+    "close-chat": "Fermer le chat",
+    "settings-btn": "⚙ Paramètres",
+    "settings-title": "Paramètres",
+    "send": "Envoyer",
+    "placeholder": "Message..."
+  },
+  "nav": {
+    "pricing": "Tarifs",
+    "faq": "FAQ",
+    "devchat": "Chat",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "download": "Télécharger",
+    "signin": "Connexion",
+    "signup": "Inscription",
+    "openApp": "Ouvrir Yukai",
+    "analytics": "📊 Analyse",
+    "signout": "Déconnexion"
+  },
+  "login": {
+    "title": "Bon retour",
+    "subtitle": "Connecte-toi pour continuer à discuter avec Yukai",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgot": "Mot de passe oublié?",
+    "submit": "Se connecter",
+    "submitting": "Connexion...",
+    "noAccount": "Pas de compte?",
+    "noAccount.cta": "S'inscrire",
+    "error": {
+      "invalid": "Email ou mot de passe invalide"
+    }
+  },
+  "register": {
+    "title": "Faisons connaissance",
+    "subtitle": "Crée un compte en une minute et commence à discuter avec Yukai",
+    "username": "Nom d'utilisateur",
+    "email": "Email",
+    "password": "Mot de passe",
+    "password.hint": "Au moins 8 caractères",
+    "confirmPassword": "Confirmer le mot de passe",
+    "submit": "S'inscrire",
+    "submitting": "Création...",
+    "haveAccount": "Déjà un compte?",
+    "haveAccount.cta": "Se connecter",
+    "error": {
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "failed": "Échec de la création du compte",
+      "loginAfter": "Compte créé mais connexion auto échouée — essaie sur la page de connexion"
+    }
+  }
+}

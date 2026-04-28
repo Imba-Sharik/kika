@@ -1,0 +1,189 @@
+{
+  "chat": {
+    "you": "du",
+    "status": {
+      "error": "Fehler",
+      "speaking": "spricht",
+      "thinking": "denkt",
+      "ready": "bereit"
+    },
+    "empty": {
+      "hint": "Drücke",
+      "hint2": "zum Sprechen"
+    },
+    "timing": {
+      "label": "gesamt"
+    }
+  },
+  "onboarding": {
+    "greet": "Hallo!",
+    "text1": "Um per Stimme zu sprechen — drücke",
+    "text2": "oder klicke auf die Balken unter Yukai:",
+    "text3": "Nochmal drücken/klicken zum Ausschalten.",
+    "dismiss": "Verstanden",
+    "mic": {
+      "hint": "Balken bewegen sich nicht?",
+      "cta": "Mikrofon-Einstellungen öffnen"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "close": "Schließen",
+    "account": "Konto",
+    "account.signedIn": "Angemeldet als",
+    "account.notSignedIn": "Nicht angemeldet — Yukai kann nicht antworten",
+    "account.signin": "Anmelden",
+    "account.signout": "Abmelden",
+    "mic": "Mikrofon",
+    "mic.default": "Standard",
+    "voice": "Yukai-Stimme",
+    "voice.hint": "ElevenLabs — am besten für Englisch. Fish — natürliches Russisch.",
+    "sensitivity": "Mikrofon-Empfindlichkeit",
+    "sensitivity.hint": "Füllung = VAD-Sprachwahrscheinlichkeit. Ziehe den orangen Schwellenwert — dort beginnt 'Sprache'. Sofort wirksam.",
+    "language": "Sprache",
+    "language.hint": "Ändert die Sprache, in der Yukai antwortet. Stimme passt sich automatisch an.",
+    "connection": "Verbindung",
+    "connection.auto": "Auto (empfohlen)",
+    "connection.direct": "Direkt — yukai.app",
+    "connection.ru": "RU-Spiegel — ru.yukai.app",
+    "connection.hint": "Wenn die App keine Verbindung herstellt — versuche den RU-Spiegel. Fenster lädt bei Änderung neu.",
+    "hotkeys": "Tastenkombinationen:",
+    "hotkey.handsfree": "Freisprechen ein/aus",
+    "hotkey.dictation": "Diktieren (halten)",
+    "hotkey.shazam": "Lied erkennen",
+    "devchat.title": "Mit Entwickler chatten",
+    "devchat.hint": "Sag mir, was kaputt ist, was fehlt, was gefällt",
+    "show-onboarding": "Anfänger-Tipp erneut anzeigen"
+  },
+  "quota": {
+    "today": "Heute:",
+    "tier": {
+      "trial": "Testphase",
+      "free": "Kostenlos",
+      "paid": "Bezahlt"
+    },
+    "trialLeft": "Kostenlose Testphase: noch {days} Tage",
+    "trialExpired": "Testphase abgelaufen — Bezahlung kommt bald"
+  },
+  "plugins": {
+    "section": "Plugins"
+  },
+  "common": {
+    "close": "Schließen",
+    "empty": "Hier ist noch nichts."
+  },
+  "english": {
+    "stats": "gesamt · {known} bekannt · {learning} lernen · {newish} neu",
+    "tab": {
+      "all": "Alle",
+      "new": "Neu",
+      "learning": "Lernen",
+      "known": "Bekannt"
+    },
+    "empty": {
+      "hint": "Sag zu Yukai: \"Lass uns Englisch lernen\" oder \"Lass uns üben\" — gelernte Wörter erscheinen hier"
+    },
+    "bottom": {
+      "hint": "Sag \"Lass uns üben\" — Yukai zeigt neue Wörter im Rate-Modus"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "Lied-Verlauf",
+      "name": "Musikerkennung",
+      "desc": "Shazam-Stil: Halte Linke Alt + ` damit Yukai erkennt was läuft"
+    },
+    "dictation": {
+      "title": "Diktier-Verlauf",
+      "name": "Diktieren",
+      "desc": "Halte Rechte Alt und sprich — Text wird transkribiert und ins aktive Feld eingefügt"
+    },
+    "english": {
+      "title": "Englisch-Verlauf",
+      "name": "Englisch lernen",
+      "desc": "Karteikarten mit SRS-Wiederholung. [img: word] → Bild + Yukai fragt."
+    },
+    "screenshot": {
+      "title": "Screenshots + Vision",
+      "name": "Screenshot + Vision",
+      "desc": "Bildschirmaufnahme → Claude beschreibt was er sieht. Sag \"was ist auf dem Bildschirm\", \"Bereich auswählen\", \"welcher Anime ist das\"."
+    }
+  },
+  "music": {
+    "history": "Verlauf",
+    "empty": "Halte Alt+` zum Erkennen des laufenden Liedes"
+  },
+  "dictation": {
+    "title": "Diktieren",
+    "empty": "Halte Rechte Alt und sprich — Text wird eingefügt und hier gespeichert",
+    "repaste-tooltip": "Klick zum erneuten Einfügen"
+  },
+  "screenshot": {
+    "title": "Screenshots",
+    "region": "▭ Bereich",
+    "full": "+ Ganzer Bildschirm",
+    "region-tooltip": "Bereich mit Maus auswählen",
+    "full-tooltip": "Ganzen Bildschirm aufnehmen",
+    "anime-tooltip": "Präzise Anime-Frame-Suche (Episode + Zeitstempel)",
+    "empty": {
+      "hint": "Klicke \"+ Ganzer Bildschirm\" oder sage \"was ist auf dem Bildschirm?\" / \"Bereich auswählen und sag was es ist\""
+    }
+  },
+  "menu": {
+    "chat": "Chat",
+    "memory": "Yukai-Speicher (Ordner öffnen)",
+    "settings": "Einstellungen"
+  },
+  "overlay": {
+    "close-chat": "Chat schließen",
+    "settings-btn": "⚙ Einstellungen",
+    "settings-title": "Einstellungen",
+    "send": "Senden",
+    "placeholder": "Nachricht..."
+  },
+  "nav": {
+    "pricing": "Preise",
+    "faq": "FAQ",
+    "devchat": "Chat",
+    "privacy": "Datenschutz",
+    "terms": "Bedingungen",
+    "download": "Herunterladen",
+    "signin": "Anmelden",
+    "signup": "Registrieren",
+    "openApp": "Yukai öffnen",
+    "analytics": "📊 Analyse",
+    "signout": "Abmelden"
+  },
+  "login": {
+    "title": "Willkommen zurück",
+    "subtitle": "Melde dich an, um mit Yukai weiterzuchatten",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgot": "Passwort vergessen?",
+    "submit": "Anmelden",
+    "submitting": "Anmeldung...",
+    "noAccount": "Kein Konto?",
+    "noAccount.cta": "Registrieren",
+    "error": {
+      "invalid": "Ungültige E-Mail oder Passwort"
+    }
+  },
+  "register": {
+    "title": "Lass uns kennenlernen",
+    "subtitle": "Erstelle ein Konto in einer Minute und beginne mit Yukai zu chatten",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "password.hint": "Mindestens 8 Zeichen",
+    "confirmPassword": "Passwort bestätigen",
+    "submit": "Registrieren",
+    "submitting": "Erstellung...",
+    "haveAccount": "Bereits ein Konto?",
+    "haveAccount.cta": "Anmelden",
+    "error": {
+      "passwordMismatch": "Passwörter stimmen nicht überein",
+      "failed": "Konto konnte nicht erstellt werden",
+      "loginAfter": "Konto erstellt, aber automatische Anmeldung fehlgeschlagen — versuche es auf der Anmeldeseite"
+    }
+  }
+}

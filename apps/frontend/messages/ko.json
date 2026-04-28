@@ -1,0 +1,189 @@
+{
+  "chat": {
+    "you": "당신",
+    "status": {
+      "error": "오류",
+      "speaking": "말하는 중",
+      "thinking": "생각 중",
+      "ready": "준비됨"
+    },
+    "empty": {
+      "hint": "누르세요",
+      "hint2": "대화하려면"
+    },
+    "timing": {
+      "label": "총"
+    }
+  },
+  "onboarding": {
+    "greet": "안녕하세요!",
+    "text1": "음성으로 대화하려면 누르세요",
+    "text2": "또는 Yukai 아래 막대를 클릭:",
+    "text3": "다시 누르거나 클릭하면 끔.",
+    "dismiss": "확인",
+    "mic": {
+      "hint": "막대가 움직이지 않나요?",
+      "cta": "마이크 설정 열기"
+    }
+  },
+  "settings": {
+    "title": "설정",
+    "close": "닫기",
+    "account": "계정",
+    "account.signedIn": "로그인:",
+    "account.notSignedIn": "로그인되지 않음 — Yukai가 응답할 수 없습니다",
+    "account.signin": "로그인",
+    "account.signout": "로그아웃",
+    "mic": "마이크",
+    "mic.default": "기본값",
+    "voice": "Yukai 음성",
+    "voice.hint": "ElevenLabs — 영어에 최적. Fish — 자연스러운 러시아어.",
+    "sensitivity": "마이크 감도",
+    "sensitivity.hint": "채우기 = VAD 음성 확률. 주황색 임계값을 드래그 — 그 지점부터 '음성'이 시작됩니다. 즉시 적용.",
+    "language": "언어",
+    "language.hint": "Yukai가 응답하는 언어를 변경합니다. 음성은 자동 조정됩니다.",
+    "connection": "연결",
+    "connection.auto": "자동 (권장)",
+    "connection.direct": "직접 — yukai.app",
+    "connection.ru": "RU 미러 — ru.yukai.app",
+    "connection.hint": "앱이 연결되지 않으면 — RU 미러를 사용해 보세요. 변경 시 창이 다시 로드됩니다.",
+    "hotkeys": "단축키:",
+    "hotkey.handsfree": "핸즈프리 켜기/끄기",
+    "hotkey.dictation": "받아쓰기 (길게 누르기)",
+    "hotkey.shazam": "노래 인식",
+    "devchat.title": "개발자와 대화",
+    "devchat.hint": "고장난 것, 부족한 것, 좋았던 것을 알려주세요",
+    "show-onboarding": "초보자 도움말 다시 보기"
+  },
+  "quota": {
+    "today": "오늘:",
+    "tier": {
+      "trial": "체험",
+      "free": "무료",
+      "paid": "유료"
+    },
+    "trialLeft": "무료 체험: {days}일 남음",
+    "trialExpired": "체험 종료 — 결제 기능이 곧 추가됩니다"
+  },
+  "plugins": {
+    "section": "플러그인"
+  },
+  "common": {
+    "close": "닫기",
+    "empty": "아직 없습니다."
+  },
+  "english": {
+    "stats": "총 · {known} 알고 있음 · {learning} 학습 중 · {newish} 새로움",
+    "tab": {
+      "all": "전체",
+      "new": "새로운",
+      "learning": "학습 중",
+      "known": "알고 있음"
+    },
+    "empty": {
+      "hint": "Yukai에게 \"영어를 공부하자\"라고 말하세요 — 배운 단어가 여기에 표시됩니다"
+    },
+    "bottom": {
+      "hint": "\"연습하자\"라고 말하세요 — Yukai가 추측 모드로 새 단어를 표시합니다"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "노래 기록",
+      "name": "음악 인식",
+      "desc": "Shazam 스타일: Left Alt + `를 길게 눌러 Yukai가 재생 중인 곡을 식별"
+    },
+    "dictation": {
+      "title": "받아쓰기 기록",
+      "name": "받아쓰기",
+      "desc": "Right Alt를 길게 누르고 말하면 — 텍스트가 활성 필드에 붙여넣어집니다"
+    },
+    "english": {
+      "title": "영어 학습 기록",
+      "name": "영어 학습",
+      "desc": "SRS 간격 반복 플래시카드. [img: word] → 이미지 + Yukai 질문."
+    },
+    "screenshot": {
+      "title": "스크린샷 + 시각",
+      "name": "스크린샷 + 시각",
+      "desc": "화면 캡처 → Claude가 본 것을 설명합니다. \"화면에 무엇이 있나\", \"영역 선택\", \"이게 무슨 애니인가\"라고 말하세요."
+    }
+  },
+  "music": {
+    "history": "기록",
+    "empty": "Alt+`를 길게 눌러 재생 중인 곡 인식"
+  },
+  "dictation": {
+    "title": "받아쓰기",
+    "empty": "Right Alt를 길게 누르고 말하면 — 텍스트가 붙여넣어지고 여기에 저장됩니다",
+    "repaste-tooltip": "클릭하여 다시 붙여넣기"
+  },
+  "screenshot": {
+    "title": "스크린샷",
+    "region": "▭ 영역",
+    "full": "+ 전체",
+    "region-tooltip": "마우스로 영역 선택",
+    "full-tooltip": "전체 화면 캡처",
+    "anime-tooltip": "정확한 애니 프레임 검색 (에피소드 + 타임스탬프)",
+    "empty": {
+      "hint": "\"+ 전체\"를 클릭하거나 \"화면에 뭐가 있어?\" / \"영역 선택해서 무엇인지 알려줘\"라고 말하세요"
+    }
+  },
+  "menu": {
+    "chat": "채팅",
+    "memory": "Yukai 메모리 (폴더 열기)",
+    "settings": "설정"
+  },
+  "overlay": {
+    "close-chat": "채팅 닫기",
+    "settings-btn": "⚙ 설정",
+    "settings-title": "설정",
+    "send": "전송",
+    "placeholder": "메시지..."
+  },
+  "nav": {
+    "pricing": "가격",
+    "faq": "FAQ",
+    "devchat": "채팅",
+    "privacy": "개인정보",
+    "terms": "약관",
+    "download": "다운로드",
+    "signin": "로그인",
+    "signup": "회원가입",
+    "openApp": "Yukai 열기",
+    "analytics": "📊 분석",
+    "signout": "로그아웃"
+  },
+  "login": {
+    "title": "다시 오신 것을 환영합니다",
+    "subtitle": "로그인하여 Yukai와 대화를 계속하세요",
+    "email": "이메일",
+    "password": "비밀번호",
+    "forgot": "비밀번호를 잊으셨나요?",
+    "submit": "로그인",
+    "submitting": "로그인 중...",
+    "noAccount": "계정이 없으신가요?",
+    "noAccount.cta": "회원가입",
+    "error": {
+      "invalid": "잘못된 이메일 또는 비밀번호"
+    }
+  },
+  "register": {
+    "title": "만나서 반갑습니다",
+    "subtitle": "1분 만에 계정을 만들고 Yukai와 대화를 시작하세요",
+    "username": "사용자 이름",
+    "email": "이메일",
+    "password": "비밀번호",
+    "password.hint": "최소 8자",
+    "confirmPassword": "비밀번호 확인",
+    "submit": "회원가입",
+    "submitting": "생성 중...",
+    "haveAccount": "이미 계정이 있으신가요?",
+    "haveAccount.cta": "로그인",
+    "error": {
+      "passwordMismatch": "비밀번호가 일치하지 않습니다",
+      "failed": "계정 생성 실패",
+      "loginAfter": "계정이 생성되었지만 자동 로그인에 실패했습니다 — 로그인 페이지에서 시도하세요"
+    }
+  }
+}
