@@ -13,7 +13,7 @@ import { defineRouting } from 'next-intl/routing'
  *   ru.yukai.app/     → редирект на /ru через middleware (host-detect)
  */
 export const routing = defineRouting({
-  locales: ['en', 'ru', 'ja', 'ko', 'zh', 'de', 'fr', 'pt'],
+  locales: ['en', 'ru', 'ja', 'ko', 'zh', 'de', 'fr', 'pt', 'es'],
   defaultLocale: 'en',
   localePrefix: 'as-needed',
 })

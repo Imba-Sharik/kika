@@ -163,7 +163,7 @@
     "submit": "Anmelden",
     "submitting": "Anmeldung...",
     "noAccount": "Kein Konto?",
-    "noAccount.cta": "Registrieren",
+    "noAccountCta": "Registrieren",
     "error": {
       "invalid": "Ungültige E-Mail oder Passwort"
     }
@@ -174,12 +174,12 @@
     "username": "Benutzername",
     "email": "E-Mail",
     "password": "Passwort",
-    "password.hint": "Mindestens 8 Zeichen",
+    "passwordHint": "Mindestens 8 Zeichen",
     "confirmPassword": "Passwort bestätigen",
     "submit": "Registrieren",
     "submitting": "Erstellung...",
     "haveAccount": "Bereits ein Konto?",
-    "haveAccount.cta": "Anmelden",
+    "haveAccountCta": "Anmelden",
     "error": {
       "passwordMismatch": "Passwörter stimmen nicht überein",
       "failed": "Konto konnte nicht erstellt werden",

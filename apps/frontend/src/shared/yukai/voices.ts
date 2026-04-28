@@ -768,6 +768,28 @@ export const BUILTIN_VOICES: Voice[] = [
 export const DEFAULT_VOICE_ID = 'fish-voice-1'
 
 /**
+ * Дефолтные тексты для preview голоса в Settings — каждый на родном языке голоса,
+ * чтобы юзер услышал как голос реально звучит (а не японский voice читающий
+ * английский текст с акцентом).
+ */
+const VOICE_SAMPLES: Record<string, string> = {
+  ja: 'こんにちは！愉快です、よろしくね。',
+  en: "Hi! I'm Yukai, nice to meet you.",
+  ko: '안녕하세요! 저는 유카이예요, 만나서 반가워요.',
+  zh: '你好！我是愉快，很高兴认识你。',
+  ru: 'Привет! Я Yukai, рада знакомству.',
+  de: 'Hallo! Ich bin Yukai, freut mich, dich kennenzulernen.',
+  fr: 'Salut ! Je suis Yukai, ravie de te rencontrer.',
+  pt: 'Oi! Eu sou Yukai, prazer em te conhecer.',
+  es: '¡Hola! Soy Yukai, encantada de conocerte.',
+}
+
+export function getVoiceSampleText(voice: Voice, fallbackLocale = 'en'): string {
+  const lang = voice.langs?.[0] ?? fallbackLocale
+  return VOICE_SAMPLES[lang] ?? VOICE_SAMPLES[fallbackLocale] ?? VOICE_SAMPLES.en
+}
+
+/**
  * Подобрать дефолтный voice для локали. Сначала ищет в BUILTIN+user-voices
  * того что в `langs` явно. Иначе fallback на ElevenLabs multilingual.
  */

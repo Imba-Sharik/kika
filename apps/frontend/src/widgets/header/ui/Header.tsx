@@ -49,7 +49,7 @@ export function Header() {
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              title={t('devchat')}
+              title="Telegram"
               aria-label="Telegram"
               className="hover:text-white transition"
             >

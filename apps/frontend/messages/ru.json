@@ -163,7 +163,7 @@
     "submit": "Войти",
     "submitting": "Входим...",
     "noAccount": "Нет аккаунта?",
-    "noAccount.cta": "Зарегистрироваться",
+    "noAccountCta": "Зарегистрироваться",
     "error": {
       "invalid": "Неверный email или пароль"
     }
@@ -174,12 +174,12 @@
     "username": "Имя пользователя",
     "email": "Email",
     "password": "Пароль",
-    "password.hint": "Минимум 8 символов",
+    "passwordHint": "Минимум 8 символов",
     "confirmPassword": "Подтвердить пароль",
     "submit": "Зарегистрироваться",
     "submitting": "Создаём...",
     "haveAccount": "Уже есть аккаунт?",
-    "haveAccount.cta": "Войти",
+    "haveAccountCta": "Войти",
     "error": {
       "passwordMismatch": "Пароли не совпадают",
       "failed": "Не удалось создать аккаунт",

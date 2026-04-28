@@ -122,7 +122,7 @@ export function RegisterForm({
             required
           />
           <FieldDescription className="text-white/40">
-            {t('password.hint')}
+            {t('passwordHint')}
           </FieldDescription>
         </Field>
         <Field>
@@ -153,7 +153,7 @@ export function RegisterForm({
             href="/login"
             className="text-pink-300 underline-offset-4 hover:text-pink-200 hover:underline"
           >
-            {t('haveAccount.cta')}
+            {t('haveAccountCta')}
           </Link>
         </FieldDescription>
       </FieldGroup>

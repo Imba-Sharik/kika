@@ -163,7 +163,7 @@
     "submit": "로그인",
     "submitting": "로그인 중...",
     "noAccount": "계정이 없으신가요?",
-    "noAccount.cta": "회원가입",
+    "noAccountCta": "회원가입",
     "error": {
       "invalid": "잘못된 이메일 또는 비밀번호"
     }
@@ -174,12 +174,12 @@
     "username": "사용자 이름",
     "email": "이메일",
     "password": "비밀번호",
-    "password.hint": "최소 8자",
+    "passwordHint": "최소 8자",
     "confirmPassword": "비밀번호 확인",
     "submit": "회원가입",
     "submitting": "생성 중...",
     "haveAccount": "이미 계정이 있으신가요?",
-    "haveAccount.cta": "로그인",
+    "haveAccountCta": "로그인",
     "error": {
       "passwordMismatch": "비밀번호가 일치하지 않습니다",
       "failed": "계정 생성 실패",

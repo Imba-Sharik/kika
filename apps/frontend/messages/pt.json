@@ -163,7 +163,7 @@
     "submit": "Entrar",
     "submitting": "Entrando...",
     "noAccount": "Sem conta?",
-    "noAccount.cta": "Cadastre-se",
+    "noAccountCta": "Cadastre-se",
     "error": {
       "invalid": "Email ou senha inválidos"
     }
@@ -174,12 +174,12 @@
     "username": "Nome de usuário",
     "email": "Email",
     "password": "Senha",
-    "password.hint": "Mínimo 8 caracteres",
+    "passwordHint": "Mínimo 8 caracteres",
     "confirmPassword": "Confirmar senha",
     "submit": "Cadastrar",
     "submitting": "Criando...",
     "haveAccount": "Já tem uma conta?",
-    "haveAccount.cta": "Entrar",
+    "haveAccountCta": "Entrar",
     "error": {
       "passwordMismatch": "Senhas não coincidem",
       "failed": "Falha ao criar conta",

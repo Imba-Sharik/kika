@@ -33,6 +33,7 @@ export const ALL_LOCALES = [
   { code: 'ru', label: 'Русский', short: 'RU', flag: '🇷🇺', flagPng: '/language/RU.png' },
   { code: 'fr', label: 'Français', short: 'FR', flag: '🇫🇷', flagPng: '/language/FR.png' },
   { code: 'pt', label: 'Português', short: 'PT', flag: '🇧🇷', flagPng: '/language/BR.png' },
+  { code: 'es', label: 'Español', short: 'ES', flag: '🇪🇸', flagPng: '/language/ES.png' },
 ] as const
 
 export type LocaleCode = (typeof ALL_LOCALES)[number]['code']

@@ -163,7 +163,7 @@
     "submit": "登录",
     "submitting": "登录中...",
     "noAccount": "没有账户?",
-    "noAccount.cta": "注册",
+    "noAccountCta": "注册",
     "error": {
       "invalid": "邮箱或密码无效"
     }
@@ -174,12 +174,12 @@
     "username": "用户名",
     "email": "邮箱",
     "password": "密码",
-    "password.hint": "至少8个字符",
+    "passwordHint": "至少8个字符",
     "confirmPassword": "确认密码",
     "submit": "注册",
     "submitting": "创建中...",
     "haveAccount": "已有账户?",
-    "haveAccount.cta": "登录",
+    "haveAccountCta": "登录",
     "error": {
       "passwordMismatch": "密码不匹配",
       "failed": "创建账户失败",

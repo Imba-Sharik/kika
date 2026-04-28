@@ -102,7 +102,7 @@ export function LoginForm({
             href="/register"
             className="text-pink-300 underline-offset-4 hover:text-pink-200 hover:underline"
           >
-            {t('noAccount.cta')}
+            {t('noAccountCta')}
           </Link>
         </FieldDescription>
       </FieldGroup>

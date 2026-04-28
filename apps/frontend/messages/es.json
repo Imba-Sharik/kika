@@ -1,0 +1,242 @@
+{
+  "chat": {
+    "you": "tú",
+    "status": {
+      "error": "error",
+      "speaking": "hablando",
+      "thinking": "pensando",
+      "ready": "listo"
+    },
+    "empty": {
+      "hint": "Pulsa",
+      "hint2": "para hablar"
+    },
+    "timing": {
+      "label": "total"
+    }
+  },
+  "onboarding": {
+    "greet": "¡Hola!",
+    "text1": "Para hablar por voz — pulsa",
+    "text2": "o haz clic en las barras debajo de Yukai:",
+    "text3": "Pulsa/clic de nuevo para apagarlo.",
+    "dismiss": "Entendido",
+    "mic": {
+      "hint": "¿Las barras no se mueven?",
+      "cta": "Abrir ajustes del micro"
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "close": "Cerrar",
+    "mic": "Micrófono",
+    "mic_default": "Predeterminado",
+    "voice": "Voz de Yukai",
+    "voice_hint": "ElevenLabs — ideal para inglés. Fish — ruso natural.",
+    "sensitivity": "Sensibilidad del micro",
+    "sensitivity_hint": "Relleno = probabilidad de voz del VAD. Arrastra el umbral naranja — ahí empieza la \"voz\". Se aplica al instante.",
+    "language": "Idioma",
+    "language_hint": "Cambia el idioma en el que responde Yukai. La voz se ajusta automáticamente.",
+    "connection": "Conexión",
+    "connection_auto": "Automático (recomendado)",
+    "connection_direct": "Directo — yukai.app",
+    "connection_ru": "Espejo RU — ru.yukai.app",
+    "connection_hint": "Si la app no conecta — prueba el espejo RU. La ventana se recarga al cambiar.",
+    "hotkeys": "Atajos:",
+    "hotkey_handsfree": "manos libres on/off",
+    "hotkey_dictation": "dictado (mantener)",
+    "hotkey_shazam": "reconocer canción",
+    "devchat_title": "Chatear con el desarrollador",
+    "devchat_hint": "Cuéntame qué se rompió, qué falta, qué te gustó",
+    "show_onboarding": "Mostrar consejo para principiantes otra vez",
+    "account": {
+      "title": "Cuenta",
+      "signedIn": "Sesión iniciada como",
+      "notSignedIn": "Sin sesión — Yukai no puede responder",
+      "signin": "Iniciar sesión",
+      "signout": "Cerrar sesión"
+    }
+  },
+  "quota": {
+    "today": "Hoy:",
+    "tier": {
+      "trial": "Prueba",
+      "free": "Gratis",
+      "paid": "De pago"
+    },
+    "trialLeft": "Prueba gratuita: quedan {days} días",
+    "trialExpired": "Prueba caducada — pago en camino"
+  },
+  "plugins": {
+    "section": "Plugins"
+  },
+  "common": {
+    "close": "Cerrar",
+    "empty": "Aún no hay nada aquí."
+  },
+  "english": {
+    "stats": "total · {known} sabidas · {learning} aprendiendo · {newish} nuevas",
+    "tab": {
+      "all": "Todas",
+      "new": "Nuevas",
+      "learning": "Aprendiendo",
+      "known": "Sabidas"
+    },
+    "empty": {
+      "hint": "Dile a Yukai: \"vamos a estudiar inglés\" o \"vamos a practicar\" — las palabras aprendidas aparecerán aquí"
+    },
+    "bottom": {
+      "hint": "Di \"vamos a practicar\" — Yukai mostrará palabras nuevas en modo adivinanza"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "Historial de canciones",
+      "name": "Reconocimiento de música",
+      "desc": "Estilo Shazam: mantén Alt izquierdo + ` para que Yukai identifique lo que suena"
+    },
+    "dictation": {
+      "title": "Historial de dictado",
+      "name": "Dictado",
+      "desc": "Mantén Alt derecho y habla — el texto se transcribe y se pega en el campo activo"
+    },
+    "english": {
+      "title": "Historial de inglés",
+      "name": "Aprender inglés",
+      "desc": "Tarjetas con repetición espaciada SRS. [img: palabra] → imagen + Yukai pregunta."
+    },
+    "screenshot": {
+      "title": "Capturas + visión",
+      "name": "Captura + visión",
+      "desc": "Captura de pantalla → Claude describe lo que ve. Di \"qué hay en pantalla\", \"selecciona zona\", \"qué anime es esto\"."
+    }
+  },
+  "music": {
+    "history": "Historial",
+    "empty": "Mantén Alt+` para identificar la canción que suena"
+  },
+  "dictation": {
+    "title": "Dictado",
+    "empty": "Mantén Alt derecho y habla — el texto se pega y se guarda aquí",
+    "repaste-tooltip": "Haz clic para pegar de nuevo"
+  },
+  "screenshot": {
+    "title": "Capturas",
+    "region": "▭ zona",
+    "full": "+ completa",
+    "region-tooltip": "Selecciona zona con el ratón",
+    "full-tooltip": "Capturar pantalla completa",
+    "anime-tooltip": "Búsqueda precisa de fotograma de anime (episodio + marca de tiempo)",
+    "empty": {
+      "hint": "Haz clic en \"+ completa\" o di \"¿qué hay en pantalla?\" / \"selecciona zona y dime qué es\""
+    }
+  },
+  "menu": {
+    "chat": "Chat",
+    "memory": "Memoria de Yukai (abrir carpeta)",
+    "settings": "Ajustes"
+  },
+  "overlay": {
+    "close_chat": "Cerrar chat",
+    "settings_btn": "⚙ Ajustes",
+    "settings_title": "Ajustes",
+    "send": "Enviar",
+    "placeholder": "Mensaje..."
+  },
+  "nav": {
+    "pricing": "Precios",
+    "faq": "FAQ",
+    "devchat": "Chat",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "download": "Descargar",
+    "signin": "Iniciar sesión",
+    "signup": "Registrarse",
+    "openApp": "Abrir Yukai",
+    "analytics": "📊 Analítica",
+    "signout": "Cerrar sesión"
+  },
+  "login": {
+    "title": "Bienvenido de nuevo",
+    "subtitle": "Inicia sesión para seguir charlando con Yukai",
+    "email": "Email",
+    "password": "Contraseña",
+    "forgot": "¿Olvidaste la contraseña?",
+    "submit": "Iniciar sesión",
+    "submitting": "Iniciando sesión...",
+    "noAccount": "¿No tienes cuenta?",
+    "noAccountCta": "Regístrate",
+    "errorInvalid": "Email o contraseña no válidos"
+  },
+  "register": {
+    "title": "Encantada de conocerte",
+    "subtitle": "Crea una cuenta en un minuto y empieza a charlar con Yukai",
+    "username": "Usuario",
+    "email": "Email",
+    "password": "Contraseña",
+    "passwordHint": "Al menos 8 caracteres",
+    "confirmPassword": "Confirmar contraseña",
+    "submit": "Registrarse",
+    "submitting": "Creando...",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "haveAccountCta": "Inicia sesión",
+    "errorPasswordMismatch": "Las contraseñas no coinciden",
+    "errorFailed": "No se pudo crear la cuenta",
+    "errorLoginAfter": "Cuenta creada pero el inicio de sesión automático falló — prueba en la página de inicio de sesión"
+  },
+  "landing": {
+    "betaBanner": "La beta está abierta — únete a nuestro Telegram para chatear con el dev →",
+    "heroTitle1": "Tu compañera de IA,",
+    "heroTitle2": "que vive en tu pantalla",
+    "heroSubtitle": "Yukai te responde, dicta tus mensajes, identifica música como Shazam desde cualquier app y siempre está ahí. No es solo una asistente — es una compañera con personalidad.",
+    "ctaDownload": "Descargar para Windows",
+    "ctaHow": "Cómo funciona",
+    "betaNote": "Gratis durante la beta · macOS y Linux pronto",
+    "yukaiBubbleLabel": "Yukai · feliz",
+    "yukaiBubbleText": "Hola, lista para ayudar hoy. ¿Qué hacemos primero — revisar el correo o escuchar algo de música?",
+    "featuresTitle": "Lo que sabe hacer",
+    "featuresSubtitle": "Tres funciones principales — cada una sustituye una app aparte. Todo en una sola Yukai.",
+    "feature1Title": "Compañera viva",
+    "feature1Desc": "Habla con voz, reacciona con emociones. Recuerda lo que hablasteis. El trabajo y la vida se vuelven menos aburridos.",
+    "feature2Title": "Dictado por voz",
+    "feature2Desc": "Mantén Alt derecho, habla, suelta — el texto aparece en cualquier ventana. Como Wispr Flow pero con personalidad.",
+    "feature3Title": "Shazam en los auriculares",
+    "feature3Desc": "¿Suena una canción en YouTube o en un juego? Alt+` — Yukai la oye por el audio del sistema y te dice el nombre.",
+    "howTitle": "Cómo se ve",
+    "howSubtitle": "Yukai es una ventana transparente sobre todos los programas. La ves, pero no estorba.",
+    "step1Title": "Instala y ejecuta",
+    "step1Desc": "Descarga el .exe, ábrelo — Yukai aparece en la esquina de la pantalla.",
+    "step2Title": "Configura el personaje",
+    "step2Desc": "Elige voz, emociones. Más adelante — personajes personalizados de creadores.",
+    "step3Title": "Vive como siempre",
+    "step3Desc": "Trabaja, juega, mira YouTube. Yukai siempre está ahí, responde cuando hace falta.",
+    "pricingTitle": "Un plan. Todo incluido.",
+    "pricingSubtitle": "Sin límites ocultos. Sin throttling. Cancela cuando quieras.",
+    "pricingPopular": "Popular",
+    "pricingPerMonth": "/mes",
+    "pricingFeature1": "Chat de voz ilimitado",
+    "pricingFeature2": "Dictado por voz en cualquier ventana",
+    "pricingFeature3": "Reconocimiento de música por auriculares",
+    "pricingFeature4": "Todas las emociones y la personalidad de Yukai",
+    "pricingFeature5": "Acceso a futuros personajes del marketplace",
+    "pricingFeature6": "Soporte prioritario",
+    "pricingNote": "Gratis durante la beta. Suscripción — cuando salga la v1.",
+    "faqTitle": "FAQ",
+    "faq1q": "¿En qué sistemas funciona?",
+    "faq1a": "Windows 10/11 — ya. macOS y Linux — en desarrollo. Mínimo: 4 GB de RAM, micrófono.",
+    "faq2q": "¿Necesito internet?",
+    "faq2a": "Sí, la voz y el cerebro de Yukai corren en la nube (Claude AI + Fish Audio). Una conexión doméstica normal es suficiente.",
+    "faq3q": "¿Cuántos idiomas conoce?",
+    "faq3a": "Ruso e inglés — completos. Otros — los entiende, pero la voz es RU/EN por ahora.",
+    "faq4q": "¿Puedo cambiar la voz o el aspecto?",
+    "faq4a": "Lo básico — gratis. Próximamente marketplace con voces y personajes de creadores (incluidos artistas de anime y seiyuu).",
+    "faq5q": "¿Qué hace Yukai con mis datos?",
+    "faq5a": "Las conversaciones no se guardan en servidores más allá del procesamiento. La memoria local se queda solo en tu ordenador.",
+    "faq6q": "¿Y si cancelo la suscripción?",
+    "faq6a": "El acceso continúa hasta el final del periodo pagado. La memoria local y los ajustes se quedan contigo.",
+    "finalTitle1": "Instala en un minuto.",
+    "finalTitle2": "Luego — como con una vieja amiga.",
+    "finalSubtitle": "La beta es gratis ahora. Sin tarjetas, sin spam.",
+    "finalCta": "Descargar para Windows →"
+  }
+}

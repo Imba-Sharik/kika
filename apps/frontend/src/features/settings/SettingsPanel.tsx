@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { signOut, useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
-import { BUILTIN_VOICES } from '@/shared/yukai/voices'
+import { useLocale, useTranslations } from 'next-intl'
+import { BUILTIN_VOICES, findVoice, getVoiceSampleText } from '@/shared/yukai/voices'
+import { fetchTts, playViaBlob } from '@/features/tts/audio'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
 import type { Language } from '@/shared/yukai/persona'
@@ -11,6 +12,47 @@ import { aiFetch } from '@/shared/api/aiFetch'
 import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
 
 type OriginPref = 'auto' | 'direct' | 'ru'
+
+const LANG_LABEL: Record<string, string> = {
+  ja: '日本語 (Japanese)',
+  ko: '한국어 (Korean)',
+  zh: '中文 (Chinese)',
+  ru: 'Русский (Russian)',
+  en: 'English',
+  de: 'Deutsch (German)',
+  fr: 'Français (French)',
+  pt: 'Português (Portuguese)',
+  es: 'Español (Spanish)',
+}
+
+const LANG_ORDER = ['ja', 'en', 'ko', 'zh', 'ru', 'de', 'fr', 'pt', 'es']
+
+function groupVoicesByLanguage(currentLocale: string) {
+  // Multilingual = голоса с langs.length >= 3 (например ElevenLabs)
+  const multilingual = BUILTIN_VOICES.filter((v) => (v.langs?.length ?? 0) >= 3)
+  // Single-lang голоса группируем по первому языку
+  const byLang: Record<string, typeof BUILTIN_VOICES> = {}
+  for (const v of BUILTIN_VOICES) {
+    if ((v.langs?.length ?? 0) >= 3) continue
+    const primary = v.langs?.[0] ?? 'en'
+    if (!byLang[primary]) byLang[primary] = []
+    byLang[primary].push(v)
+  }
+  // Текущая локаль — первая группа (если в ней есть голоса)
+  const orderedLangs = [
+    currentLocale,
+    ...LANG_ORDER.filter((l) => l !== currentLocale),
+  ].filter((l) => byLang[l]?.length)
+
+  return {
+    multilingual,
+    languageGroups: orderedLangs.map((lang) => ({
+      lang,
+      label: LANG_LABEL[lang] ?? lang,
+      voices: byLang[lang],
+    })),
+  }
+}
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 
@@ -112,6 +154,38 @@ export function SettingsPanel({
   onClose,
 }: Props) {
   const t = useTranslations()
+  const locale = useLocale()
+  // Группировка голосов по языкам. Сначала optgroup для текущей UI-локали,
+  // потом остальные языки в фиксированном порядке. Multilingual (≥3 языков) —
+  // отдельная группа сверху.
+  const voiceGroups = groupVoicesByLanguage(locale)
+
+  // Preview голоса при выборе. Состояние: 'idle' | 'loading' | 'playing'.
+  // Audio инстанс держим в ref, чтобы повторный клик отменял текущее проигрывание.
+  const [previewState, setPreviewState] = useState<'idle' | 'loading' | 'playing'>('idle')
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  async function previewVoice() {
+    if (previewState !== 'idle') {
+      // Прервать текущее проигрывание/загрузку
+      audioRef.current?.pause()
+      setPreviewState('idle')
+      return
+    }
+    const voice = findVoice(voiceId, [])
+    const text = getVoiceSampleText(voice, locale)
+    setPreviewState('loading')
+    try {
+      const res = await fetchTts(text, { provider: voice.provider, voiceId: voice.voiceId })
+      if (!audioRef.current) audioRef.current = new Audio()
+      setPreviewState('playing')
+      await playViaBlob(res, audioRef.current)
+    } catch (e) {
+      console.warn('[voice-preview] failed:', e)
+    } finally {
+      setPreviewState('idle')
+    }
+  }
+
   // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
   // Для пользователей с заблокированным Vercel в РФ или со своим VPN.
   const [originPref, setOriginPref] = useState<OriginPref>('auto')
@@ -211,11 +285,12 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t('settings.voice')}
           </label>
+          <div style={{ display: 'flex', gap: 6 }}>
           <select
             value={voiceId}
             onChange={(e) => onSelectVoice(e.target.value)}
             style={{
-              width: '100%',
+              flex: 1,
               background: '#1f2937',
               color: 'white',
               border: '1px solid #374151',
@@ -224,12 +299,46 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            {BUILTIN_VOICES.map((v) => (
-              <option key={v.id} value={v.id}>
-                {v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')}
-              </option>
+            {voiceGroups.multilingual.length > 0 && (
+              <optgroup label="🌐 Multilingual">
+                {voiceGroups.multilingual.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+            {voiceGroups.languageGroups.map((g) => (
+              <optgroup key={g.lang} label={g.label}>
+                {g.voices.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
+          <button
+            type="button"
+            onClick={previewVoice}
+            title={previewState === 'idle' ? 'Preview voice' : 'Stop'}
+            style={{
+              width: 32,
+              background: previewState === 'idle' ? '#1f2937' : 'rgba(244, 114, 182, 0.18)',
+              color: 'white',
+              border: `1px solid ${previewState === 'idle' ? '#374151' : 'rgba(244, 114, 182, 0.45)'}`,
+              borderRadius: 4,
+              cursor: previewState === 'loading' ? 'wait' : 'pointer',
+              fontSize: 14,
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {previewState === 'loading' ? '…' : previewState === 'playing' ? '■' : '▶'}
+          </button>
+          </div>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4 }}>
             {t('settings.voiceHint')}
           </div>
