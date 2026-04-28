@@ -33,15 +33,16 @@ export function setLanguagePreference(_lang: Language) {
  * Полный список локалей с label'ами для UI language picker.
  * Используется в Header и Settings.
  */
+// flag — путь к PNG в public/language/. Для en пока нет файла → emoji fallback.
 export const ALL_LOCALES = [
-  { code: 'en', label: 'English', short: 'EN', flag: '🇬🇧' },
-  { code: 'ru', label: 'Русский', short: 'RU', flag: '🇷🇺' },
-  { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵' },
-  { code: 'ko', label: '한국어', short: 'KO', flag: '🇰🇷' },
-  { code: 'zh', label: '中文', short: 'ZH', flag: '🇨🇳' },
-  { code: 'de', label: 'Deutsch', short: 'DE', flag: '🇩🇪' },
-  { code: 'fr', label: 'Français', short: 'FR', flag: '🇫🇷' },
-  { code: 'pt', label: 'Português', short: 'PT', flag: '🇧🇷' },
+  { code: 'en', label: 'English', short: 'EN', flag: '🇬🇧', flagPng: null },
+  { code: 'ru', label: 'Русский', short: 'RU', flag: '🇷🇺', flagPng: '/language/RU.png' },
+  { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵', flagPng: '/language/JP.png' },
+  { code: 'ko', label: '한국어', short: 'KO', flag: '🇰🇷', flagPng: '/language/KR.png' },
+  { code: 'zh', label: '中文', short: 'ZH', flag: '🇨🇳', flagPng: '/language/CN.png' },
+  { code: 'de', label: 'Deutsch', short: 'DE', flag: '🇩🇪', flagPng: '/language/DE.png' },
+  { code: 'fr', label: 'Français', short: 'FR', flag: '🇫🇷', flagPng: '/language/FR.png' },
+  { code: 'pt', label: 'Português', short: 'PT', flag: '🇧🇷', flagPng: '/language/BR.png' },
 ] as const
 
 export type LocaleCode = (typeof ALL_LOCALES)[number]['code']

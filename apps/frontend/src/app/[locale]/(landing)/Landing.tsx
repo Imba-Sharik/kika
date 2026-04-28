@@ -249,6 +249,18 @@ export default function Landing() {
             <a href="/terms" className="hover:text-white transition">{tNav('terms')}</a>
           </div>
         </div>
+        {/* Flaticon атрибуция — обязательна по лицензии free-pack'а */}
+        <div className="mt-6 px-6 text-center text-xs text-white/30">
+          <a
+            href="https://www.flaticon.com/ru/free-icons/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="флаги иконки"
+            className="hover:text-white/50 transition"
+          >
+            Флаги иконки от iconset.co — Flaticon
+          </a>
+        </div>
       </footer>
     </main>
   )
