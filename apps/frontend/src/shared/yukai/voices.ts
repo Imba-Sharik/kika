@@ -30,7 +30,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-kasane-teto',
-    label: "Fish — Kasane Teto (español) (Spanish)",
+    label: "Fish — Kasane Teto (Spanish)",
     provider: 'fish',
     voiceId: '0118a35dcb604837abe7961a43e13ba8',
     langs: ['es'],
@@ -51,7 +51,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-priscilla-barielle',
-    label: "Fish — Priscilla Barielle Español Latino (Spanish)",
+    label: "Fish — Priscilla Barielle (Spanish)",
     provider: 'fish',
     voiceId: '0b2aa74c364a49789bcba051f2901a5c',
     langs: ['es'],
@@ -184,7 +184,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-ja-female',
-    label: "Fish — 73mp0R4r1+M41l+b04,h4nc00ck-opw4-Multy-speaker-2 (Japanese)",
+    label: "Fish — Multy Speaker (Japanese)",
     provider: 'fish',
     voiceId: '3ffcf3ee1e7d4e0eae452923580b0f70',
     langs: ['ja'],
@@ -205,7 +205,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-light-yagami',
-    label: "Fish — Light Yagami Japanese V2 (Japanese)",
+    label: "Fish — Light Yagami v2 (Japanese)",
     provider: 'fish',
     voiceId: '4bc1d3d1fa60415f989b8e0b99f333e1',
     langs: ['ja'],
@@ -317,10 +317,10 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-voice-1',
-    label: "Fish — Mita Miside (Russian voice) (English)",
+    label: "Fish — Mita",
     provider: 'fish',
     voiceId: '6dc11f3f67a543f6ad4537a4a347e224',
-    langs: ['en', 'ru'],
+    langs: ['ru'],
   },
   {
     id: 'fish-ja-70216001',
@@ -492,7 +492,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-voix-francaise-expressive',
-    label: "Fish — Voix Française Expressive (French)",
+    label: "Fish — Voix Française (French)",
     provider: 'fish',
     voiceId: 'a4de3afb47714454b47a0de76c3cb5f6',
     langs: ['fr'],
@@ -611,7 +611,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-gojo-satoru-japanese-trained',
-    label: "Fish — Gojo satoru  (Japanese trained) (Japanese)",
+    label: "Fish — Gojo Satoru (Japanese)",
     provider: 'fish',
     voiceId: 'c748ffc7823b419481f7003b313566ad',
     langs: ['ja'],
@@ -702,7 +702,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-mita-pt-br',
-    label: "Fish — Mita (PTBR (PT-BR) (Brasil) (Portuguese)",
+    label: "Fish — Mita (Portuguese)",
     provider: 'fish',
     voiceId: 'ea3bf7f7c7af4b59be4715013e1c4428',
     langs: ['pt'],
@@ -723,7 +723,7 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-kurumi-tokisaki-nightmare',
-    label: "Fish — Kurumi tokisaki (nightmare) (English)",
+    label: "Fish — Kurumi Tokisaki (English)",
     provider: 'fish',
     voiceId: 'f9f294f55fd24e28b5b6469ae7e17ea9',
     langs: ['en', 'ja'],
@@ -790,14 +790,16 @@ export function getVoiceSampleText(voice: Voice, fallbackLocale = 'en'): string 
 }
 
 /**
- * Подобрать дефолтный voice для локали. Сначала ищет в BUILTIN+user-voices
- * того что в `langs` явно. Иначе fallback на ElevenLabs multilingual.
+ * Подобрать дефолтный voice для локали. Берём первый голос у которого
+ * `langs[0] === locale` (порядок в BUILTIN_VOICES определяет дефолт). Для
+ * русского — фиксированно Mita (исторический дефолт, юзеры привыкли).
  */
 export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = []): string {
+  if (locale === 'ru') return 'fish-voice-1' // Mita
   const all = [...BUILTIN_VOICES, ...userVoices]
-  const match = all.find((v) => v.langs?.includes(locale))
+  const match = all.find((v) => v.langs?.[0] === locale)
   if (match) return match.id
-  // Multilingual fallback
+  // Fallback если для локали нет ни одного голоса
   return 'eleven-kika'
 }
 

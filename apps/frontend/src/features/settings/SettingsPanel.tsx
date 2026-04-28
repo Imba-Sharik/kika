@@ -28,12 +28,11 @@ const LANG_LABEL: Record<string, string> = {
 const LANG_ORDER = ['ja', 'en', 'ko', 'zh', 'ru', 'de', 'fr', 'pt', 'es']
 
 function groupVoicesByLanguage(currentLocale: string) {
-  // Multilingual = голоса с langs.length >= 3 (например ElevenLabs)
-  const multilingual = BUILTIN_VOICES.filter((v) => (v.langs?.length ?? 0) >= 3)
-  // Single-lang голоса группируем по первому языку
+  // Все голоса группируем по langs[0]. Multilingual-голос (ElevenLabs)
+  // попадёт в группу своего первого языка (en), отдельной "Multilingual" секции
+  // больше нет — так юзеру проще найти голос для нужного языка.
   const byLang: Record<string, typeof BUILTIN_VOICES> = {}
   for (const v of BUILTIN_VOICES) {
-    if ((v.langs?.length ?? 0) >= 3) continue
     const primary = v.langs?.[0] ?? 'en'
     if (!byLang[primary]) byLang[primary] = []
     byLang[primary].push(v)
@@ -45,7 +44,6 @@ function groupVoicesByLanguage(currentLocale: string) {
   ].filter((l) => byLang[l]?.length)
 
   return {
-    multilingual,
     languageGroups: orderedLangs.map((lang) => ({
       lang,
       label: LANG_LABEL[lang] ?? lang,
@@ -299,15 +297,6 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            {voiceGroups.multilingual.length > 0 && (
-              <optgroup label="🌐 Multilingual">
-                {voiceGroups.multilingual.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')}
-                  </option>
-                ))}
-              </optgroup>
-            )}
             {voiceGroups.languageGroups.map((g) => (
               <optgroup key={g.lang} label={g.label}>
                 {g.voices.map((v) => (
@@ -323,17 +312,24 @@ export function SettingsPanel({
             onClick={previewVoice}
             title={previewState === 'idle' ? 'Preview voice' : 'Stop'}
             style={{
-              width: 32,
-              background: previewState === 'idle' ? '#1f2937' : 'rgba(244, 114, 182, 0.18)',
-              color: 'white',
-              border: `1px solid ${previewState === 'idle' ? '#374151' : 'rgba(244, 114, 182, 0.45)'}`,
+              flexShrink: 0,
+              width: 36,
+              height: 30,
+              background:
+                previewState === 'idle'
+                  ? 'rgba(244, 114, 182, 0.18)'
+                  : 'rgba(244, 114, 182, 0.35)',
+              color: '#f9a8d4',
+              border: '1px solid rgba(244, 114, 182, 0.5)',
               borderRadius: 4,
               cursor: previewState === 'loading' ? 'wait' : 'pointer',
               fontSize: 14,
+              lineHeight: 1,
               padding: 0,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              fontWeight: 600,
             }}
           >
             {previewState === 'loading' ? '…' : previewState === 'playing' ? '■' : '▶'}
