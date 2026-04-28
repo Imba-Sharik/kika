@@ -38,6 +38,7 @@ export const ALL_LOCALES = [
   { code: 'ru', label: 'Русский', short: 'RU', flag: '🇷🇺' },
   { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵' },
   { code: 'ko', label: '한국어', short: 'KO', flag: '🇰🇷' },
+  { code: 'zh', label: '中文', short: 'ZH', flag: '🇨🇳' },
   { code: 'de', label: 'Deutsch', short: 'DE', flag: '🇩🇪' },
   { code: 'fr', label: 'Français', short: 'FR', flag: '🇫🇷' },
   { code: 'pt', label: 'Português', short: 'PT', flag: '🇧🇷' },

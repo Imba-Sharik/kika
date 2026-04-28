@@ -1,0 +1,244 @@
+{
+  "chat": {
+    "you": "你",
+    "status": {
+      "error": "错误",
+      "speaking": "说话中",
+      "thinking": "思考中",
+      "ready": "准备就绪"
+    },
+    "empty": {
+      "hint": "按",
+      "hint2": "开始对话"
+    },
+    "timing": {
+      "label": "总计"
+    }
+  },
+  "onboarding": {
+    "greet": "你好!",
+    "text1": "用语音对话 — 按住",
+    "text2": "或点击Yukai下方的条:",
+    "text3": "再次按下/点击关闭。",
+    "dismiss": "知道了",
+    "mic": {
+      "hint": "条不动?",
+      "cta": "打开麦克风设置"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "close": "关闭",
+    "account": "账户",
+    "account.signedIn": "已登录:",
+    "account.notSignedIn": "未登录 — Yukai无法回应",
+    "account.signin": "登录",
+    "account.signout": "登出",
+    "mic": "麦克风",
+    "mic.default": "默认",
+    "voice": "Yukai声音",
+    "voice.hint": "ElevenLabs — 英语最佳。Fish — 自然俄语。",
+    "sensitivity": "麦克风灵敏度",
+    "sensitivity.hint": "填充 = VAD语音概率。拖动橙色阈值 — 那里开始'说话'。立即应用。",
+    "language": "语言",
+    "language.hint": "更改Yukai回应的语言。声音自动调整。",
+    "connection": "连接",
+    "connection.auto": "自动 (推荐)",
+    "connection.direct": "直接 — yukai.app",
+    "connection.ru": "RU镜像 — ru.yukai.app",
+    "connection.hint": "如果应用无法连接 — 试试RU镜像。更改时窗口重新加载。",
+    "hotkeys": "快捷键:",
+    "hotkey.handsfree": "免手操作 开/关",
+    "hotkey.dictation": "听写 (按住)",
+    "hotkey.shazam": "识别歌曲",
+    "devchat.title": "与开发者聊天",
+    "devchat.hint": "告诉我什么坏了、缺什么、喜欢什么",
+    "show-onboarding": "再次显示新手提示"
+  },
+  "quota": {
+    "today": "今日:",
+    "tier": {
+      "trial": "试用",
+      "free": "免费",
+      "paid": "付费"
+    },
+    "trialLeft": "免费试用: 还剩{days}天",
+    "trialExpired": "试用已过期 — 付款即将上线"
+  },
+  "plugins": {
+    "section": "插件"
+  },
+  "common": {
+    "close": "关闭",
+    "empty": "这里还没有内容。"
+  },
+  "english": {
+    "stats": "总 · {known} 已知 · {learning} 学习中 · {newish} 新词",
+    "tab": {
+      "all": "全部",
+      "new": "新",
+      "learning": "学习中",
+      "known": "已知"
+    },
+    "empty": {
+      "hint": "对Yukai说: \"我们学英语吧\" — 学到的单词将出现在这里"
+    },
+    "bottom": {
+      "hint": "说\"我们练习吧\" — Yukai将以猜测模式显示新单词"
+    }
+  },
+  "plugin": {
+    "music": {
+      "title": "歌曲历史",
+      "name": "音乐识别",
+      "desc": "Shazam风格: 按住Left Alt + ` 让Yukai识别正在播放的歌曲"
+    },
+    "dictation": {
+      "title": "听写历史",
+      "name": "听写",
+      "desc": "按住Right Alt并说话 — 文本被转录并粘贴到活动字段"
+    },
+    "english": {
+      "title": "英语历史",
+      "name": "英语学习",
+      "desc": "SRS间隔重复闪卡。[img: word] → 图像 + Yukai提问。"
+    },
+    "screenshot": {
+      "title": "截图 + 视觉",
+      "name": "截图 + 视觉",
+      "desc": "屏幕截图 → Claude描述所看到的。说\"屏幕上有什么\"、\"选择区域\"、\"这是什么动漫\"。"
+    }
+  },
+  "music": {
+    "history": "历史",
+    "empty": "按住Alt+`识别正在播放的歌曲"
+  },
+  "dictation": {
+    "title": "听写",
+    "empty": "按住Right Alt并说话 — 文本被粘贴并保存在这里",
+    "repaste-tooltip": "点击再次粘贴"
+  },
+  "screenshot": {
+    "title": "截图",
+    "region": "▭ 区域",
+    "full": "+ 全屏",
+    "region-tooltip": "用鼠标选择区域",
+    "full-tooltip": "捕获全屏",
+    "anime-tooltip": "精确动漫帧搜索 (剧集 + 时间戳)",
+    "empty": {
+      "hint": "点击\"+ 全屏\"或说\"屏幕上有什么?\" / \"选择一个区域告诉我那是什么\""
+    }
+  },
+  "menu": {
+    "chat": "聊天",
+    "memory": "Yukai记忆 (打开文件夹)",
+    "settings": "设置"
+  },
+  "overlay": {
+    "close-chat": "关闭聊天",
+    "settings-btn": "⚙ 设置",
+    "settings-title": "设置",
+    "send": "发送",
+    "placeholder": "消息..."
+  },
+  "nav": {
+    "pricing": "价格",
+    "faq": "FAQ",
+    "devchat": "聊天",
+    "privacy": "隐私",
+    "terms": "条款",
+    "download": "下载",
+    "signin": "登录",
+    "signup": "注册",
+    "openApp": "打开Yukai",
+    "analytics": "📊 分析",
+    "signout": "登出"
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "登录以继续与Yukai聊天",
+    "email": "邮箱",
+    "password": "密码",
+    "forgot": "忘记密码?",
+    "submit": "登录",
+    "submitting": "登录中...",
+    "noAccount": "没有账户?",
+    "noAccount.cta": "注册",
+    "error": {
+      "invalid": "邮箱或密码无效"
+    }
+  },
+  "register": {
+    "title": "让我们认识一下",
+    "subtitle": "一分钟创建账户开始与Yukai聊天",
+    "username": "用户名",
+    "email": "邮箱",
+    "password": "密码",
+    "password.hint": "至少8个字符",
+    "confirmPassword": "确认密码",
+    "submit": "注册",
+    "submitting": "创建中...",
+    "haveAccount": "已有账户?",
+    "haveAccount.cta": "登录",
+    "error": {
+      "passwordMismatch": "密码不匹配",
+      "failed": "创建账户失败",
+      "loginAfter": "账户已创建但自动登录失败 — 请尝试登录页面"
+    }
+  },
+  "landing": {
+    "betaBanner": "Beta已开放 — 加入我们的Telegram与开发者聊天 →",
+    "heroTitle1": "你的AI伙伴,",
+    "heroTitle2": "活在你的屏幕上",
+    "heroSubtitle": "Yukai说话、听写你的消息、识别任何应用的音乐,始终在你身边。不只是助手 — 是有个性的伙伴。",
+    "ctaDownload": "下载Windows版",
+    "ctaHow": "如何运作",
+    "betaNote": "Beta期间免费 · macOS和Linux即将推出",
+    "yukaiBubbleLabel": "Yukai · 开心",
+    "yukaiBubbleText": "嘿,今天准备好帮你了。先做什么 — 检查邮件还是听音乐?",
+    "featuresTitle": "她能做什么",
+    "featuresSubtitle": "三大主要功能 — 每个都替代一个独立应用。全在Yukai一个里。",
+    "feature1Title": "活生生的伙伴",
+    "feature1Desc": "用声音说话,用情感反应。记得讨论过的内容。工作和生活不再无聊。",
+    "feature2Title": "语音听写",
+    "feature2Desc": "按住右Alt,说话,松开 — 文本出现在任何窗口。像Wispr Flow,但有个性。",
+    "feature3Title": "耳机里的Shazam",
+    "feature3Desc": "YouTube或游戏中播放歌曲?Alt+` — Yukai通过系统声音听到并告诉你名字。",
+    "howTitle": "看起来怎样",
+    "howSubtitle": "Yukai是覆盖所有程序之上的透明窗口。能看见她,但她不挡路。",
+    "step1Title": "安装并运行",
+    "step1Desc": "下载.exe,打开 — Yukai出现在屏幕角落。",
+    "step2Title": "设置角色",
+    "step2Desc": "选择声音、情感。稍后 — 来自创作者的自定义角色。",
+    "step3Title": "照常生活",
+    "step3Desc": "工作、玩游戏、看YouTube。Yukai始终在身边,需要时回应。",
+    "pricingTitle": "一个套餐。一切包含。",
+    "pricingSubtitle": "无隐藏限制。无限速。随时取消。",
+    "pricingPopular": "热门",
+    "pricingPerMonth": "/月",
+    "pricingFeature1": "无限语音聊天",
+    "pricingFeature2": "任何窗口的语音听写",
+    "pricingFeature3": "耳机音乐识别",
+    "pricingFeature4": "所有Yukai情感和个性",
+    "pricingFeature5": "未来市场角色访问",
+    "pricingFeature6": "优先支持",
+    "pricingNote": "Beta期间免费。订阅 — v1发布时。",
+    "faqTitle": "常见问题",
+    "faq1q": "在哪些系统上运行?",
+    "faq1a": "Windows 10/11 — 现在。macOS和Linux — 开发中。最低: 4GB RAM,麦克风。",
+    "faq2q": "需要互联网吗?",
+    "faq2a": "是的,语音和Yukai的大脑通过云端运行 (Claude AI + Fish Audio)。普通家庭网络足够。",
+    "faq3q": "她懂多少种语言?",
+    "faq3a": "俄语和英语 — 完全。其他 — 理解,但目前声音只有RU/EN。",
+    "faq4q": "我能更换声音或外观吗?",
+    "faq4a": "基础 — 免费。包括动漫艺术家和声优在内的创作者声音和角色市场即将开放。",
+    "faq5q": "Yukai如何处理我的数据?",
+    "faq5a": "对话不会在服务器上存储超过处理时间。本地记忆只保留在你的电脑上。",
+    "faq6q": "如果我取消订阅?",
+    "faq6a": "访问保持到付费期结束。本地记忆和设置保留在你身边。",
+    "finalTitle1": "一分钟安装。",
+    "finalTitle2": "之后 — 像与老朋友一样。",
+    "finalSubtitle": "Beta现在免费。无卡片,无垃圾邮件。",
+    "finalCta": "下载Windows版 →"
+  }
+}
