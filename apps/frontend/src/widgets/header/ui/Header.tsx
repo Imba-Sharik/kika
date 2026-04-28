@@ -1,22 +1,15 @@
 "use client"
 
-import { useLocale, useTranslations } from "next-intl"
-import { Link, usePathname, useRouter } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 import { UserNav } from "./UserNav"
-import { ALL_LOCALES, type LocaleCode } from "@/shared/yukai/useLanguage"
+import { LocalePicker } from "./LocalePicker"
 
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 
 export function Header() {
   const t = useTranslations('nav')
-  const locale = useLocale() as LocaleCode
-  const router = useRouter()
-  const pathname = usePathname()
-
-  function switchLocale(newLocale: LocaleCode) {
-    router.replace(pathname, { locale: newLocale })
-  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0A0A0F]/80 backdrop-blur">
@@ -54,7 +47,7 @@ export function Header() {
           <span className="hidden md:inline-block h-5 w-px bg-white/10" aria-hidden />
 
           <div className="flex items-center gap-3">
-            <LocalePicker current={locale} onChange={switchLocale} />
+            <LocalePicker />
             <UserNav />
             <a
               href={DOWNLOAD_URL}
@@ -69,25 +62,3 @@ export function Header() {
   )
 }
 
-function LocalePicker({
-  current,
-  onChange,
-}: {
-  current: LocaleCode
-  onChange: (l: LocaleCode) => void
-}) {
-  return (
-    <select
-      value={current}
-      onChange={(e) => onChange(e.target.value as LocaleCode)}
-      className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer focus:outline-none focus:ring-1 focus:ring-pink-400/50"
-      aria-label="Language"
-    >
-      {ALL_LOCALES.map((l) => (
-        <option key={l.code} value={l.code} className="bg-[#0F0E15] text-white">
-          {l.short} {l.label}
-        </option>
-      ))}
-    </select>
-  )
-}

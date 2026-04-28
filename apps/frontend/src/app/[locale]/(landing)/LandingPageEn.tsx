@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { UserNav } from '@/widgets/header/ui/UserNav'
-import { setLanguagePreference } from '@/shared/yukai/useLanguage'
+import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
 
 // Stable download URL — filename is pinned via electron-builder artifactName,
 // so this link always points to the latest release without any updates to the landing.
@@ -33,13 +33,7 @@ export default function LandingPageEn() {
           </a>
           <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Privacy</a>
           <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Terms</a>
-          <a
-            href="/ru"
-            className="text-sm text-white/50 hover:text-white transition"
-            title="Русский"
-          >
-            RU
-          </a>
+          <LocalePicker />
           <UserNav />
           <a
             href={DOWNLOAD_URL}

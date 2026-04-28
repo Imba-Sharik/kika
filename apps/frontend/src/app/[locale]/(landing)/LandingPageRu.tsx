@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { UserNav } from '@/widgets/header/ui/UserNav'
-import { setLanguagePreference } from '@/shared/yukai/useLanguage'
+import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
 
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
@@ -30,13 +30,7 @@ export default function LandingPageRu() {
           </a>
           <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Приватность</a>
           <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Условия</a>
-          <a
-            href="/"
-            className="text-sm text-white/50 hover:text-white transition"
-            title="English"
-          >
-            EN
-          </a>
+          <LocalePicker />
           <UserNav />
           <a
             href={DOWNLOAD_URL}
