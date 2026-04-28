@@ -38,7 +38,7 @@ export function setLanguagePreference(_lang: Language) {
 // 3-й с конца (бренд позиционируется как international, ru — один из языков
 // а не приоритет).
 export const ALL_LOCALES = [
-  { code: 'en', label: 'English', short: 'EN', flag: '🇺🇸', flagPng: '/language/EN.png' },
+  { code: 'en', label: 'English', short: 'EN', flag: '🇺🇸', flagPng: '/language/EN1.png' },
   { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵', flagPng: '/language/JP.png' },
   { code: 'ko', label: '한국어', short: 'KO', flag: '🇰🇷', flagPng: '/language/KR.png' },
   { code: 'zh', label: '中文', short: 'ZH', flag: '🇨🇳', flagPng: '/language/CN.png' },
