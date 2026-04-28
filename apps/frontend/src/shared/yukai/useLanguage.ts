@@ -2,41 +2,28 @@
 
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from '@/i18n/navigation'
-import type { Language } from './persona'
 
 /**
- * BRIDGE: старые компоненты используют `useLanguage()` + `t(lang, key)` из
- * shared/yukai/i18n.ts с типом Language = 'ru' | 'en'. Новые компоненты
- * используют `useTranslations()` из next-intl.
- *
- * Этот хук маппит next-intl locale → старый Language. Для /ru возвращает 'ru',
- * для всего остального ('en' | 'ja' | 'ko' | 'de' | 'fr' | 'pt') — 'en'.
- *
- * После полной миграции на next-intl этот файл будет удалён.
+ * Утилиты для UI-локализации. Реальный хук получения локали — useLocale()
+ * из next-intl напрямую. Здесь только helpers вокруг.
  */
-export function useLanguage(): Language {
-  const locale = useLocale()
-  return locale === 'ru' ? 'ru' : 'en'
+
+const LANGUAGE_KEY = 'kika:overlay:language'
+
+/**
+ * Сохранить выбор языка явно в localStorage. URL остаётся source-of-truth,
+ * но localStorage помогает overlay выбирать voice/protocol при первом
+ * запуске когда ещё нет URL-локали.
+ */
+export function setLanguagePreference(lang: string) {
+  try {
+    localStorage.setItem(LANGUAGE_KEY, lang)
+  } catch {}
 }
 
 /**
- * Программный switch языка. Переход на /ru или /en и т.д. — middleware next-intl
- * переключит локаль. localStorage больше не нужен — URL это source of truth.
+ * Полный список локалей с label'ами и флагами для UI language picker.
  */
-export function setLanguagePreference(_lang: Language) {
-  // No-op в bridge-режиме. Реальное переключение происходит через
-  // <Link href={pathname} locale="ru" /> или router.replace(pathname, { locale: 'ru' }).
-  // Оставляем функцию для backward-compat — старые вызовы из Header не падают.
-}
-
-/**
- * Полный список локалей с label'ами для UI language picker.
- * Используется в Header и Settings.
- */
-// flag — путь к PNG в public/language/.
-// Порядок: en первый (default), потом азиатские языки + европейские, ru
-// 3-й с конца (бренд позиционируется как international, ru — один из языков
-// а не приоритет).
 export const ALL_LOCALES = [
   { code: 'en', label: 'English', short: 'EN', flag: '🇺🇸', flagPng: '/language/EN1.png' },
   { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵', flagPng: '/language/JP.png' },
@@ -52,7 +39,7 @@ export type LocaleCode = (typeof ALL_LOCALES)[number]['code']
 
 /**
  * Хук для language picker — текущая локаль + функция переключения через router.
- * Использует @/i18n/navigation router'а который умеет менять locale.
+ * router.replace меняет URL и реактивно обновляет NextIntlClientProvider.
  */
 export function useLocaleSwitcher() {
   const router = useRouter()
@@ -60,6 +47,7 @@ export function useLocaleSwitcher() {
   const current = useLocale() as LocaleCode
 
   function switchTo(newLocale: LocaleCode) {
+    setLanguagePreference(newLocale)
     router.replace(pathname, { locale: newLocale })
   }
 

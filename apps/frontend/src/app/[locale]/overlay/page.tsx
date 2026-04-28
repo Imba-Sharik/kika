@@ -24,9 +24,9 @@ import {
   type Emotion,
   type Language,
 } from '@/shared/yukai/persona'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
-import { DEFAULT_VOICE_ID, findVoice } from '@/shared/yukai/voices'
+import { DEFAULT_VOICE_ID, findVoice, getDefaultVoiceForLocale } from '@/shared/yukai/voices'
 
 // Фиксированные настройки — как в chat-test с дефолтами
 const CHARACTER = BUILTIN_CHARACTERS[0]
@@ -66,6 +66,7 @@ const kbdStyle: React.CSSProperties = {
 export default function OverlayPage() {
   // i18n — useTranslations берёт строки из messages/{locale}.json
   const tt = useTranslations()
+  const currentLocale = useLocale()
   // Auth-state — если юзер не залогинен, поверх персонажа покажется AuthGateBubble
   // (паттерн как у onboarding-tooltip'а). До login AI-вызовы возвращают 403,
   // так что overlay рендерится но юзер не может говорить пока не зарегается.
@@ -91,6 +92,22 @@ export default function OverlayPage() {
     setVoiceId(id)
     try { localStorage.setItem(VOICE_STORAGE_KEY, id) } catch {}
   }
+  // При смене локали (через URL /ja /ko etc) — авто-подбираем подходящий voice.
+  // Юзер всё равно может вручную поменять в Settings, тогда оставим выбор.
+  // Используем localStorage VOICE_USER_PICKED флаг чтобы не перезаписывать ручной выбор.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const userPicked = localStorage.getItem('kika:overlay:voice-user-picked') === 'true'
+      if (userPicked) return
+      const recommended = getDefaultVoiceForLocale(currentLocale)
+      if (recommended !== voiceId) {
+        setVoiceId(recommended)
+        localStorage.setItem(VOICE_STORAGE_KEY, recommended)
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLocale])
   const [micLevel, setMicLevel] = useState(0)
   const [vadThreshold, setVadThreshold] = useState<number>(DEFAULT_VAD_THRESHOLD)
   useEffect(() => {

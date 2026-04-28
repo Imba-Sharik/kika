@@ -5,42 +5,65 @@ export type Voice = {
   label: string
   provider: TtsProvider
   voiceId: string
+  /**
+   * Локали для которых этот voice звучит хорошо. Используется в
+   * getDefaultVoiceForLocale() при автоподборе голоса под выбранный язык.
+   */
+  langs?: string[]
 }
 
 export const BUILTIN_VOICES: Voice[] = [
   {
     id: 'eleven-kika',
-    label: 'ElevenLabs — Yukai',
+    label: 'ElevenLabs — Yukai (multilingual)',
     provider: 'elevenlabs',
     voiceId: 'YQ8Df5FlfEfMCfGNZHsN',
+    // ElevenLabs Turbo v2.5 поддерживает 30+ языков. Отлично для en, ko, de, fr, pt, zh.
+    langs: ['en', 'ko', 'de', 'fr', 'pt', 'zh'],
   },
   {
     id: 'fish-voice-1',
-    label: 'Fish — Voice 1 (Mita)',
+    label: 'Fish — Mita (Russian)',
     provider: 'fish',
     voiceId: '6dc11f3f67a543f6ad4537a4a347e224',
+    langs: ['ru'],
   },
   {
     id: 'fish-voice-2',
-    label: 'Fish — Voice 2',
+    label: 'Fish — Voice 2 (Russian)',
     provider: 'fish',
     voiceId: '23dc81dab27e4cea8cc2cfe3104747fd',
+    langs: ['ru'],
   },
   {
     id: 'fish-voice-3',
-    label: 'Fish — Voice 3',
+    label: 'Fish — Voice 3 (Russian)',
     provider: 'fish',
     voiceId: '71bf4cb71cd44df6aa603d51db8f92ff',
+    langs: ['ru'],
   },
   {
     id: 'fish-voice-4',
-    label: 'Fish — 女の子',
+    label: 'Fish — 女の子 (Japanese)',
     provider: 'fish',
     voiceId: 'bf5634e34ee5489991fe687ad0d202c5',
+    langs: ['ja'],
   },
 ]
 
 export const DEFAULT_VOICE_ID = 'fish-voice-1'
+
+/**
+ * Подобрать дефолтный voice для локали. Сначала ищет в BUILTIN+user-voices
+ * того что в `langs` явно. Иначе fallback на ElevenLabs multilingual.
+ */
+export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = []): string {
+  const all = [...BUILTIN_VOICES, ...userVoices]
+  const match = all.find((v) => v.langs?.includes(locale))
+  if (match) return match.id
+  // Multilingual fallback
+  return 'eleven-kika'
+}
 
 const STORAGE_KEY = 'kika:user-voices:v1'
 
