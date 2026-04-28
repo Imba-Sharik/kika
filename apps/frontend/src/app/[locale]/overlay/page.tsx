@@ -92,6 +92,12 @@ export default function OverlayPage() {
     setVoiceId(id)
     try { localStorage.setItem(VOICE_STORAGE_KEY, id) } catch {}
   }
+  // Версия для ручного выбора из Settings — отмечает user-picked флаг,
+  // чтобы автоподбор по локали не перезаписывал выбор.
+  function selectVoiceManually(id: string) {
+    selectVoice(id)
+    try { localStorage.setItem('kika:overlay:voice-user-picked', 'true') } catch {}
+  }
   // При смене локали (через URL /ja /ko etc) — авто-подбираем подходящий voice.
   // Юзер всё равно может вручную поменять в Settings, тогда оставим выбор.
   // Используем localStorage VOICE_USER_PICKED флаг чтобы не перезаписывать ручной выбор.
@@ -910,7 +916,7 @@ export default function OverlayPage() {
           mics={mics}
           onSelectMic={selectMic}
           voiceId={voiceId}
-          onSelectVoice={selectVoice}
+          onSelectVoice={selectVoiceManually}
           vadProbability={mic.vadProbability}
           vadThreshold={vadThreshold}
           onSelectVadThreshold={selectVadThreshold}
