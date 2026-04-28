@@ -283,7 +283,6 @@ export function SettingsPanel({
           plugins={BUILTIN_PLUGINS}
           isEnabled={isPluginEnabled}
           setEnabled={setPluginEnabled}
-          language={language}
         />
 
         <div style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.5, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12 }}>

@@ -63,7 +63,7 @@ function DictProvider({ children }: { ctx: YukaiContext; children: ReactNode }) 
 
 function DictPanelSlot({ ctx }: { ctx: YukaiContext }) {
   const dict = useDictPlugin()
-  return <DictationPanel history={dict.history} onClose={() => ctx.ui.closePanel()} language={ctx.language} />
+  return <DictationPanel history={dict.history} onClose={() => ctx.ui.closePanel()} />
 }
 
 function DictStatusBadge() {

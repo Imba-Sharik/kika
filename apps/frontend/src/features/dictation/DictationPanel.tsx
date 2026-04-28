@@ -1,28 +1,18 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import type { DictationItem } from './useDictation'
-import type { Language } from '@/shared/yukai/persona'
-import { t } from '@/shared/yukai/i18n'
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
-const kbdStyle: React.CSSProperties = {
-  display: 'inline-block',
-  padding: '1px 5px',
-  background: 'rgba(255,255,255,0.1)',
-  border: '1px solid rgba(255,255,255,0.15)',
-  borderRadius: 3,
-  fontSize: 10,
-  fontFamily: 'monospace',
-  color: '#e5e7eb',
-}
 
 type Props = {
   history: DictationItem[]
   onClose: () => void
-  language: Language
 }
 
-export function DictationPanel({ history, onClose, language }: Props) {
+export function DictationPanel({ history, onClose }: Props) {
+  const t = useTranslations()
+
   return (
     <div
       style={{
@@ -54,11 +44,11 @@ export function DictationPanel({ history, onClose, language }: Props) {
         }}
       >
         <span style={{ fontSize: 14 }}>⌨️</span>
-        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t(language, 'dictation.title')}</span>
+        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t('dictation.title')}</span>
         <span style={{ color: '#9ca3af', flex: 1 }}>· {history.length}</span>
         <button
           onClick={onClose}
-          title={t(language, 'common.close')}
+          title={t('common.close')}
           style={{
             width: 22,
             height: 22,
@@ -82,10 +72,10 @@ export function DictationPanel({ history, onClose, language }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {history.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            {t(language, 'common.empty')}
+            {t('common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              {t(language, 'dictation.empty')}
+              {t('dictation.empty')}
             </span>
           </div>
         ) : (
@@ -109,12 +99,11 @@ export function DictationPanel({ history, onClose, language }: Props) {
                   const api = (window as any).electronAPI
                   api?.pasteText?.(it.text)
                 }}
-                title={t(language, 'dictation.repaste-tooltip')}
+                title={t('dictation.repaste-tooltip')}
               >
                 <div style={{ color: '#f3f4f6', whiteSpace: 'pre-wrap' }}>{it.text}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, fontSize: 10, color: '#6b7280' }}>
                   <span>{dateStr} {timeStr}</span>
-                  <span style={{ color: '#a855f7' }}>↶ клик — вставить</span>
                 </div>
               </div>
             )
@@ -131,7 +120,7 @@ export function DictationPanel({ history, onClose, language }: Props) {
           textAlign: 'center',
         }}
       >
-        {t(language, 'dictation.empty')}
+        {t('dictation.empty')}
       </div>
     </div>
   )

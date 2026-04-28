@@ -1,8 +1,8 @@
 'use client'
 
 import { createContext, useContext, useState, type ReactNode } from 'react'
+import { useTranslations } from 'next-intl'
 import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
-import { t } from '@/shared/yukai/i18n'
 import { getAiBaseUrl } from '@/shared/api/strapi'
 
 
@@ -154,6 +154,7 @@ const actionBtnStyle: React.CSSProperties = {
 }
 
 function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
+  const t = useTranslations()
   const state = useContext(ScreenCtx)
   const history = state?.history ?? []
   const [selectedTs, setSelectedTs] = useState<number | null>(null)
@@ -215,11 +216,11 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
         }}
       >
         <span style={{ fontSize: 14 }}>📸</span>
-        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t(ctx.language, 'screenshot.title')}</span>
+        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t('screenshot.title')}</span>
         <span style={{ color: '#9ca3af', flex: 1 }}>· {history.length}</span>
         <button
           onClick={() => { void doCapture(ctx, { mode: 'region' }) }}
-          title={t(ctx.language, 'screenshot.region-tooltip')}
+          title={t('screenshot.region-tooltip')}
           style={{
             background: 'rgba(59,130,246,0.2)',
             border: '1px solid rgba(59,130,246,0.4)',
@@ -230,11 +231,11 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
             borderRadius: 12,
           }}
         >
-          {t(ctx.language, 'screenshot.region')}
+          {t('screenshot.region')}
         </button>
         <button
           onClick={() => { void doCapture(ctx, { mode: 'full' }) }}
-          title={t(ctx.language, 'screenshot.full-tooltip')}
+          title={t('screenshot.full-tooltip')}
           style={{
             background: 'rgba(236,72,153,0.2)',
             border: '1px solid rgba(236,72,153,0.4)',
@@ -245,11 +246,11 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
             borderRadius: 12,
           }}
         >
-          {t(ctx.language, 'screenshot.full')}
+          {t('screenshot.full')}
         </button>
         <button
           onClick={() => ctx.ui.closePanel()}
-          title={t(ctx.language, 'common.close')}
+          title={t('common.close')}
           style={{
             width: 22,
             height: 22,
@@ -269,10 +270,10 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {history.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            {t(ctx.language, 'common.empty')}
+            {t('common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              {t(ctx.language, 'screenshot.empty.hint')}
+              {t('screenshot.empty.hint')}
             </span>
           </div>
         ) : (
@@ -320,7 +321,7 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
                       <button
                         onClick={() => openSearchSite(item, 'https://trace.moe')}
                         style={actionBtnStyle}
-                        title={t(ctx.language, 'screenshot.anime-tooltip')}
+                        title={t('screenshot.anime-tooltip')}
                       >
                         🔗 trace.moe
                       </button>

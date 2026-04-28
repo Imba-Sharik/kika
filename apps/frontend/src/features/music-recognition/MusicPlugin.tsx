@@ -44,7 +44,7 @@ function MusicProvider({ ctx, children }: { ctx: YukaiContext; children: ReactNo
 
 function MusicPanelSlot({ ctx }: { ctx: YukaiContext }) {
   const music = useMusicPlugin()
-  return <MusicPanel history={music.history} onClose={() => ctx.ui.closePanel()} language={ctx.language} />
+  return <MusicPanel history={music.history} onClose={() => ctx.ui.closePanel()} />
 }
 
 function MusicStatusBadge() {

@@ -118,15 +118,15 @@
   "dictation": {
     "title": "Dictation",
     "empty": "Hold Right Alt and speak — text gets pasted and saved here",
-    "repaste_tooltip": "Click to paste again"
+    "repaste-tooltip": "Click to paste again"
   },
   "screenshot": {
     "title": "Screenshots",
     "region": "▭ region",
     "full": "+ full",
-    "region_tooltip": "Select region with mouse",
-    "full_tooltip": "Capture full screen",
-    "anime_tooltip": "Precise anime frame search (episode + timestamp)",
+    "region-tooltip": "Select region with mouse",
+    "full-tooltip": "Capture full screen",
+    "anime-tooltip": "Precise anime frame search (episode + timestamp)",
     "empty": {
       "hint": "Click \"+ full\" or say \"what's on screen?\" / \"select region and tell me what it is\""
     }

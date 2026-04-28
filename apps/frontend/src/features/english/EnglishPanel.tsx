@@ -1,20 +1,19 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { EnglishHistoryGrid } from './EnglishCard'
 import { statusOf, type EnglishItem, type EnglishStatus } from './english-md'
-import type { Language } from '@/shared/yukai/persona'
-import { t } from '@/shared/yukai/i18n'
 
 type Props = {
   items: EnglishItem[]
   onClose: () => void
-  language: Language
 }
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 
-export function EnglishPanel({ items, onClose, language }: Props) {
+export function EnglishPanel({ items, onClose }: Props) {
+  const t = useTranslations()
   const [filter, setFilter] = useState<'all' | EnglishStatus>('all')
   const known = items.filter((it) => statusOf(it) === 'known').length
   const learning = items.filter((it) => statusOf(it) === 'learning').length
@@ -22,15 +21,13 @@ export function EnglishPanel({ items, onClose, language }: Props) {
   const filtered = filter === 'all' ? items : items.filter((it) => statusOf(it) === filter)
 
   const STATUS_LABEL: Record<EnglishStatus, string> = {
-    new: t(language, 'english.tab.new'),
-    learning: t(language, 'english.tab.learning'),
-    known: t(language, 'english.tab.known'),
+    new: t('english.tab.new'),
+    learning: t('english.tab.learning'),
+    known: t('english.tab.known'),
   }
 
-  const stats = t(language, 'english.stats')
-    .replace('{known}', String(known))
-    .replace('{learning}', String(learning))
-    .replace('{newish}', String(newish))
+  // ICU MessageFormat: t() поддерживает {var} плейсхолдеры через 2-й аргумент
+  const stats = t('english.stats', { known, learning, newish })
 
   return (
     <div
@@ -69,7 +66,7 @@ export function EnglishPanel({ items, onClose, language }: Props) {
         </span>
         <button
           onClick={onClose}
-          title={t(language, 'common.close')}
+          title={t('common.close')}
           style={{
             width: 22,
             height: 22,
@@ -94,7 +91,7 @@ export function EnglishPanel({ items, onClose, language }: Props) {
         <div style={{ display: 'flex', gap: 4, padding: '6px 8px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           {(['all', 'new', 'learning', 'known'] as const).map((tab) => {
             const isActive = filter === tab
-            const label = tab === 'all' ? t(language, 'english.tab.all') : STATUS_LABEL[tab]
+            const label = tab === 'all' ? t('english.tab.all') : STATUS_LABEL[tab]
             const count = tab === 'all'
               ? items.length
               : items.filter((it) => statusOf(it) === tab).length
@@ -123,10 +120,10 @@ export function EnglishPanel({ items, onClose, language }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {items.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            {t(language, 'common.empty')}
+            {t('common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              {t(language, 'english.empty.hint')}
+              {t('english.empty.hint')}
             </span>
           </div>
         ) : (
@@ -143,7 +140,7 @@ export function EnglishPanel({ items, onClose, language }: Props) {
           textAlign: 'center',
         }}
       >
-        {t(language, 'english.bottom.hint')}
+        {t('english.bottom.hint')}
       </div>
     </div>
   )

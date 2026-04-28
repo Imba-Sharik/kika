@@ -1,8 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import type { MusicItem } from './useMusicRecognition'
-import type { Language } from '@/shared/yukai/persona'
-import { t } from '@/shared/yukai/i18n'
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 const kbdStyle: React.CSSProperties = {
@@ -19,10 +18,10 @@ const kbdStyle: React.CSSProperties = {
 type Props = {
   history: MusicItem[]
   onClose: () => void
-  language: Language
 }
 
-export function MusicPanel({ history, onClose, language }: Props) {
+export function MusicPanel({ history, onClose }: Props) {
+  const t = useTranslations()
   return (
     <div
       style={{
@@ -54,11 +53,11 @@ export function MusicPanel({ history, onClose, language }: Props) {
         }}
       >
         <span style={{ fontSize: 14 }}>🎵</span>
-        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t(language, 'music.history')}</span>
+        <span style={{ color: '#fbbf24', fontWeight: 600 }}>{t('music.history')}</span>
         <span style={{ color: '#9ca3af', flex: 1 }}>· {history.length}</span>
         <button
           onClick={onClose}
-          title={t(language, 'common.close')}
+          title={t('common.close')}
           style={{
             width: 22,
             height: 22,
@@ -82,10 +81,10 @@ export function MusicPanel({ history, onClose, language }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
         {history.length === 0 ? (
           <div style={{ color: '#888', fontStyle: 'italic', padding: 12, textAlign: 'center' }}>
-            {t(language, 'common.empty')}
+            {t('common.empty')}
             <br />
             <span style={{ color: '#666', fontSize: 10 }}>
-              {t(language, 'music.empty')}
+              {t('music.empty')}
             </span>
           </div>
         ) : (
@@ -139,7 +138,7 @@ export function MusicPanel({ history, onClose, language }: Props) {
           textAlign: 'center',
         }}
       >
-        {t(language, 'music.empty')}
+        {t('music.empty')}
       </div>
     </div>
   )

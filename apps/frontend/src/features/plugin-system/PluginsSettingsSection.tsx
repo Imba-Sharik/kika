@@ -1,23 +1,42 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import type { YukaiPlugin } from './types'
-import type { Language } from '@/shared/yukai/persona'
-import { t, translatePluginName, translatePluginDescription } from '@/shared/yukai/i18n'
 
 type Props = {
   plugins: YukaiPlugin[]
   isEnabled: (id: string) => boolean
   setEnabled: (id: string, enabled: boolean) => void
-  language: Language
 }
 
 // Секция "Плагины" в настройках — список всех зарегистрированных плагинов
 // с чекбоксами и списком разрешений.
-export function PluginsSettingsSection({ plugins, isEnabled, setEnabled, language }: Props) {
+export function PluginsSettingsSection({ plugins, isEnabled, setEnabled }: Props) {
+  const t = useTranslations()
+
+  function pluginName(p: YukaiPlugin): string {
+    // Если в JSON есть plugin.<id>.name — используем перевод, иначе fallback
+    // на p.name из манифеста.
+    try {
+      return t(`plugin.${p.id}.name` as never)
+    } catch {
+      return p.name
+    }
+  }
+
+  function pluginDesc(p: YukaiPlugin): string | undefined {
+    if (!p.description) return undefined
+    try {
+      return t(`plugin.${p.id}.desc` as never)
+    } catch {
+      return p.description
+    }
+  }
+
   return (
     <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12 }}>
       <label style={{ display: 'block', color: '#9ca3af', marginBottom: 8, fontSize: 11 }}>
-        {t(language, 'plugins.section')}
+        {t('plugins.section')}
       </label>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {plugins.map((p) => {
@@ -44,11 +63,11 @@ export function PluginsSettingsSection({ plugins, isEnabled, setEnabled, languag
               />
               <div style={{ flex: 1 }}>
                 <div style={{ color: '#e5e7eb', fontSize: 12, fontWeight: 600 }}>
-                  {p.icon} {translatePluginName(language, p.id, p.name)}
+                  {p.icon} {pluginName(p)}
                 </div>
                 {p.description && (
                   <div style={{ color: '#9ca3af', fontSize: 10, marginTop: 2 }}>
-                    {translatePluginDescription(language, p.id, p.description)}
+                    {pluginDesc(p)}
                   </div>
                 )}
                 {p.permissions.length > 0 && (
