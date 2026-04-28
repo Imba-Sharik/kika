@@ -283,12 +283,13 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t('settings.voice')}
           </label>
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 6, width: '100%' }}>
           <select
             value={voiceId}
             onChange={(e) => onSelectVoice(e.target.value)}
             style={{
               flex: 1,
+              minWidth: 0,
               background: '#1f2937',
               color: 'white',
               border: '1px solid #374151',
