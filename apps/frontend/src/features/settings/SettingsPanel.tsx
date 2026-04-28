@@ -158,31 +158,39 @@ export function SettingsPanel({
   // отдельная группа сверху.
   const voiceGroups = groupVoicesByLanguage(locale)
 
-  // Preview голоса при выборе. Состояние: 'idle' | 'loading' | 'playing'.
-  // Audio инстанс держим в ref, чтобы повторный клик отменял текущее проигрывание.
-  const [previewState, setPreviewState] = useState<'idle' | 'loading' | 'playing'>('idle')
+  // Preview голоса. previewingId — какой voice сейчас играет (или null).
+  // Клик ▶ на той же строке — стоп. На другой — переключение.
+  const [previewingId, setPreviewingId] = useState<string | null>(null)
+  const [previewLoading, setPreviewLoading] = useState<string | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  async function previewVoice() {
-    if (previewState !== 'idle') {
-      // Прервать текущее проигрывание/загрузку
+  async function previewVoiceById(id: string) {
+    // Toggle: тот же id → стоп
+    if (previewingId === id || previewLoading === id) {
       audioRef.current?.pause()
-      setPreviewState('idle')
+      setPreviewingId(null)
+      setPreviewLoading(null)
       return
     }
-    const voice = findVoice(voiceId, [])
+    // Другой id → прерываем текущее проигрывание и стартуем новое
+    audioRef.current?.pause()
+    const voice = findVoice(id, [])
     const text = getVoiceSampleText(voice, locale)
-    setPreviewState('loading')
+    setPreviewLoading(id)
     try {
       const res = await fetchTts(text, { provider: voice.provider, voiceId: voice.voiceId })
       if (!audioRef.current) audioRef.current = new Audio()
-      setPreviewState('playing')
+      setPreviewLoading(null)
+      setPreviewingId(id)
       await playViaBlob(res, audioRef.current)
     } catch (e) {
       console.warn('[voice-preview] failed:', e)
     } finally {
-      setPreviewState('idle')
+      setPreviewLoading(null)
+      setPreviewingId((cur) => (cur === id ? null : cur))
     }
   }
+  // Открыт ли список голосов
+  const [voiceListOpen, setVoiceListOpen] = useState(false)
 
   // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
   // Для пользователей с заблокированным Vercel в РФ или со своим VPN.
@@ -283,62 +291,16 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t('settings.voice')}
           </label>
-          <div style={{ position: 'relative', width: '100%' }}>
-          <select
-            value={voiceId}
-            onChange={(e) => onSelectVoice(e.target.value)}
-            style={{
-              width: '100%',
-              background: '#1f2937',
-              color: 'white',
-              border: '1px solid #374151',
-              // паддинг справа = chevron native селекта (~22px) + кнопка ▶ (24px) + зазор (8px)
-              padding: '6px 54px 6px 8px',
-              fontSize: 12,
-              borderRadius: 4,
-            }}
-          >
-            {voiceGroups.languageGroups.map((g) => (
-              <optgroup key={g.lang} label={g.label}>
-                {g.voices.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-          <button
-            type="button"
-            onClick={previewVoice}
-            title={previewState === 'idle' ? 'Preview voice' : 'Stop'}
-            style={{
-              position: 'absolute',
-              right: 26, // оставляем место для нативной стрелки селекта справа
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: 22,
-              height: 22,
-              background:
-                previewState === 'idle'
-                  ? 'rgba(244, 114, 182, 0.2)'
-                  : 'rgba(244, 114, 182, 0.4)',
-              color: '#f9a8d4',
-              border: '1px solid rgba(244, 114, 182, 0.5)',
-              borderRadius: 3,
-              cursor: previewState === 'loading' ? 'wait' : 'pointer',
-              fontSize: 11,
-              lineHeight: 1,
-              padding: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600,
-            }}
-          >
-            {previewState === 'loading' ? '…' : previewState === 'playing' ? '■' : '▶'}
-          </button>
-          </div>
+          <VoiceSelect
+            voiceId={voiceId}
+            onSelectVoice={onSelectVoice}
+            languageGroups={voiceGroups.languageGroups}
+            open={voiceListOpen}
+            onOpenChange={setVoiceListOpen}
+            previewingId={previewingId}
+            previewLoading={previewLoading}
+            onPreview={previewVoiceById}
+          />
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4 }}>
             {t('settings.voiceHint')}
           </div>
@@ -520,6 +482,153 @@ type Quota = {
   resetsAt: string
   tier: 'trial' | 'free' | 'paid'
   trialDaysLeft: number | null
+}
+
+/**
+ * Кастомный voice picker — dropdown где в каждой строке кнопка ▶ для предпрослушивания
+ * без выбора. Native <select> такое не позволяет, поэтому свой popover.
+ */
+type VoiceGroup = { lang: string; label: string; voices: typeof BUILTIN_VOICES }
+function VoiceSelect({
+  voiceId,
+  onSelectVoice,
+  languageGroups,
+  open,
+  onOpenChange,
+  previewingId,
+  previewLoading,
+  onPreview,
+}: {
+  voiceId: string
+  onSelectVoice: (id: string) => void
+  languageGroups: VoiceGroup[]
+  open: boolean
+  onOpenChange: (v: boolean) => void
+  previewingId: string | null
+  previewLoading: string | null
+  onPreview: (id: string) => void
+}) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
+  const selected = findVoice(voiceId, [])
+  const selectedLabel = selected.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')
+
+  // Закрытие при клике вне
+  useEffect(() => {
+    if (!open) return
+    function onClick(e: MouseEvent) {
+      if (!wrapperRef.current?.contains(e.target as Node)) onOpenChange(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [open, onOpenChange])
+
+  return (
+    <div ref={wrapperRef} style={{ position: 'relative', width: '100%' }}>
+      <button
+        type="button"
+        onClick={() => onOpenChange(!open)}
+        style={{
+          width: '100%',
+          background: '#1f2937',
+          color: 'white',
+          border: '1px solid #374151',
+          padding: '6px 28px 6px 8px',
+          fontSize: 12,
+          borderRadius: 4,
+          textAlign: 'left',
+          cursor: 'pointer',
+          position: 'relative',
+        }}
+      >
+        {selectedLabel}
+        <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', fontSize: 10, color: '#9ca3af' }}>▾</span>
+      </button>
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            left: 0,
+            right: 0,
+            maxHeight: 320,
+            overflowY: 'auto',
+            background: '#0f1115',
+            border: '1px solid #374151',
+            borderRadius: 4,
+            zIndex: 10,
+            boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
+          }}
+        >
+          {languageGroups.map((g) => (
+            <div key={g.lang}>
+              <div style={{ padding: '6px 10px', fontSize: 10, color: '#9ca3af', fontWeight: 600, background: '#1a1d24', position: 'sticky', top: 0 }}>
+                {g.label}
+              </div>
+              {g.voices.map((v) => {
+                const isSelected = v.id === voiceId
+                const isPlaying = previewingId === v.id
+                const isLoading = previewLoading === v.id
+                const label = v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '').replace(/\s\([^)]+\)$/, '')
+                return (
+                  <div
+                    key={v.id}
+                    onClick={() => {
+                      onSelectVoice(v.id)
+                      onOpenChange(false)
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '6px 8px',
+                      cursor: 'pointer',
+                      background: isSelected ? 'rgba(244, 114, 182, 0.15)' : 'transparent',
+                      borderLeft: isSelected ? '2px solid #f472b6' : '2px solid transparent',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected) e.currentTarget.style.background = 'transparent'
+                    }}
+                  >
+                    <span style={{ flex: 1, fontSize: 12, color: 'white' }}>{label}</span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onPreview(v.id)
+                      }}
+                      title={isPlaying ? 'Stop' : 'Preview'}
+                      style={{
+                        width: 22,
+                        height: 22,
+                        background: isPlaying || isLoading ? 'rgba(244, 114, 182, 0.4)' : 'rgba(244, 114, 182, 0.18)',
+                        color: '#f9a8d4',
+                        border: '1px solid rgba(244, 114, 182, 0.5)',
+                        borderRadius: 3,
+                        cursor: isLoading ? 'wait' : 'pointer',
+                        fontSize: 11,
+                        lineHeight: 1,
+                        padding: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 600,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {isLoading ? '…' : isPlaying ? '■' : '▶'}
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 /**
