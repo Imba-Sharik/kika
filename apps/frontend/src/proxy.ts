@@ -1,15 +1,14 @@
-// @/proxy.ts
-// Next.js 16+ — защита роутов (замена middleware.ts)
-// FSD: слой app (инфраструктура)
+// Next.js 16 — proxy.ts (бывший middleware.ts).
+// Делегирует на next-intl middleware: разруливает /ja, /ko, /ru, /de, /fr, /pt
+// URL-префиксы; для /en (default) префикса нет (localePrefix: 'as-needed').
 
-export { auth as proxy } from '@/auth';
+import createMiddleware from 'next-intl/middleware'
+import { routing } from '@/i18n/routing'
+
+export default createMiddleware(routing)
 
 export const config = {
-  // /overlay сознательно публичный — Electron-юзер должен сразу видеть Юкай,
-  // а внутри overlay есть inline AuthGateBubble (паттерн онбординг-tooltip'а),
-  // которая просит логин/регистрацию рядом с персонажем. AI-вызовы и так
-  // защищены на бэке (Strapi 403 без JWT). Server-side redirect ломает UX
-  // только что установленного приложения.
-  // Сейчас гейтить нечего — все public-страницы доступны анонимам.
-  matcher: [],
-};
+  // Все роуты КРОМЕ api/, _next/, статики и файлов с расширением.
+  // /api/auth/* и т.д. не должны проходить через i18n-middleware.
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
+}

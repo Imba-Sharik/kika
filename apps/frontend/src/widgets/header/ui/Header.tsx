@@ -1,15 +1,24 @@
 "use client"
 
-import Link from "next/link"
+import { Link, usePathname, useRouter } from "@/i18n/navigation"
+import { useLocale } from "next-intl"
 import { UserNav } from "./UserNav"
-import { setLanguagePreference, useLanguage } from "@/shared/yukai/useLanguage"
+import { useLanguage } from "@/shared/yukai/useLanguage"
 import { t } from "@/shared/yukai/i18n"
+import { ALL_LOCALES, type LocaleCode } from "@/shared/yukai/useLanguage"
 
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 
 export function Header() {
-  const lang = useLanguage()
+  const lang = useLanguage() // ru | en (для t() bridge)
+  const locale = useLocale() as LocaleCode // полный список (en/ru/ja/ko/de/fr/pt)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  function switchLocale(newLocale: LocaleCode) {
+    router.replace(pathname, { locale: newLocale })
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0A0A0F]/80 backdrop-blur">
@@ -50,14 +59,7 @@ export function Header() {
 
           {/* Группа 2: язык + auth + CTA */}
           <div className="flex items-center gap-3">
-            <Link
-              href={lang === 'en' ? '/' : '/en'}
-              onClick={() => setLanguagePreference(lang === 'en' ? 'ru' : 'en')}
-              className="text-sm text-white/50 hover:text-white transition"
-              title={lang === 'en' ? 'Русский' : 'English'}
-            >
-              {lang === 'en' ? 'RU' : 'EN'}
-            </Link>
+            <LocalePicker current={locale} onChange={switchLocale} />
             <UserNav />
             <a
               href={DOWNLOAD_URL}
@@ -69,5 +71,28 @@ export function Header() {
         </div>
       </nav>
     </header>
+  )
+}
+
+function LocalePicker({
+  current,
+  onChange,
+}: {
+  current: LocaleCode
+  onChange: (l: LocaleCode) => void
+}) {
+  return (
+    <select
+      value={current}
+      onChange={(e) => onChange(e.target.value as LocaleCode)}
+      className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer focus:outline-none focus:ring-1 focus:ring-pink-400/50"
+      aria-label="Language"
+    >
+      {ALL_LOCALES.map((l) => (
+        <option key={l.code} value={l.code} className="bg-[#0F0E15] text-white">
+          {l.short} {l.label}
+        </option>
+      ))}
+    </select>
   )
 }

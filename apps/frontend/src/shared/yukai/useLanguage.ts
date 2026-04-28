@@ -1,79 +1,62 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { useRouter, usePathname } from '@/i18n/navigation'
 import type { Language } from './persona'
 
-// Должен совпадать с ключом в [apps/frontend/src/app/overlay/page.tsx]
-// чтобы выбор юзера в Settings → overlay прокидывался на лендинг и обратно.
-const LANGUAGE_KEY = 'kika:overlay:language'
-
 /**
- * Явно сохранить выбор языка. Используется в language toggle в Header,
- * чтобы клик по "RU"/"EN" сразу записал предпочтение перед навигацией.
- * Без этого юзер на /en, кликая "RU", пойдёт на / — но useLanguage прочитает
- * localStorage 'en' и оставит английский.
+ * BRIDGE: старые компоненты используют `useLanguage()` + `t(lang, key)` из
+ * shared/yukai/i18n.ts с типом Language = 'ru' | 'en'. Новые компоненты
+ * используют `useTranslations()` из next-intl.
+ *
+ * Этот хук маппит next-intl locale → старый Language. Для /ru возвращает 'ru',
+ * для всего остального ('en' | 'ja' | 'ko' | 'de' | 'fr' | 'pt') — 'en'.
+ *
+ * После полной миграции на next-intl этот файл будет удалён.
  */
-export function setLanguagePreference(lang: Language) {
-  try {
-    localStorage.setItem(LANGUAGE_KEY, lang)
-  } catch {}
+export function useLanguage(): Language {
+  const locale = useLocale()
+  return locale === 'ru' ? 'ru' : 'en'
 }
 
 /**
- * Определение языка на client-side.
- *
- * Приоритет:
- * 1. Pathname `/en` — явный сигнал "юзер хочет английский здесь и сейчас".
- *    Перебивает localStorage чтобы не оставаться в RU когда юзер кликнул EN-ссылку.
- * 2. localStorage — если юзер явно выбрал в Settings overlay'я
- * 3. По хосту: ru.yukai.app → ru, yukai.app → en
- * 4. Fallback на navigator.language (для localhost / preview-доменов)
+ * Программный switch языка. Переход на /ru или /en и т.д. — middleware next-intl
+ * переключит локаль. localStorage больше не нужен — URL это source of truth.
  */
-export function useLanguage(): Language {
+export function setLanguagePreference(_lang: Language) {
+  // No-op в bridge-режиме. Реальное переключение происходит через
+  // <Link href={pathname} locale="ru" /> или router.replace(pathname, { locale: 'ru' }).
+  // Оставляем функцию для backward-compat — старые вызовы из Header не падают.
+}
+
+/**
+ * Полный список локалей с label'ами для UI language picker.
+ * Используется в Header и Settings.
+ */
+export const ALL_LOCALES = [
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'ru', label: 'Русский', short: 'RU' },
+  { code: 'ja', label: '日本語', short: 'JA' },
+  { code: 'ko', label: '한국어', short: 'KO' },
+  { code: 'de', label: 'Deutsch', short: 'DE' },
+  { code: 'fr', label: 'Français', short: 'FR' },
+  { code: 'pt', label: 'Português', short: 'PT' },
+] as const
+
+export type LocaleCode = (typeof ALL_LOCALES)[number]['code']
+
+/**
+ * Хук для language picker — текущая локаль + функция переключения через router.
+ * Использует @/i18n/navigation router'а который умеет менять locale.
+ */
+export function useLocaleSwitcher() {
+  const router = useRouter()
   const pathname = usePathname()
-  const [language, setLanguage] = useState<Language>('ru')
+  const current = useLocale() as LocaleCode
 
-  useEffect(() => {
-    // Path-based override — явный сигнал, юзер сам тапнул "EN".
-    // Сохраняем в localStorage чтобы /login после /en тоже остался EN.
-    if (pathname?.startsWith('/en')) {
-      setLanguage('en')
-      try {
-        localStorage.setItem(LANGUAGE_KEY, 'en')
-      } catch {}
-      return
-    }
+  function switchTo(newLocale: LocaleCode) {
+    router.replace(pathname, { locale: newLocale })
+  }
 
-    // Дальше — read-only детект, БЕЗ автозаписи в localStorage.
-    // Запись только при явном выборе юзера (setLanguagePreference из тоггла,
-    // Settings overlay'я). Иначе host-default цементируется в localStorage
-    // и потом перебивает host-логику если юзер ходит между хостами в одном
-    // браузере (например dev → prod).
-    try {
-      const saved = localStorage.getItem(LANGUAGE_KEY)
-      if (saved === 'en' || saved === 'ru') {
-        setLanguage(saved)
-        return
-      }
-    } catch {}
-
-    // Host-based default
-    if (typeof window !== 'undefined') {
-      const host = window.location.hostname.toLowerCase()
-      if (host.startsWith('ru.')) {
-        setLanguage('ru')
-        return
-      }
-      if (host === 'yukai.app' || host.endsWith('.vercel.app')) {
-        setLanguage('en')
-        return
-      }
-      // localhost / preview — fallback на системную локаль
-      const sys = (navigator.language || 'en').toLowerCase()
-      setLanguage(sys.startsWith('ru') ? 'ru' : 'en')
-    }
-  }, [pathname])
-
-  return language
+  return { current, switchTo }
 }

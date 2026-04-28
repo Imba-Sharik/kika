@@ -4,13 +4,10 @@ import Image from 'next/image'
 import { UserNav } from '@/widgets/header/ui/UserNav'
 import { setLanguagePreference } from '@/shared/yukai/useLanguage'
 
-// Stable download URL — filename is pinned via electron-builder artifactName,
-// so this link always points to the latest release without any updates to the landing.
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
-// Telegram group — main feedback channel for beta users.
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 
-export default function LandingPageEn() {
+export default function LandingPageRu() {
   return (
     <main className="relative overflow-hidden">
       {/* Background glow */}
@@ -26,27 +23,26 @@ export default function LandingPageEn() {
           <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Yukai</span>
         </div>
         <div className="flex items-center gap-3">
-          <a href="#pricing" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Pricing</a>
+          <a href="#pricing" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Цена</a>
           <a href="#faq" className="hidden md:inline text-sm text-white/70 hover:text-white transition">FAQ</a>
           <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hidden md:inline text-sm text-white/70 hover:text-white transition">
-            Chat with dev
+            Чат с разработчиком
           </a>
-          <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Privacy</a>
-          <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Terms</a>
+          <a href="/privacy" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Приватность</a>
+          <a href="/terms" className="hidden md:inline text-sm text-white/70 hover:text-white transition">Условия</a>
           <a
             href="/"
-            onClick={() => setLanguagePreference('ru')}
             className="text-sm text-white/50 hover:text-white transition"
-            title="Русский"
+            title="English"
           >
-            RU
+            EN
           </a>
           <UserNav />
           <a
             href={DOWNLOAD_URL}
             className="rounded-lg bg-linear-to-r from-pink-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
           >
-            Download
+            Скачать
           </a>
         </div>
       </nav>
@@ -60,33 +56,33 @@ export default function LandingPageEn() {
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white/70 hover:text-white hover:bg-white/10 transition"
         >
           <span className="h-2 w-2 rounded-full bg-pink-400 animate-pulse" />
-          Beta is open — join our Telegram to chat with the dev →
+          Beta открыта — присоединяйся к чату с разработчиком →
         </a>
         <h1 className="mb-6 text-5xl md:text-7xl font-bold tracking-tight">
-          Your AI companion,<br />
+          Твой AI-компаньон,<br />
           <span className="bg-gradient-to-r from-pink-400 via-pink-500 to-violet-500 bg-clip-text text-transparent">
-            who lives on your screen
+            который живёт на экране
           </span>
         </h1>
         <p className="mx-auto mb-10 max-w-2xl text-lg text-white/70">
-          Yukai talks back, dictates your messages, Shazams music from any app,
-          and is always right there. Not just an assistant — a partner with personality.
+          Yukai разговаривает голосом, диктует твои письма, узнаёт музыку в наушниках
+          и всегда рядом. Не просто ассистент — напарник с характером.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href={DOWNLOAD_URL}
             className="group relative overflow-hidden rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-4 text-base font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
           >
-            <span className="relative z-10">Download for Windows</span>
+            <span className="relative z-10">Скачать для Windows</span>
           </a>
           <a
             href="#how"
             className="rounded-xl border border-white/15 px-8 py-4 text-base font-medium hover:bg-white/5 transition"
           >
-            How it works
+            Как это работает
           </a>
         </div>
-        <p className="mt-4 text-xs text-white/50">Free during beta · macOS and Linux coming soon</p>
+        <p className="mt-4 text-xs text-white/50">Бесплатно в beta · macOS и Linux скоро</p>
 
         {/* Hero illustration */}
         <div className="relative mt-16 mx-auto max-w-3xl">
@@ -104,9 +100,9 @@ export default function LandingPageEn() {
               />
             </div>
             <div className="mt-6 rounded-2xl bg-black/40 p-4 text-left">
-              <div className="mb-2 text-xs font-medium text-pink-400">Yukai · happy</div>
+              <div className="mb-2 text-xs font-medium text-pink-400">Yukai · счастлива</div>
               <div className="text-sm text-white/80">
-                &ldquo;Hey! Ready to help you today. What should we do first — check your email or listen to music?&rdquo;
+                &ldquo;Привет! Готова помочь тебе сегодня. Что сделаем первым — проверим почту или послушаем музыку?&rdquo;
               </div>
             </div>
           </div>
@@ -115,28 +111,28 @@ export default function LandingPageEn() {
 
       {/* Features */}
       <section id="features" className="mx-auto max-w-6xl px-6 py-24">
-        <h2 className="mb-4 text-center text-4xl font-bold">What she can do</h2>
+        <h2 className="mb-4 text-center text-4xl font-bold">Что она умеет</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          Three core features — each one replaces a separate app. All inside one Yukai.
+          Три главные фичи — каждая заменяет отдельное приложение. Всё в одной Yukai.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
               emoji: '🎭',
-              title: 'Living companion',
-              desc: 'Speaks with real voice, reacts with emotions. Remembers what you talked about. Work and life become less dull.',
+              title: 'Живой компаньон',
+              desc: 'Разговаривает голосом, реагирует эмоциями. Помнит что обсуждали. Не скучно работать и жить.',
               color: 'from-pink-500/20 to-pink-600/5',
             },
             {
               emoji: '⌨️',
-              title: 'Voice dictation',
-              desc: 'Hold Right Alt, speak, release — text appears in any window. Like Wispr Flow, but with personality.',
+              title: 'Голосовая диктовка',
+              desc: 'Зажми правый Alt, говори, отпусти — текст появляется в любом окне. Как Wispr Flow, но с характером.',
               color: 'from-violet-500/20 to-violet-600/5',
             },
             {
               emoji: '🎵',
-              title: 'Shazam in your headphones',
-              desc: 'Song playing in YouTube or a game? Alt+` — Yukai listens through system audio and tells you the title.',
+              title: 'Shazam в наушниках',
+              desc: 'Играет песня в YouTube или игре? Alt+` — Yukai услышит через системный звук и скажет название.',
               color: 'from-pink-500/20 to-violet-500/10',
             },
           ].map((f) => (
@@ -154,15 +150,15 @@ export default function LandingPageEn() {
 
       {/* How it works */}
       <section id="how" className="mx-auto max-w-6xl px-6 py-24">
-        <h2 className="mb-4 text-center text-4xl font-bold">How it looks</h2>
+        <h2 className="mb-4 text-center text-4xl font-bold">Как это выглядит</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          Yukai is a transparent window on top of all your apps. Visible, but never in the way.
+          Yukai — прозрачное окно поверх всех программ. Видно её, но она не мешает.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { n: '01', title: 'Install and launch', desc: 'Download the .exe and run it — Yukai appears in the corner of your screen.' },
-            { n: '02', title: 'Tune her personality', desc: 'Pick a voice, emotions. Soon — custom characters from creators.' },
-            { n: '03', title: 'Live as usual', desc: 'Work, game, watch YouTube. Yukai is right there, responds when needed.' },
+            { n: '01', title: 'Установи и запусти', desc: 'Скачай .exe, открой — Yukai появляется в углу экрана.' },
+            { n: '02', title: 'Настрой характер', desc: 'Выбери голос, эмоции. Позже — кастомные персонажи от креаторов.' },
+            { n: '03', title: 'Живи как обычно', desc: 'Работай, играй, смотри ютуб. Yukai всегда рядом, отвечает когда нужно.' },
           ].map((s) => (
             <div key={s.n} className="relative">
               <div className="mb-4 text-6xl font-bold bg-gradient-to-br from-pink-400 to-violet-400 bg-clip-text text-transparent">
@@ -177,28 +173,28 @@ export default function LandingPageEn() {
 
       {/* Pricing */}
       <section id="pricing" className="mx-auto max-w-4xl px-6 py-24">
-        <h2 className="mb-4 text-center text-4xl font-bold">One plan. Everything included.</h2>
+        <h2 className="mb-4 text-center text-4xl font-bold">Один тариф. Всё включено.</h2>
         <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">
-          No hidden limits. No throttling. Cancel anytime.
+          Без скрытых лимитов. Без тормозов. Отмена в любой момент.
         </p>
         <div className="relative mx-auto max-w-md">
           <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-pink-500 to-violet-500 opacity-60 blur-lg" />
           <div className="relative rounded-2xl border border-white/10 bg-[#0F0E15] p-8">
             <div className="mb-2 inline-flex rounded-full bg-pink-500/20 px-3 py-1 text-xs font-medium text-pink-300">
-              Popular
+              Популярный
             </div>
             <div className="mb-6 flex items-baseline gap-2">
               <span className="text-5xl font-bold">$19</span>
-              <span className="text-white/60">/mo</span>
+              <span className="text-white/60">/мес</span>
             </div>
             <ul className="mb-8 space-y-3 text-sm">
               {[
-                'Unlimited voice chat',
-                'Voice dictation into any window',
-                'Music recognition through system audio',
-                'All emotions and Yukai personality',
-                'Access to upcoming marketplace characters',
-                'Priority support',
+                'Безлимитный чат с голосом',
+                'Голосовая диктовка в любое окно',
+                'Распознавание музыки через наушники',
+                'Все эмоции и характер Yukai',
+                'Доступ к будущим персонажам маркетплейса',
+                'Приоритетная поддержка',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,10 +208,10 @@ export default function LandingPageEn() {
               href={DOWNLOAD_URL}
               className="block w-full rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-6 py-4 text-center font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
             >
-              Download for Windows
+              Скачать для Windows
             </a>
             <p className="mt-3 text-center text-xs text-white/50">
-              Free during beta. Subscription starts with v1.
+              Сейчас бесплатно во время beta. Подписка — когда выйдет v1.
             </p>
           </div>
         </div>
@@ -223,33 +219,15 @@ export default function LandingPageEn() {
 
       {/* FAQ */}
       <section id="faq" className="mx-auto max-w-3xl px-6 py-24">
-        <h2 className="mb-12 text-center text-4xl font-bold">FAQ</h2>
+        <h2 className="mb-12 text-center text-4xl font-bold">Частые вопросы</h2>
         <div className="space-y-4">
           {[
-            {
-              q: 'Which systems are supported?',
-              a: 'Windows 10/11 — right now. macOS and Linux are in progress. Minimum: 4 GB RAM, a microphone.',
-            },
-            {
-              q: 'Do I need internet?',
-              a: 'Yes, Yukai\'s voice and brain work through the cloud (Claude AI + Fish Audio). Normal home internet is enough.',
-            },
-            {
-              q: 'How many languages does she speak?',
-              a: 'English and Russian — fully. Other languages — she understands, but voice is currently English/Russian only.',
-            },
-            {
-              q: 'Can I change her voice or look?',
-              a: 'Basic ones — free. Soon a marketplace with voices and characters from creators (including anime artists and voice actors).',
-            },
-            {
-              q: 'What happens to my data?',
-              a: 'Conversations are not stored on servers beyond processing. Local memory stays only on your machine.',
-            },
-            {
-              q: 'What if I cancel the subscription?',
-              a: 'Access stays until the end of your paid period. Local memory and settings stay with you.',
-            },
+            { q: 'На каких системах работает?', a: 'Windows 10/11 — сейчас. macOS и Linux — в разработке. Минимальные требования: 4 ГБ RAM, микрофон.' },
+            { q: 'Нужен ли интернет?', a: 'Да, голос и мозг Yukai работают через облако (Claude AI + Fish Audio). Обычный домашний интернет справляется.' },
+            { q: 'Сколько языков знает?', a: 'Русский и английский — полностью. Другие — понимает, но голос пока только русский/английский.' },
+            { q: 'Могу ли я сменить голос или внешность?', a: 'Базовые — бесплатно. Скоро откроется маркетплейс с голосами и персонажами от креаторов (включая аниме-артистов и сэйю).' },
+            { q: 'Что делает Yukai с моими данными?', a: 'Разговоры не сохраняются на серверах дольше обработки. Локальная память хранится только у тебя на компьютере.' },
+            { q: 'Что если отменю подписку?', a: 'Доступ сохраняется до конца оплаченного периода. Локальная память и настройки остаются у тебя.' },
           ].map((item) => (
             <details key={item.q} className="group rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur">
               <summary className="flex cursor-pointer items-center justify-between font-medium list-none">
@@ -275,17 +253,17 @@ export default function LandingPageEn() {
           />
         </div>
         <h2 className="mb-4 text-4xl font-bold">
-          Install in a minute.<br />
-          The rest feels like meeting an old friend.
+          Установи за минуту.<br />
+          Дальше — как со старым другом.
         </h2>
         <p className="mb-8 text-white/60">
-          Beta is free. No credit card, no spam.
+          Beta сейчас бесплатна. Без карт, без спама.
         </p>
         <a
           href={DOWNLOAD_URL}
           className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-4 font-semibold shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
         >
-          Download for Windows →
+          Скачать для Windows →
         </a>
       </section>
 
@@ -299,8 +277,8 @@ export default function LandingPageEn() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
             <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Telegram</a>
-            <a href="/privacy" className="hover:text-white transition">Privacy</a>
-            <a href="/terms" className="hover:text-white transition">Terms</a>
+            <a href="/privacy" className="hover:text-white transition">Конфиденциальность</a>
+            <a href="/terms" className="hover:text-white transition">Условия</a>
           </div>
         </div>
       </footer>
