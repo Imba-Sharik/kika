@@ -790,16 +790,27 @@ export function getVoiceSampleText(voice: Voice, fallbackLocale = 'en'): string 
 }
 
 /**
- * Подобрать дефолтный voice для локали. Берём первый голос у которого
- * `langs[0] === locale` (порядок в BUILTIN_VOICES определяет дефолт). Для
- * русского — фиксированно Mita (исторический дефолт, юзеры привыкли).
+ * Дефолтный голос для каждой локали — выбран вручную из соображений качества/звучания.
+ * Если в карте нет — fallback на первый голос с langs[0]===locale, иначе ElevenLabs.
  */
+const LOCALE_DEFAULT_VOICE: Record<string, string> = {
+  ru: 'fish-voice-1',          // Mita
+  ja: 'fish-fern',             // フェルン
+  ko: 'fish-ko-20s-female',    // 20대 여성
+  zh: 'fish-zh-faccba1a',      // 温柔动听女声
+  de: 'fish-egirl',            // e girl
+  pt: 'fish-garota-fofa',      // Garota fofa
+  es: 'fish-madoka',           // Madoka
+  en: 'eleven-kika',           // ElevenLabs Yukai
+}
+
 export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = []): string {
-  if (locale === 'ru') return 'fish-voice-1' // Mita
+  const explicit = LOCALE_DEFAULT_VOICE[locale]
+  if (explicit) return explicit
+  // Fallback: первый голос с langs[0]===locale
   const all = [...BUILTIN_VOICES, ...userVoices]
   const match = all.find((v) => v.langs?.[0] === locale)
   if (match) return match.id
-  // Fallback если для локали нет ни одного голоса
   return 'eleven-kika'
 }
 
