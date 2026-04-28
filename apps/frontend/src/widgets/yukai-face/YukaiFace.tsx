@@ -34,7 +34,32 @@ const EMOTION_SRC: Record<Emotion, string> = {
 
 const FADE_MS = 250
 
+// Все 16 PNG предзагружаются один раз при первом mount YukaiFace —
+// HTTP cache браузера → последующие смены эмоций instant. Без этого первый
+// показ каждой эмоции вызывал ~50-200ms задержку (HTTP fetch).
+//
+// Используем requestIdleCallback чтобы не конкурировать с первичным рендером
+// (active emotion грузится через <img> с приоритетом, остальные — в idle).
+let preloaded = false
+function preloadEmotions() {
+  if (preloaded || typeof window === 'undefined') return
+  preloaded = true
+  const run = () => {
+    for (const src of Object.values(EMOTION_SRC)) {
+      const img = new Image()
+      img.src = src
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const idle = (window as any).requestIdleCallback as ((cb: () => void) => void) | undefined
+  if (idle) idle(run)
+  else setTimeout(run, 200)
+}
+
 export function YukaiFace({ emotion, audio, size = 320, overrides }: Props) {
+  // Прелоад всех эмоций на первом mount компонента — синхронно, без эффекта.
+  // Браузер начинает качать в параллель, к моменту смены emotion картинка уже в cache.
+  preloadEmotions()
   const [amplitude, setAmplitude] = useState(0)
   const rafRef = useRef<number | null>(null)
   const ctxRef = useRef<AudioContext | null>(null)
