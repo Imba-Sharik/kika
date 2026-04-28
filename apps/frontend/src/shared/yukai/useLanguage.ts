@@ -35,7 +35,7 @@ export function setLanguagePreference(_lang: Language) {
  */
 // flag — путь к PNG в public/language/. Для en пока нет файла → emoji fallback.
 export const ALL_LOCALES = [
-  { code: 'en', label: 'English', short: 'EN', flag: '🇬🇧', flagPng: null },
+  { code: 'en', label: 'English', short: 'EN', flag: '🇺🇸', flagPng: '/language/EN.png' },
   { code: 'ru', label: 'Русский', short: 'RU', flag: '🇷🇺', flagPng: '/language/RU.png' },
   { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵', flagPng: '/language/JP.png' },
   { code: 'ko', label: '한국어', short: 'KO', flag: '🇰🇷', flagPng: '/language/KR.png' },

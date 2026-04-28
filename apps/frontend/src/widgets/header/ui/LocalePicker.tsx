@@ -63,17 +63,21 @@ function FlagIcon({
   flagPng: string | null
 }) {
   if (flagPng) {
+    // object-cover + размер обёртки 5x5 нормализует флаги с разным внутренним
+    // padding'ом — даже если в исходном PNG флаг занимает 70% bbox, обёртка
+    // обрежет лишние края и масштабирует под одинаковый круг.
     return (
-      <Image
-        src={flagPng}
-        alt={code}
-        width={20}
-        height={20}
-        className="h-5 w-5 shrink-0 rounded-full object-cover"
-        unoptimized
-      />
+      <span className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full">
+        <Image
+          src={flagPng}
+          alt={code}
+          fill
+          sizes="20px"
+          className="object-cover"
+          unoptimized
+        />
+      </span>
     )
   }
-  // Fallback emoji для en (нет PNG-файла в public/language/)
   return <span className="text-base leading-none">{flag}</span>
 }
