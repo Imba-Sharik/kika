@@ -3,7 +3,8 @@
 import { useState, type FormEvent } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 import { cn } from "@/shared/lib/utils"
 import { STRAPI_API_URL } from "@/shared/api/strapi"
@@ -16,15 +17,13 @@ import {
 } from "@/shared/ui/field"
 import { Input } from "@/shared/ui/input"
 import { PasswordInput } from "@/shared/ui/password-input"
-import { useLanguage } from "@/shared/yukai/useLanguage"
-import { t } from "@/shared/yukai/i18n"
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
   const router = useRouter()
-  const lang = useLanguage()
+  const t = useTranslations('register')
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
 
@@ -39,13 +38,12 @@ export function RegisterForm({
     const confirmPassword = fd.get("confirmPassword") as string
 
     if (password !== confirmPassword) {
-      setError(t(lang, 'register.error.passwordMismatch'))
+      setError(t('error.passwordMismatch'))
       return
     }
 
     setPending(true)
     try {
-      // 1) Регистрация в Strapi напрямую — endpoint публичный, не нужен JWT
       const res = await fetch(`${STRAPI_API_URL}/auth/local/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,19 +51,17 @@ export function RegisterForm({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        setError(data?.error?.message ?? t(lang, 'register.error.failed'))
+        setError(data?.error?.message ?? t('error.failed'))
         return
       }
 
-      // 2) Сразу логиним юзера client-side signIn'ом — это синхронно обновит
-      // SessionProvider, иначе после редиректа на главной хедер останется анонимным
       const result = await signIn("credentials", {
         identifier: email,
         password,
         redirect: false,
       })
       if (!result || result.error) {
-        setError(t(lang, 'register.error.loginAfter'))
+        setError(t('error.loginAfter'))
         return
       }
 
@@ -88,7 +84,7 @@ export function RegisterForm({
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="username" className="text-white/80">
-            {t(lang, 'register.username')}
+            {t('username')}
           </FieldLabel>
           <Input
             id="username"
@@ -102,7 +98,7 @@ export function RegisterForm({
         </Field>
         <Field>
           <FieldLabel htmlFor="email" className="text-white/80">
-            {t(lang, 'register.email')}
+            {t('email')}
           </FieldLabel>
           <Input
             id="email"
@@ -116,7 +112,7 @@ export function RegisterForm({
         </Field>
         <Field>
           <FieldLabel htmlFor="password" className="text-white/80">
-            {t(lang, 'register.password')}
+            {t('password')}
           </FieldLabel>
           <PasswordInput
             id="password"
@@ -126,12 +122,12 @@ export function RegisterForm({
             required
           />
           <FieldDescription className="text-white/40">
-            {t(lang, 'register.password.hint')}
+            {t('password.hint')}
           </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="confirmPassword" className="text-white/80">
-            {t(lang, 'register.confirmPassword')}
+            {t('confirmPassword')}
           </FieldLabel>
           <PasswordInput
             id="confirmPassword"
@@ -148,16 +144,16 @@ export function RegisterForm({
             disabled={pending}
             className="rounded-xl bg-linear-to-r from-pink-500 to-violet-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {pending ? t(lang, 'register.submitting') : t(lang, 'register.submit')}
+            {pending ? t('submitting') : t('submit')}
           </button>
         </Field>
         <FieldDescription className="text-center text-white/60">
-          {t(lang, 'register.haveAccount')}{" "}
+          {t('haveAccount')}{" "}
           <Link
             href="/login"
             className="text-pink-300 underline-offset-4 hover:text-pink-200 hover:underline"
           >
-            {t(lang, 'register.haveAccount.cta')}
+            {t('haveAccount.cta')}
           </Link>
         </FieldDescription>
       </FieldGroup>

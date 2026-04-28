@@ -1,13 +1,12 @@
 "use client"
 
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 import { LoginForm } from "@/features/auth/ui/LoginForm"
-import { useLanguage } from "@/shared/yukai/useLanguage"
-import { t } from "@/shared/yukai/i18n"
 
 export default function LoginPage() {
-  const lang = useLanguage()
+  const t = useTranslations('login')
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col items-center justify-center px-6 py-12">
@@ -23,12 +22,12 @@ export default function LoginPage() {
         />
         <div>
           <h1 className="text-3xl font-bold">
-            {t(lang, 'login.title')}{" "}
+            {t('title')}{" "}
             <span className="bg-linear-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">
               ✨
             </span>
           </h1>
-          <p className="mt-2 text-sm text-white/60">{t(lang, 'login.subtitle')}</p>
+          <p className="mt-2 text-sm text-white/60">{t('subtitle')}</p>
         </div>
       </div>
       <div className="relative w-full">

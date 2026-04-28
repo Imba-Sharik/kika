@@ -3,10 +3,10 @@
 import { useState, type FormEvent, type CSSProperties } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { STRAPI_API_URL } from '@/shared/api/strapi'
-import type { Language } from '@/shared/yukai/persona'
-import { t } from '@/shared/yukai/i18n'
+import { useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
 
 type Mode = 'signup' | 'signin'
 
@@ -18,14 +18,13 @@ type Mode = 'signup' | 'signin'
  * Показывается когда useSession() возвращает null. После успешного логина
  * SessionProvider обновляется → !session становится false → баббл прячется.
  */
-export function AuthGateBubble({
-  language,
-  onLanguageChange,
-}: {
-  language: Language
-  onLanguageChange: (lang: Language) => void
-}) {
+export function AuthGateBubble() {
   const router = useRouter()
+  const tLogin = useTranslations('login')
+  const tRegister = useTranslations('register')
+  const tNav = useTranslations('nav')
+  const { current: locale, switchTo } = useLocaleSwitcher()
+
   const [mode, setMode] = useState<Mode>('signup')
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
@@ -37,7 +36,7 @@ export function AuthGateBubble({
       redirect: false,
     })
     if (!result || result.error) {
-      setError(t(language, 'login.error.invalid'))
+      setError(tLogin('error.invalid'))
       return false
     }
     return true
@@ -62,7 +61,7 @@ export function AuthGateBubble({
         })
         if (!res.ok) {
           const data = await res.json().catch(() => null)
-          setError(data?.error?.message ?? t(language, 'register.error.failed'))
+          setError(data?.error?.message ?? tRegister('error.failed'))
           return
         }
         ok = await doSignIn(email, password)
@@ -76,6 +75,14 @@ export function AuthGateBubble({
       setPending(false)
     }
   }
+
+  // 3 quick toggles в баббле — для остальных локалей юзер использует Header LocalePicker
+  // когда залогинится. На AuthGate показываем самые востребованные.
+  const QUICK_LOCALES: { code: LocaleCode; label: string }[] = [
+    { code: 'en', label: 'EN' },
+    { code: 'ja', label: '日本語' },
+    { code: 'ru', label: 'RU' },
+  ]
 
   return (
     <div
@@ -96,25 +103,22 @@ export function AuthGateBubble({
         zIndex: 10,
       }}
     >
-      {/* Язык — компактный тоггл в правом верхнем углу. onLanguageChange
-          (=selectLanguage из overlay) обновит state, сохранит в localStorage,
-          подберёт голос и при необходимости редиректнёт на другой домен. */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8, gap: 8 }}>
         <div style={{ fontWeight: 600 }}>
-          {mode === 'signup' ? t(language, 'register.title') : t(language, 'login.title')} 👋
+          {mode === 'signup' ? tRegister('title') : tLogin('title')} 👋
         </div>
-        <div style={{ display: 'flex', gap: 4, fontSize: 10, opacity: 0.85 }}>
-          <button type="button" onClick={() => onLanguageChange('ru')} style={langStyle(language === 'ru')}>
-            RU
-          </button>
-          <span style={{ opacity: 0.4 }}>·</span>
-          <button type="button" onClick={() => onLanguageChange('en')} style={langStyle(language === 'en')}>
-            EN
-          </button>
+        <div style={{ display: 'flex', gap: 6, fontSize: 10, opacity: 0.85 }}>
+          {QUICK_LOCALES.map((l, i) => (
+            <span key={l.code} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <button type="button" onClick={() => switchTo(l.code)} style={langStyle(locale === l.code)}>
+                {l.label}
+              </button>
+              {i < QUICK_LOCALES.length - 1 && <span style={{ opacity: 0.4 }}>·</span>}
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* Toggle между signup / signin */}
       <div style={{ display: 'flex', gap: 4, marginBottom: 10 }}>
         <button
           type="button"
@@ -124,7 +128,7 @@ export function AuthGateBubble({
           }}
           style={tabStyle(mode === 'signup')}
         >
-          {t(language, 'nav.signup')}
+          {tNav('signup')}
         </button>
         <button
           type="button"
@@ -134,7 +138,7 @@ export function AuthGateBubble({
           }}
           style={tabStyle(mode === 'signin')}
         >
-          {t(language, 'nav.signin')}
+          {tNav('signin')}
         </button>
       </div>
 
@@ -143,7 +147,7 @@ export function AuthGateBubble({
           <input
             type="text"
             name="username"
-            placeholder={t(language, 'register.username')}
+            placeholder={tRegister('username')}
             required
             autoComplete="username"
             style={inputStyle}
@@ -152,7 +156,7 @@ export function AuthGateBubble({
         <input
           type="email"
           name="email"
-          placeholder={t(language, 'login.email')}
+          placeholder={tLogin('email')}
           required
           autoComplete="email"
           style={inputStyle}
@@ -160,7 +164,7 @@ export function AuthGateBubble({
         <input
           type="password"
           name="password"
-          placeholder={t(language, 'login.password')}
+          placeholder={tLogin('password')}
           required
           autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
           minLength={mode === 'signup' ? 8 : undefined}
@@ -189,11 +193,11 @@ export function AuthGateBubble({
         >
           {pending
             ? mode === 'signup'
-              ? t(language, 'register.submitting')
-              : t(language, 'login.submitting')
+              ? tRegister('submitting')
+              : tLogin('submitting')
             : mode === 'signup'
-              ? t(language, 'register.submit')
-              : t(language, 'login.submit')}
+              ? tRegister('submit')
+              : tLogin('submit')}
         </button>
       </form>
 

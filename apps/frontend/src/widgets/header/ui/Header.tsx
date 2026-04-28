@@ -1,18 +1,16 @@
 "use client"
 
+import { useLocale, useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
-import { useLocale } from "next-intl"
 import { UserNav } from "./UserNav"
-import { useLanguage } from "@/shared/yukai/useLanguage"
-import { t } from "@/shared/yukai/i18n"
 import { ALL_LOCALES, type LocaleCode } from "@/shared/yukai/useLanguage"
 
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 
 export function Header() {
-  const lang = useLanguage() // ru | en (для t() bridge)
-  const locale = useLocale() as LocaleCode // полный список (en/ru/ja/ko/de/fr/pt)
+  const t = useTranslations('nav')
+  const locale = useLocale() as LocaleCode
   const router = useRouter()
   const pathname = usePathname()
 
@@ -30,13 +28,12 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-6">
-          {/* Группа 1: навигация */}
           <div className="hidden md:flex items-center gap-5 text-sm text-white/70">
             <Link href="/#pricing" className="hover:text-white transition">
-              {t(lang, 'nav.pricing')}
+              {t('pricing')}
             </Link>
             <Link href="/#faq" className="hover:text-white transition">
-              {t(lang, 'nav.faq')}
+              {t('faq')}
             </Link>
             <a
               href={TELEGRAM_URL}
@@ -44,20 +41,18 @@ export function Header() {
               rel="noopener noreferrer"
               className="hover:text-white transition"
             >
-              {t(lang, 'nav.devchat')}
+              {t('devchat')}
             </a>
             <Link href="/privacy" className="hover:text-white transition">
-              {t(lang, 'nav.privacy')}
+              {t('privacy')}
             </Link>
             <Link href="/terms" className="hover:text-white transition">
-              {t(lang, 'nav.terms')}
+              {t('terms')}
             </Link>
           </div>
 
-          {/* Разделитель */}
           <span className="hidden md:inline-block h-5 w-px bg-white/10" aria-hidden />
 
-          {/* Группа 2: язык + auth + CTA */}
           <div className="flex items-center gap-3">
             <LocalePicker current={locale} onChange={switchLocale} />
             <UserNav />
@@ -65,7 +60,7 @@ export function Header() {
               href={DOWNLOAD_URL}
               className="rounded-lg bg-linear-to-r from-pink-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-pink-500/30 transition hover:shadow-pink-500/50"
             >
-              {t(lang, 'nav.download')}
+              {t('download')}
             </a>
           </div>
         </div>

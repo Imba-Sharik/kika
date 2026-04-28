@@ -1,7 +1,8 @@
 "use client"
 
 import { signOut, useSession } from "next-auth/react"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,30 +10,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu"
-import { useLanguage } from "@/shared/yukai/useLanguage"
-import { t } from "@/shared/yukai/i18n"
 
 export function UserNav() {
   const { data: session, status } = useSession()
-  const lang = useLanguage()
+  const t = useTranslations('nav')
 
   // Пока сессия грузится — не показываем ни кнопки логина, ни аватар.
-  // Иначе у залогиненного юзера сначала промелькнут "Войти / Регистрация",
-  // потом сменятся на аватар. Лучше короткая пустота чем flash.
   if (status === 'loading') {
     return <div className="h-9 w-9" aria-hidden />
   }
 
   if (!session) {
-    // На лендинге убрали "Регистрация" — регистрация юзера идёт после скачивания
-    // (proxy.ts редиректит на /login при первом запуске app). Меньше choice paralysis,
-    // одна основная цель = скачать.
     return (
       <Link
         href="/login"
         className="text-sm text-white/70 hover:text-white transition"
       >
-        {t(lang, 'nav.signin')}
+        {t('signin')}
       </Link>
     )
   }
@@ -63,11 +57,11 @@ export function UserNav() {
         </div>
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuItem asChild className="text-white focus:bg-white/10 focus:text-white">
-          <Link href="/overlay">{t(lang, 'nav.openApp')}</Link>
+          <Link href="/overlay">{t('openApp')}</Link>
         </DropdownMenuItem>
         {session.user?.role === 'manager' && (
           <DropdownMenuItem asChild className="text-white focus:bg-white/10 focus:text-white">
-            <Link href="/analytics">{t(lang, 'nav.analytics')}</Link>
+            <Link href="/analytics">{t('analytics')}</Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator className="bg-white/10" />
@@ -75,7 +69,7 @@ export function UserNav() {
           onClick={() => signOut({ callbackUrl: '/' })}
           className="text-white focus:bg-white/10 focus:text-white"
         >
-          {t(lang, 'nav.signout')}
+          {t('signout')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

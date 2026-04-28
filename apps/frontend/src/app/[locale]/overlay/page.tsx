@@ -509,7 +509,7 @@ export default function OverlayPage() {
             рядом с персонажем. Onboarding ниже скрыт пока auth не пройден.
             sessionStatus 'loading' → ничего не показываем (избегаем flash). */}
         {sessionStatus !== 'loading' && !session && (
-          <AuthGateBubble language={language} onLanguageChange={selectLanguage} />
+          <AuthGateBubble />
         )}
 
         {/* Онбординг: показывается один раз при первом запуске справа от персонажа.

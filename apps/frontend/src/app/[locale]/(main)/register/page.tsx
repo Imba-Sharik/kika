@@ -1,13 +1,12 @@
 "use client"
 
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 import { RegisterForm } from "@/features/auth/ui/RegisterForm"
-import { useLanguage } from "@/shared/yukai/useLanguage"
-import { t } from "@/shared/yukai/i18n"
 
 export default function RegisterPage() {
-  const lang = useLanguage()
+  const t = useTranslations('register')
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col items-center justify-center px-6 py-12">
@@ -24,10 +23,10 @@ export default function RegisterPage() {
         <div>
           <h1 className="text-3xl font-bold">
             <span className="bg-linear-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">
-              {t(lang, 'register.title')}
+              {t('title')}
             </span>
           </h1>
-          <p className="mt-2 text-sm text-white/60">{t(lang, 'register.subtitle')}</p>
+          <p className="mt-2 text-sm text-white/60">{t('subtitle')}</p>
         </div>
       </div>
       <div className="relative w-full">
