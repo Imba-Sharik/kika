@@ -1,17 +1,10 @@
-import LandingPageRu from './LandingPageRu'
-import LandingPageEn from './LandingPageEn'
+import Landing from './Landing'
 
 /**
- * Лендинг рендерится по locale из URL. /ru → русская версия, всё остальное
- * (en/ja/ko/de/fr/pt) — пока английская. Полная локализация лендинга на
- * 5 новых языков идёт в следующей фазе (требует разнести ~80 строк по JSON).
+ * Лендинг рендерится через next-intl. Контент берётся из messages/{locale}.json
+ * (namespace 'landing'). Один компонент Landing.tsx с useTranslations() —
+ * работает на всех 7 локалях без дублирования файлов.
  */
-export default async function LandingPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  if (locale === 'ru') return <LandingPageRu />
-  return <LandingPageEn />
+export default function LandingPage() {
+  return <Landing />
 }

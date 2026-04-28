@@ -34,13 +34,13 @@ export function setLanguagePreference(_lang: Language) {
  * Используется в Header и Settings.
  */
 export const ALL_LOCALES = [
-  { code: 'en', label: 'English', short: 'EN' },
-  { code: 'ru', label: 'Русский', short: 'RU' },
-  { code: 'ja', label: '日本語', short: 'JA' },
-  { code: 'ko', label: '한국어', short: 'KO' },
-  { code: 'de', label: 'Deutsch', short: 'DE' },
-  { code: 'fr', label: 'Français', short: 'FR' },
-  { code: 'pt', label: 'Português', short: 'PT' },
+  { code: 'en', label: 'English', short: 'EN', flag: '🇬🇧' },
+  { code: 'ru', label: 'Русский', short: 'RU', flag: '🇷🇺' },
+  { code: 'ja', label: '日本語', short: 'JA', flag: '🇯🇵' },
+  { code: 'ko', label: '한국어', short: 'KO', flag: '🇰🇷' },
+  { code: 'de', label: 'Deutsch', short: 'DE', flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', short: 'FR', flag: '🇫🇷' },
+  { code: 'pt', label: 'Português', short: 'PT', flag: '🇧🇷' },
 ] as const
 
 export type LocaleCode = (typeof ALL_LOCALES)[number]['code']

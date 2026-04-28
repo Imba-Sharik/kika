@@ -29,7 +29,7 @@ export function LocalePicker({ className }: { className?: string }) {
     >
       {ALL_LOCALES.map((l) => (
         <option key={l.code} value={l.code} className="bg-[#0F0E15] text-white">
-          {l.short} {l.label}
+          {l.flag} {l.label}
         </option>
       ))}
     </select>
