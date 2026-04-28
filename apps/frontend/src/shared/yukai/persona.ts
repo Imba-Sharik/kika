@@ -166,7 +166,19 @@ export const YUKAI_DEFAULT_PERSONA = `Ты — Юкай (Yukai), AI-компан
 поддразниваешь, с лёгкой игривостью. Без детскости, без наигранной
 кавайности. Говоришь живо, по-человечески, коротко.`
 
-export type Language = 'ru' | 'en'
+export type Language = 'en' | 'ru' | 'ja' | 'ko' | 'zh' | 'de' | 'fr' | 'pt' | 'es'
+
+const LANG_NAME: Record<Language, string> = {
+  en: 'English',
+  ru: 'Russian (русский)',
+  ja: 'Japanese (日本語)',
+  ko: 'Korean (한국어)',
+  zh: 'Chinese (中文)',
+  de: 'German (Deutsch)',
+  fr: 'French (Français)',
+  pt: 'Portuguese (Português)',
+  es: 'Spanish (Español)',
+}
 
 const EMOTION_PROTOCOL_EN = `Response formatting rules (technical):
 - Default to English
@@ -209,8 +221,18 @@ Examples of correct response:
 
 NEVER write a response without an emotion tag at the start.`
 
-export function buildSystemPrompt(persona: string, language: Language = 'ru'): string {
-  const protocol = language === 'en' ? EMOTION_PROTOCOL_EN : EMOTION_PROTOCOL
+export function buildSystemPrompt(persona: string, language: Language = 'en'): string {
+  // Русский — нативный protocol (исторический). Остальные локали — английский
+  // protocol с инструкцией "respond in {lang}". Claude отлично следует этой
+  // инструкции, выдаёт ответ на нужном языке. Эмоции и теги работают одинаково.
+  if (language === 'ru') {
+    return `${persona.trim()}\n\n${EMOTION_PROTOCOL}`
+  }
+  const langName = LANG_NAME[language] ?? 'English'
+  const protocol = EMOTION_PROTOCOL_EN.replace(
+    '- Default to English',
+    `- Default to ${langName} — respond in this language by default. If user explicitly asks for another language, do it briefly then switch back.`
+  )
   return `${persona.trim()}\n\n${protocol}`
 }
 

@@ -36,7 +36,6 @@ const EMOTION_STORAGE_KEY = 'kika:overlay:emotion'
 const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
 const VOICE_STORAGE_KEY = 'kika:overlay:voiceId'
 const VAD_THRESHOLD_KEY = 'kika:overlay:vadThreshold'
-const LANGUAGE_KEY = 'kika:overlay:language'
 const DEFAULT_VAD_THRESHOLD = 0.4
 
 // Устаревшие [APPEND:]/[WRITE:] текстовые теги больше не используются —
@@ -128,59 +127,14 @@ export default function OverlayPage() {
     setVadThreshold(v)
     try { localStorage.setItem(VAD_THRESHOLD_KEY, String(v)) } catch {}
   }
-  // Default 'ru' на SSR — useEffect подхватывает реальное значение после маунта.
-  // Логика выбора:
-  //   1. Если юзер уже выбирал в Settings — берём из localStorage
-  //   2. Иначе по хосту: ru.yukai.app → ru, yukai.app → en
-  //   3. Если хост непонятный (localhost dev) — fallback на navigator.language
-  //   4. Сохраняем чтобы следующий запуск не пересчитывать
-  const [language, setLanguage] = useState<Language>('ru')
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(LANGUAGE_KEY)
-      if (saved === 'en' || saved === 'ru') {
-        setLanguage(saved)
-        return
-      }
-      // Первый запуск — определяем по хосту, потом по системной локали
-      const host = window.location.hostname.toLowerCase()
-      let detected: Language
-      if (host.startsWith('ru.')) {
-        detected = 'ru'
-      } else if (host === 'yukai.app' || host.endsWith('.vercel.app')) {
-        detected = 'en'
-      } else {
-        // localhost / dev — fallback на системную локаль
-        const sys = (navigator.language || 'en').toLowerCase()
-        detected = sys.startsWith('ru') ? 'ru' : 'en'
-      }
-      setLanguage(detected)
-      localStorage.setItem(LANGUAGE_KEY, detected)
-      // Голос подбираем подходящий: EN → ElevenLabs, RU → Fish (default)
-      if (detected === 'en') {
-        setVoiceId('eleven-kika')
-        try { localStorage.setItem(VOICE_STORAGE_KEY, 'eleven-kika') } catch {}
-      }
-    } catch {}
-  }, [])
-  function selectLanguage(l: Language) {
-    setLanguage(l)
-    try { localStorage.setItem(LANGUAGE_KEY, l) } catch {}
-    // При смене RU↔EN авто-подбираем подходящий voice (Fish для русского, ElevenLabs для англ).
-    if (l === 'en' && voiceId !== 'eleven-kika') selectVoice('eleven-kika')
-    if (l === 'ru' && voiceId === 'eleven-kika') selectVoice(DEFAULT_VOICE_ID)
-    // Меняем домен под выбранный язык: ru.yukai.app для русского, yukai.app для английского.
-    // Только в production. Localhost / dev — никаких переходов, остаёмся где есть.
-    if (typeof window !== 'undefined') {
-      const host = window.location.hostname
-      const path = window.location.pathname + window.location.search
-      if (l === 'ru' && host === 'yukai.app') {
-        window.location.replace('https://ru.yukai.app' + path)
-      } else if (l === 'en' && host === 'ru.yukai.app') {
-        window.location.replace('https://yukai.app' + path)
-      }
-    }
-  }
+  // Source of truth для языка ответа Yukai — URL-локаль через next-intl.
+  // Меняется через LocalePicker (Header / Settings) — он зовёт router.replace.
+  // localStorage LANGUAGE_KEY оставлен только для legacy-миграции (старые версии
+  // хранили 'ru'/'en' там), сейчас не используется.
+  const language = currentLocale as Language
+  // No-op для совместимости с SettingsPanel onSelectLanguage prop.
+  // Реальное переключение делает LocalePicker внутри Settings.
+  const selectLanguage = (_l: Language) => { void _l }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
   // Показываем первую подсказку «как начать разговор» один раз. Ключ версионирован —
