@@ -283,17 +283,17 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t('settings.voice')}
           </label>
-          <div style={{ display: 'flex', gap: 6, width: '100%' }}>
+          <div style={{ position: 'relative', width: '100%' }}>
           <select
             value={voiceId}
             onChange={(e) => onSelectVoice(e.target.value)}
             style={{
-              flex: 1,
-              minWidth: 0,
+              width: '100%',
               background: '#1f2937',
               color: 'white',
               border: '1px solid #374151',
-              padding: '6px 8px',
+              // паддинг справа = chevron native селекта (~22px) + кнопка ▶ (24px) + зазор (8px)
+              padding: '6px 54px 6px 8px',
               fontSize: 12,
               borderRadius: 4,
             }}
@@ -313,18 +313,21 @@ export function SettingsPanel({
             onClick={previewVoice}
             title={previewState === 'idle' ? 'Preview voice' : 'Stop'}
             style={{
-              flexShrink: 0,
-              width: 36,
-              height: 30,
+              position: 'absolute',
+              right: 26, // оставляем место для нативной стрелки селекта справа
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: 22,
+              height: 22,
               background:
                 previewState === 'idle'
-                  ? 'rgba(244, 114, 182, 0.18)'
-                  : 'rgba(244, 114, 182, 0.35)',
+                  ? 'rgba(244, 114, 182, 0.2)'
+                  : 'rgba(244, 114, 182, 0.4)',
               color: '#f9a8d4',
               border: '1px solid rgba(244, 114, 182, 0.5)',
-              borderRadius: 4,
+              borderRadius: 3,
               cursor: previewState === 'loading' ? 'wait' : 'pointer',
-              fontSize: 14,
+              fontSize: 11,
               lineHeight: 1,
               padding: 0,
               display: 'flex',

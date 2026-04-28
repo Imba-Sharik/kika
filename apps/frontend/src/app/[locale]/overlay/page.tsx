@@ -430,6 +430,28 @@ export default function OverlayPage() {
   // всегда звали актуальную версию send().
   useEffect(() => { sendRef.current = send })
 
+  // Click-through: окно по умолчанию пропускает клики на десктоп под ним
+  // (setIgnoreMouseEvents(true, {forward:true}) в main.js). При hover на
+  // интерактивный элемент с data-interactive — переключаем ignore=false,
+  // при уходе — обратно true. Делегируем через pointermove на root.
+  // throttle через requestAnimationFrame чтобы не спамить IPC.
+  const ignoreRef = useRef(true)
+  const rafRef = useRef<number | null>(null)
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (rafRef.current !== null) return
+    const target = e.target as Element
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null
+      const interactive = target.closest('[data-interactive="true"]') !== null
+      const shouldIgnore = !interactive
+      if (shouldIgnore !== ignoreRef.current) {
+        ignoreRef.current = shouldIgnore
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ;(window as any).electronAPI?.setMouseIgnore?.(shouldIgnore)
+      }
+    })
+  }
+
   return (
     <YukaiContextProvider value={kikaCtx}>
       {/* Provider'ы ВСЕХ плагинов всегда монтируются — чтобы тогглы в настройках
@@ -437,9 +459,14 @@ export default function OverlayPage() {
           Хосты ниже уже фильтруют по activePlugins — слоты отключенных
           плагинов просто не рендерятся. */}
       <PluginProviders plugins={BUILTIN_PLUGINS} ctx={kikaCtx}>
-    <div className="fixed inset-0" style={{ background: 'transparent' }}>
+    <div
+      className="fixed inset-0"
+      style={{ background: 'transparent' }}
+      onPointerMove={handlePointerMove}
+    >
       {/* Персонаж — абсолютно позиционирован внизу-слева, НЕ двигается при toggle чата */}
       <div
+        data-interactive="true"
         style={{
           position: 'absolute',
           bottom: 0,
@@ -687,6 +714,7 @@ export default function OverlayPage() {
 
       {/* Чат — абсолют справа, display toggle (zero layout shift) */}
       <div
+        data-interactive="true"
         style={{
           ...noDragStyle,
           display: compact ? 'none' : 'flex',
@@ -865,22 +893,24 @@ export default function OverlayPage() {
       <PanelHost plugins={activePlugins} activeId={activePluginPanel} ctx={kikaCtx} />
 
       {settingsOpen && (
-        <SettingsPanel
-          micDeviceId={micDeviceId}
-          mics={mics}
-          onSelectMic={selectMic}
-          voiceId={voiceId}
-          onSelectVoice={selectVoiceManually}
-          vadProbability={mic.vadProbability}
-          vadThreshold={vadThreshold}
-          onSelectVadThreshold={selectVadThreshold}
-          onShowOnboardingAgain={showOnboardingAgain}
-          language={language}
-          onSelectLanguage={selectLanguage}
-          isPluginEnabled={isEnabled}
-          setPluginEnabled={setEnabled}
-          onClose={() => setSettingsOpen(false)}
-        />
+        <div data-interactive="true" style={{ display: 'contents' }}>
+          <SettingsPanel
+            micDeviceId={micDeviceId}
+            mics={mics}
+            onSelectMic={selectMic}
+            voiceId={voiceId}
+            onSelectVoice={selectVoiceManually}
+            vadProbability={mic.vadProbability}
+            vadThreshold={vadThreshold}
+            onSelectVadThreshold={selectVadThreshold}
+            onShowOnboardingAgain={showOnboardingAgain}
+            language={language}
+            onSelectLanguage={selectLanguage}
+            isPluginEnabled={isEnabled}
+            setPluginEnabled={setEnabled}
+            onClose={() => setSettingsOpen(false)}
+          />
+        </div>
       )}
 
       <audio

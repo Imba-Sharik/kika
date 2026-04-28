@@ -31,4 +31,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   captureScreen: () => ipcRenderer.invoke('capture-screen'),
   captureRegion: () => ipcRenderer.invoke('capture-region'),
   retryLoad: () => ipcRenderer.invoke('retry-load'),
+  setMouseIgnore: (ignore) => ipcRenderer.send('set-mouse-ignore', ignore),
 })

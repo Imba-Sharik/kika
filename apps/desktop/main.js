@@ -204,7 +204,13 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', () => {
     if (currentLoadTimer) { clearTimeout(currentLoadTimer); currentLoadTimer = null }
-    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.setIgnoreMouseEvents(false)
+    // Click-through по умолчанию: прозрачные части окна пропускают клики на стол.
+    // forward:true сохраняет mouseenter/leave для hit-detection — фронт через IPC
+    // переключает ignore=false когда мышь над интерактивным элементом (Yukai face,
+    // меню, панели), и обратно true когда уходит.
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.setIgnoreMouseEvents(true, { forward: true })
+    }
     // Запоминаем рабочий origin — следующий запуск начнём с него
     const url = mainWindow?.webContents.getURL() || ''
     if (url.startsWith(ORIGINS.direct)) setLastWorkingOrigin(ORIGINS.direct)
@@ -243,6 +249,14 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   }
 }
+
+// Click-through toggle для overlay. Фронт зовёт setMouseIgnore(false) на
+// onMouseEnter интерактивных элементов и setMouseIgnore(true) на onMouseLeave —
+// прозрачные части окна не блокируют клики на иконки рабочего стола под ним.
+ipcMain.on('set-mouse-ignore', (_event, ignore) => {
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  mainWindow.setIgnoreMouseEvents(!!ignore, { forward: true })
+})
 
 // Кнопка "Повторить" из fallback.html — повторяет попытку загрузки фронта,
 // сбрасывая список пробованных origin'ов и стартуя цикл заново.
