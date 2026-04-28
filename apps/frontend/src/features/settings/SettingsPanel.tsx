@@ -487,7 +487,10 @@ function AccountSection({ language }: { language: Language }) {
           </div>
           <button
             type="button"
-            onClick={() => signOut({ callbackUrl: '/' })}
+            // redirect: false — остаёмся в overlay'е, SessionProvider апдейтит
+            // session → AuthGateBubble автоматически появится поверх Yukai.
+            // Юзер видит "первый запуск"-UX, не выкидывается на лендинг.
+            onClick={() => signOut({ redirect: false })}
             style={{
               padding: '4px 10px',
               background: 'rgba(255,255,255,0.06)',
