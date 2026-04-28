@@ -198,8 +198,8 @@ export function SettingsPanel({
       setPreviewingId((cur) => (cur === id ? null : cur))
     }
   }
-  // Открыт ли список голосов
-  const [voiceListOpen, setVoiceListOpen] = useState(false)
+  // Поисковый запрос для фильтрации голосов
+  const [voiceSearch, setVoiceSearch] = useState('')
 
   // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
   // Для пользователей с заблокированным Vercel в РФ или со своим VPN.
@@ -300,12 +300,12 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t('settings.voice')}
           </label>
-          <VoiceSelect
+          <VoiceList
             voiceId={voiceId}
             onSelectVoice={onSelectVoice}
             languageGroups={voiceGroups.languageGroups}
-            open={voiceListOpen}
-            onOpenChange={setVoiceListOpen}
+            search={voiceSearch}
+            onSearchChange={setVoiceSearch}
             previewingId={previewingId}
             previewLoading={previewLoading}
             onPreview={previewVoiceById}
@@ -494,16 +494,17 @@ type Quota = {
 }
 
 /**
- * Кастомный voice picker — dropdown где в каждой строке кнопка ▶ для предпрослушивания
- * без выбора. Native <select> такое не позволяет, поэтому свой popover.
+ * Inline список голосов с поиском — встроен в Settings как обычная секция.
+ * Не модальный, всегда виден, скроллится отдельно. Поиск фильтрует по
+ * полному label (включая родное имя 落ち着いた女性 и т.п.).
  */
 type VoiceGroup = { lang: string; label: string; voices: typeof BUILTIN_VOICES }
-function VoiceSelect({
+function VoiceList({
   voiceId,
   onSelectVoice,
   languageGroups,
-  open,
-  onOpenChange,
+  search,
+  onSearchChange,
   previewingId,
   previewLoading,
   onPreview,
@@ -511,131 +512,118 @@ function VoiceSelect({
   voiceId: string
   onSelectVoice: (id: string) => void
   languageGroups: VoiceGroup[]
-  open: boolean
-  onOpenChange: (v: boolean) => void
+  search: string
+  onSearchChange: (v: string) => void
   previewingId: string | null
   previewLoading: string | null
   onPreview: (id: string) => void
 }) {
-  const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const selected = findVoice(voiceId, [])
-  const selectedLabel = selected.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')
-
-  // Закрытие при клике вне
-  useEffect(() => {
-    if (!open) return
-    function onClick(e: MouseEvent) {
-      if (!wrapperRef.current?.contains(e.target as Node)) onOpenChange(false)
-    }
-    document.addEventListener('mousedown', onClick)
-    return () => document.removeEventListener('mousedown', onClick)
-  }, [open, onOpenChange])
+  const q = search.trim().toLowerCase()
+  const filtered = q
+    ? languageGroups
+        .map((g) => ({
+          ...g,
+          voices: g.voices.filter((v) => v.label.toLowerCase().includes(q) || v.id.toLowerCase().includes(q)),
+        }))
+        .filter((g) => g.voices.length > 0)
+    : languageGroups
 
   return (
-    <div ref={wrapperRef} style={{ position: 'relative', width: '100%' }}>
-      <button
-        type="button"
-        onClick={() => onOpenChange(!open)}
+    <div style={{ width: '100%' }}>
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => onSearchChange(e.target.value)}
+        placeholder="Поиск голоса…"
         style={{
           width: '100%',
           background: '#1f2937',
           color: 'white',
           border: '1px solid #374151',
-          padding: '6px 28px 6px 8px',
+          padding: '6px 8px',
           fontSize: 12,
           borderRadius: 4,
-          textAlign: 'left',
-          cursor: 'pointer',
-          position: 'relative',
+          marginBottom: 6,
+        }}
+      />
+      <div
+        style={{
+          maxHeight: 260,
+          overflowY: 'auto',
+          background: '#0f1115',
+          border: '1px solid #374151',
+          borderRadius: 4,
         }}
       >
-        {selectedLabel}
-        <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', fontSize: 10, color: '#9ca3af' }}>▾</span>
-      </button>
-      {open && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            right: 0,
-            maxHeight: 320,
-            overflowY: 'auto',
-            background: '#0f1115',
-            border: '1px solid #374151',
-            borderRadius: 4,
-            zIndex: 10,
-            boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
-          }}
-        >
-          {languageGroups.map((g) => (
-            <div key={g.lang}>
-              <div style={{ padding: '6px 10px', fontSize: 10, color: '#9ca3af', fontWeight: 600, background: '#1a1d24', position: 'sticky', top: 0 }}>
-                {g.label}
-              </div>
-              {g.voices.map((v) => {
-                const isSelected = v.id === voiceId
-                const isPlaying = previewingId === v.id
-                const isLoading = previewLoading === v.id
-                const label = v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '').replace(/\s\([^)]+\)$/, '')
-                return (
-                  <div
-                    key={v.id}
-                    onClick={() => {
-                      onSelectVoice(v.id)
-                      onOpenChange(false)
+        {filtered.length === 0 && (
+          <div style={{ padding: 12, fontSize: 11, color: '#6b7280', textAlign: 'center' }}>
+            Не найдено
+          </div>
+        )}
+        {filtered.map((g) => (
+          <div key={g.lang}>
+            <div style={{ padding: '6px 10px', fontSize: 10, color: '#9ca3af', fontWeight: 600, background: '#1a1d24', position: 'sticky', top: 0, zIndex: 1 }}>
+              {g.label}
+            </div>
+            {g.voices.map((v) => {
+              const isSelected = v.id === voiceId
+              const isPlaying = previewingId === v.id
+              const isLoading = previewLoading === v.id
+              const label = v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '').replace(/\s\([^)]+\)$/, '')
+              return (
+                <div
+                  key={v.id}
+                  onClick={() => onSelectVoice(v.id)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '6px 8px',
+                    cursor: 'pointer',
+                    background: isSelected ? 'rgba(244, 114, 182, 0.15)' : 'transparent',
+                    borderLeft: isSelected ? '2px solid #f472b6' : '2px solid transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected) e.currentTarget.style.background = 'transparent'
+                  }}
+                >
+                  <span style={{ flex: 1, fontSize: 12, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onPreview(v.id)
                     }}
+                    title={isPlaying ? 'Stop' : 'Preview'}
                     style={{
+                      width: 22,
+                      height: 22,
+                      background: isPlaying || isLoading ? 'rgba(244, 114, 182, 0.4)' : 'rgba(244, 114, 182, 0.18)',
+                      color: '#f9a8d4',
+                      border: '1px solid rgba(244, 114, 182, 0.5)',
+                      borderRadius: 3,
+                      cursor: isLoading ? 'wait' : 'pointer',
+                      fontSize: 11,
+                      lineHeight: 1,
+                      padding: 0,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      padding: '6px 8px',
-                      cursor: 'pointer',
-                      background: isSelected ? 'rgba(244, 114, 182, 0.15)' : 'transparent',
-                      borderLeft: isSelected ? '2px solid #f472b6' : '2px solid transparent',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSelected) e.currentTarget.style.background = 'transparent'
+                      justifyContent: 'center',
+                      fontWeight: 600,
+                      flexShrink: 0,
                     }}
                   >
-                    <span style={{ flex: 1, fontSize: 12, color: 'white' }}>{label}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onPreview(v.id)
-                      }}
-                      title={isPlaying ? 'Stop' : 'Preview'}
-                      style={{
-                        width: 22,
-                        height: 22,
-                        background: isPlaying || isLoading ? 'rgba(244, 114, 182, 0.4)' : 'rgba(244, 114, 182, 0.18)',
-                        color: '#f9a8d4',
-                        border: '1px solid rgba(244, 114, 182, 0.5)',
-                        borderRadius: 3,
-                        cursor: isLoading ? 'wait' : 'pointer',
-                        fontSize: 11,
-                        lineHeight: 1,
-                        padding: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 600,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {isLoading ? '…' : isPlaying ? '■' : '▶'}
-                    </button>
-                  </div>
-                )
-              })}
-            </div>
-          ))}
-        </div>
-      )}
+                    {isLoading ? '…' : isPlaying ? '■' : '▶'}
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
