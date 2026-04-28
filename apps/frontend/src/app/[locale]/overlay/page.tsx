@@ -24,7 +24,7 @@ import {
   type Emotion,
   type Language,
 } from '@/shared/yukai/persona'
-import { t, translatePluginTitle } from '@/shared/yukai/i18n'
+import { useTranslations } from 'next-intl'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
 import { DEFAULT_VOICE_ID, findVoice } from '@/shared/yukai/voices'
 
@@ -64,6 +64,8 @@ const kbdStyle: React.CSSProperties = {
 }
 
 export default function OverlayPage() {
+  // i18n — useTranslations берёт строки из messages/{locale}.json
+  const tt = useTranslations()
   // Auth-state — если юзер не залогинен, поверх персонажа покажется AuthGateBubble
   // (паттерн как у onboarding-tooltip'а). До login AI-вызовы возвращают 403,
   // так что overlay рендерится но юзер не может говорить пока не зарегается.
@@ -534,15 +536,15 @@ export default function OverlayPage() {
               zIndex: 10,
             }}
           >
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>{t(language, 'onboarding.greet')} 👋</div>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>{tt('onboarding.greet')} 👋</div>
             <div style={{ marginBottom: 10 }}>
-              {t(language, 'onboarding.text1')} <kbd style={{
+              {tt('onboarding.text1')} <kbd style={{
                 padding: '1px 6px',
                 borderRadius: 3,
                 background: 'rgba(0,0,0,0.3)',
                 fontFamily: 'ui-monospace, monospace',
                 fontSize: 11,
-              }}>Ctrl+Z</kbd> {t(language, 'onboarding.text2')}
+              }}>Ctrl+Z</kbd> {tt('onboarding.text2')}
               <span style={{
                 display: 'inline-flex',
                 gap: 2,
@@ -560,7 +562,7 @@ export default function OverlayPage() {
                 <span style={{ width: 2, height: 7, background: '#22c55e' }} />
               </span>
               <br />
-              {t(language, 'onboarding.text3')}
+              {tt('onboarding.text3')}
             </div>
             {/* Подсказка про микрофон — частая боль на старте: дефолтный девайс
                 может быть не тот, permission в Windows не дан, VAD threshold
@@ -576,7 +578,7 @@ export default function OverlayPage() {
               }}
             >
               <div style={{ marginBottom: 4, opacity: 0.85 }}>
-                {t(language, 'onboarding.mic.hint')}
+                {tt('onboarding.mic.hint')}
               </div>
               <button
                 type="button"
@@ -596,7 +598,7 @@ export default function OverlayPage() {
                   cursor: 'pointer',
                 }}
               >
-                ⚙ {t(language, 'onboarding.mic.cta')}
+                ⚙ {tt('onboarding.mic.cta')}
               </button>
             </div>
             <button
@@ -614,7 +616,7 @@ export default function OverlayPage() {
                 cursor: 'pointer',
               }}
             >
-              {t(language, 'onboarding.dismiss')}
+              {tt('onboarding.dismiss')}
             </button>
             {/* Стрелочка к персонажу */}
             <div style={{
@@ -661,17 +663,28 @@ export default function OverlayPage() {
           // Порядок: Чат → плагины (в порядке регистрации) → Память → Настройки.
           const pluginItems = activePlugins
             .filter((p) => p.slots?.radial)
-            .map((p) => ({
-              icon: p.icon,
-              title: translatePluginTitle(language, p.id, p.slots!.radial!.title),
-              action: () => { p.slots!.radial!.onClick(kikaCtx); setMenuOpen(false) },
-            }))
+            .map((p) => {
+              // Если в messages есть plugin.<id>.title — используем перевод,
+              // иначе fallback на title из манифеста плагина.
+              const i18nKey = `plugin.${p.id}.title`
+              let translated: string
+              try {
+                translated = tt(i18nKey as never)
+              } catch {
+                translated = p.slots!.radial!.title
+              }
+              return {
+                icon: p.icon,
+                title: translated === i18nKey ? p.slots!.radial!.title : translated,
+                action: () => { p.slots!.radial!.onClick(kikaCtx); setMenuOpen(false) },
+              }
+            })
           const rawItems = [
-            { icon: '💬', title: t(language, 'menu.chat'), action: () => { togglePanel('chat'); setMenuOpen(false) } },
+            { icon: '💬', title: tt('menu.chat'), action: () => { togglePanel('chat'); setMenuOpen(false) } },
             ...pluginItems,
             {
               icon: '🧠',
-              title: t(language, 'menu.memory'),
+              title: tt('menu.memory'),
               action: () => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const api = (window as any).electronAPI
@@ -679,7 +692,7 @@ export default function OverlayPage() {
                 setMenuOpen(false)
               },
             },
-            { icon: '⚙', title: t(language, 'menu.settings'), action: () => { togglePanel('settings'); setMenuOpen(false) } },
+            { icon: '⚙', title: tt('menu.settings'), action: () => { togglePanel('settings'); setMenuOpen(false) } },
           ]
           const ARC_START = -90
           const ARC_END = 135
@@ -745,7 +758,7 @@ export default function OverlayPage() {
           <span style={{ color: '#fbbf24', fontWeight: 600 }}>Yukai</span>
           <span style={{ color: '#9ca3af' }}>·</span>
           <span style={{ color: '#d1d5db', flex: 1 }}>
-            {chat.error ? t(language, 'chat.status.error') : chat.speaking ? t(language, 'chat.status.speaking') : chat.loading ? t(language, 'chat.status.thinking') : t(language, 'chat.status.ready')}
+            {chat.error ? tt('chat.status.error') : chat.speaking ? tt('chat.status.speaking') : chat.loading ? tt('chat.status.thinking') : tt('chat.status.ready')}
           </span>
           {chat.lastTimings && (
             <span
@@ -762,7 +775,7 @@ export default function OverlayPage() {
           )}
           <button
             onClick={() => togglePanel('chat')}
-            title={t(language, 'overlay.close-chat')}
+            title={tt('overlay.close-chat')}
             style={{
               width: 22,
               height: 22,
@@ -786,7 +799,7 @@ export default function OverlayPage() {
         <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
           {chat.messages.length === 0 && !chat.streaming && (
             <div style={{ color: '#888', fontStyle: 'italic', padding: '8px 4px', lineHeight: 1.5 }}>
-              {t(language, 'onboarding.text1')} <kbd style={kbdStyle}>Ctrl+Z</kbd> {t(language, 'onboarding.text2')}
+              {tt('onboarding.text1')} <kbd style={kbdStyle}>Ctrl+Z</kbd> {tt('onboarding.text2')}
               <span style={{
                 display: 'inline-flex',
                 gap: 2,
@@ -823,7 +836,7 @@ export default function OverlayPage() {
             return (
               <div key={i} style={{ marginBottom: 8 }}>
                 <div style={{ color: isAssistant ? '#fbbf24' : '#60a5fa', fontSize: 10 }}>
-                  {isAssistant ? 'Yukai' : t(language, 'chat.you')}
+                  {isAssistant ? 'Yukai' : tt('chat.you')}
                 </div>
                 <div style={{ whiteSpace: 'pre-wrap' }}>{displayText}</div>
                 {imageParts.length > 0 && (
