@@ -174,10 +174,19 @@ export function SettingsPanel({
     // Другой id → прерываем текущее проигрывание и стартуем новое
     audioRef.current?.pause()
     const voice = findVoice(id, [])
-    const text = getVoiceSampleText(voice, locale)
     setPreviewLoading(id)
     try {
-      const res = await fetchTts(text, { provider: voice.provider, voiceId: voice.voiceId })
+      // Сначала пробуем pre-generated mp3 (быстрее: ~50ms vs ~1.5-2s live TTS)
+      let res: Response
+      const cachedUrl = `/voice-samples/${voice.voiceId}.mp3`
+      const cached = await fetch(cachedUrl).catch(() => null)
+      if (cached?.ok) {
+        res = cached
+      } else {
+        // Fallback на live TTS (новый голос ещё не пре-сгенерён или путь сломан)
+        const text = getVoiceSampleText(voice, locale)
+        res = await fetchTts(text, { provider: voice.provider, voiceId: voice.voiceId })
+      }
       if (!audioRef.current) audioRef.current = new Audio()
       setPreviewLoading(null)
       setPreviewingId(id)
