@@ -54,6 +54,9 @@ export function useMicListener({
   const onSpeechChangeRef = useRef(onSpeechChange)
   // testMode через ref — MicVAD callbacks захватывают закрытие один раз в start().
   const testModeRef = useRef(testMode)
+  // language через ref — иначе sendAudio замораживается на закрытии при start(),
+  // и при смене UI-локали STT продолжает слать прежний (часто 'en' default).
+  const languageRef = useRef(language)
 
   function setStateBoth(s: VadState) {
     if (s === 'off' && stateRef.current !== 'off') {
@@ -75,6 +78,11 @@ export function useMicListener({
   useEffect(() => {
     testModeRef.current = testMode
   }, [testMode])
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- ref-обновление, не setState
+  useEffect(() => {
+    languageRef.current = language
+  }, [language])
 
   // Живое обновление порога — без перезапуска VAD. setOptions пробрасывает
   // новые значения во frame-processor, следующий frame уже использует их.
@@ -117,7 +125,7 @@ export function useMicListener({
       const blob = new Blob([wavBuffer], { type: 'audio/wav' })
       const form = new FormData()
       form.append('audio', new File([blob], 'speech.wav', { type: 'audio/wav' }))
-      form.append('language', language)
+      form.append('language', languageRef.current)
 
       const res = await aiFetch('/stt', { method: 'POST', body: form })
       if (!res.ok) throw new Error(await res.text())
