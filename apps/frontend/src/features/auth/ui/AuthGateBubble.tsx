@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import { STRAPI_API_URL } from '@/shared/api/strapi'
-import { useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
+import { ALL_LOCALES, useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
 
 type Mode = 'signup' | 'signin'
 
@@ -76,14 +76,6 @@ export function AuthGateBubble() {
     }
   }
 
-  // 3 quick toggles в баббле — для остальных локалей юзер использует Header LocalePicker
-  // когда залогинится. На AuthGate показываем самые востребованные.
-  const QUICK_LOCALES: { code: LocaleCode; label: string }[] = [
-    { code: 'en', label: 'EN' },
-    { code: 'ja', label: '日本語' },
-    { code: 'ru', label: 'RU' },
-  ]
-
   return (
     <div
       onMouseDown={(e) => e.stopPropagation()}
@@ -107,16 +99,27 @@ export function AuthGateBubble() {
         <div style={{ fontWeight: 600 }}>
           {mode === 'signup' ? tRegister('title') : tLogin('title')} 👋
         </div>
-        <div style={{ display: 'flex', gap: 6, fontSize: 10, opacity: 0.85 }}>
-          {QUICK_LOCALES.map((l, i) => (
-            <span key={l.code} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <button type="button" onClick={() => switchTo(l.code)} style={langStyle(locale === l.code)}>
-                {l.label}
-              </button>
-              {i < QUICK_LOCALES.length - 1 && <span style={{ opacity: 0.4 }}>·</span>}
-            </span>
+        <select
+          value={locale}
+          onChange={(e) => switchTo(e.target.value as LocaleCode)}
+          style={{
+            background: 'rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            borderRadius: 4,
+            color: 'white',
+            fontSize: 10,
+            padding: '2px 4px',
+            cursor: 'pointer',
+            outline: 'none',
+          }}
+          aria-label="Language"
+        >
+          {ALL_LOCALES.map((l) => (
+            <option key={l.code} value={l.code} style={{ background: '#1f2937', color: 'white' }}>
+              {l.flag} {l.short}
+            </option>
           ))}
-        </div>
+        </select>
       </div>
 
       <div style={{ display: 'flex', gap: 4, marginBottom: 10 }}>
@@ -246,17 +249,3 @@ function tabStyle(active: boolean): CSSProperties {
   }
 }
 
-function langStyle(active: boolean): CSSProperties {
-  return {
-    background: 'transparent',
-    border: 'none',
-    color: 'white',
-    fontWeight: active ? 700 : 400,
-    fontSize: 10,
-    cursor: 'pointer',
-    padding: 0,
-    opacity: active ? 1 : 0.6,
-    textDecoration: active ? 'underline' : 'none',
-    textUnderlineOffset: 2,
-  }
-}

@@ -8,6 +8,7 @@ import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettings
 import type { Language } from '@/shared/yukai/persona'
 import { t } from '@/shared/yukai/i18n'
 import { aiFetch } from '@/shared/api/aiFetch'
+import { ALL_LOCALES, useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
 
 type OriginPref = 'auto' | 'direct' | 'ru'
 
@@ -243,22 +244,10 @@ export function SettingsPanel({
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
             {t(language, 'settings.language')}
           </label>
-          <select
-            value={language}
-            onChange={(e) => onSelectLanguage(e.target.value as Language)}
-            style={{
-              width: '100%',
-              background: '#1f2937',
-              color: 'white',
-              border: '1px solid #374151',
-              padding: '6px 8px',
-              fontSize: 12,
-              borderRadius: 4,
-            }}
-          >
-            <option value="ru">Русский</option>
-            <option value="en">English</option>
-          </select>
+          <LanguageSelect
+            language={language}
+            onSelectLanguage={onSelectLanguage}
+          />
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
             {t(language, 'settings.language.hint')}
           </div>
@@ -375,6 +364,53 @@ type Quota = {
   resetsAt: string
   tier: 'trial' | 'free' | 'paid'
   trialDaysLeft: number | null
+}
+
+/**
+ * Селект языка — все 8 локалей через next-intl router.
+ * Дополнительно зовём onSelectLanguage для обратной совместимости с overlay
+ * (он меняет voice по выбранному языку).
+ */
+function LanguageSelect({
+  language,
+  onSelectLanguage,
+}: {
+  language: Language
+  onSelectLanguage: (l: Language) => void
+}) {
+  const { current, switchTo } = useLocaleSwitcher()
+
+  function onChange(newLocale: LocaleCode) {
+    // 1) URL change → next-intl reloads all messages
+    switchTo(newLocale)
+    // 2) Backwards-compat: overlay меняет voice (RU→Fish, EN→ElevenLabs)
+    if (newLocale === 'ru' || newLocale === 'en') {
+      onSelectLanguage(newLocale as Language)
+    }
+    void language
+  }
+
+  return (
+    <select
+      value={current}
+      onChange={(e) => onChange(e.target.value as LocaleCode)}
+      style={{
+        width: '100%',
+        background: '#1f2937',
+        color: 'white',
+        border: '1px solid #374151',
+        padding: '6px 8px',
+        fontSize: 12,
+        borderRadius: 4,
+      }}
+    >
+      {ALL_LOCALES.map((l) => (
+        <option key={l.code} value={l.code}>
+          {l.flag} {l.label}
+        </option>
+      ))}
+    </select>
+  )
 }
 
 function AccountSection({ language }: { language: Language }) {
