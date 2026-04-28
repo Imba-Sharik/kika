@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import { STRAPI_API_URL } from '@/shared/api/strapi'
-import { ALL_LOCALES, useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
+import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
 
 type Mode = 'signup' | 'signin'
 
@@ -23,7 +23,6 @@ export function AuthGateBubble() {
   const tLogin = useTranslations('login')
   const tRegister = useTranslations('register')
   const tNav = useTranslations('nav')
-  const { current: locale, switchTo } = useLocaleSwitcher()
 
   const [mode, setMode] = useState<Mode>('signup')
   const [error, setError] = useState<string | null>(null)
@@ -99,27 +98,7 @@ export function AuthGateBubble() {
         <div style={{ fontWeight: 600 }}>
           {mode === 'signup' ? tRegister('title') : tLogin('title')} 👋
         </div>
-        <select
-          value={locale}
-          onChange={(e) => switchTo(e.target.value as LocaleCode)}
-          style={{
-            background: 'rgba(0,0,0,0.3)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            borderRadius: 4,
-            color: 'white',
-            fontSize: 10,
-            padding: '2px 4px',
-            cursor: 'pointer',
-            outline: 'none',
-          }}
-          aria-label="Language"
-        >
-          {ALL_LOCALES.map((l) => (
-            <option key={l.code} value={l.code} style={{ background: '#1f2937', color: 'white' }}>
-              {l.flag} {l.short}
-            </option>
-          ))}
-        </select>
+        <LocalePicker className="h-7 gap-1.5 rounded border border-white/25 bg-black/30 px-2 text-xs text-white hover:bg-black/50 focus-visible:ring-white/40" />
       </div>
 
       <div style={{ display: 'flex', gap: 4, marginBottom: 10 }}>

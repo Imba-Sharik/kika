@@ -8,7 +8,7 @@ import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
 import type { Language } from '@/shared/yukai/persona'
 import { aiFetch } from '@/shared/api/aiFetch'
-import { ALL_LOCALES, useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
+import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
 
 type OriginPref = 'auto' | 'direct' | 'ru'
 
@@ -378,39 +378,12 @@ function LanguageSelect({
   language: Language
   onSelectLanguage: (l: Language) => void
 }) {
-  const { current, switchTo } = useLocaleSwitcher()
-
-  function onChange(newLocale: LocaleCode) {
-    // 1) URL change → next-intl reloads all messages
-    switchTo(newLocale)
-    // 2) Backwards-compat: overlay меняет voice (RU→Fish, EN→ElevenLabs)
-    if (newLocale === 'ru' || newLocale === 'en') {
-      onSelectLanguage(newLocale as Language)
-    }
-    void language
-  }
-
-  return (
-    <select
-      value={current}
-      onChange={(e) => onChange(e.target.value as LocaleCode)}
-      style={{
-        width: '100%',
-        background: '#1f2937',
-        color: 'white',
-        border: '1px solid #374151',
-        padding: '6px 8px',
-        fontSize: 12,
-        borderRadius: 4,
-      }}
-    >
-      {ALL_LOCALES.map((l) => (
-        <option key={l.code} value={l.code}>
-          {l.flag} {l.label}
-        </option>
-      ))}
-    </select>
-  )
+  void language
+  void onSelectLanguage
+  // Используем общий LocalePicker (shadcn Select с PNG-флагами) — то же что
+  // в Header. switchTo меняет URL → next-intl router, overlay через useEffect
+  // подхватит и переключит voice по локали.
+  return <LocalePicker className="h-9 w-full justify-between gap-2 rounded border border-[#374151] bg-[#1f2937] px-2 text-xs text-white hover:bg-[#374151]" />
 }
 
 function AccountSection({ language }: { language: Language }) {
