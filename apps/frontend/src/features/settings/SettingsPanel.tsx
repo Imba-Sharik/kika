@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { signOut, useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { BUILTIN_VOICES } from '@/shared/yukai/voices'
 import { BUILTIN_PLUGINS } from '@/features/plugin-system/registry'
 import { PluginsSettingsSection } from '@/features/plugin-system/PluginsSettingsSection'
 import type { Language } from '@/shared/yukai/persona'
-import { t } from '@/shared/yukai/i18n'
 import { aiFetch } from '@/shared/api/aiFetch'
 import { ALL_LOCALES, useLocaleSwitcher, type LocaleCode } from '@/shared/yukai/useLanguage'
 
@@ -47,6 +47,7 @@ export function SettingsPanel({
   setPluginEnabled,
   onClose,
 }: Props) {
+  const t = useTranslations()
   // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
   // Для пользователей с заблокированным Vercel в РФ или со своим VPN.
   const [originPref, setOriginPref] = useState<OriginPref>('auto')
@@ -94,10 +95,10 @@ export function SettingsPanel({
         }}
       >
         <span style={{ fontSize: 14 }}>⚙</span>
-        <span style={{ color: '#e5e7eb', fontWeight: 600, flex: 1 }}>{t(language, 'settings.title')}</span>
+        <span style={{ color: '#e5e7eb', fontWeight: 600, flex: 1 }}>{t('settings.title')}</span>
         <button
           onClick={onClose}
-          title={t(language, 'settings.close')}
+          title={t('settings.close')}
           style={{
             width: 22,
             height: 22,
@@ -118,7 +119,7 @@ export function SettingsPanel({
         <AccountSection language={language} />
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            {t(language, 'settings.mic')}
+            {t('settings.mic')}
           </label>
           <select
             value={micDeviceId}
@@ -133,7 +134,7 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            <option value="">{t(language, 'settings.mic.default')}</option>
+            <option value="">{t('settings.micDefault')}</option>
             {mics.map((m) => (
               <option key={m.deviceId} value={m.deviceId}>
                 {m.label || `device ${m.deviceId.slice(0, 8)}`}
@@ -144,7 +145,7 @@ export function SettingsPanel({
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            {t(language, 'settings.voice')}
+            {t('settings.voice')}
           </label>
           <select
             value={voiceId}
@@ -166,13 +167,13 @@ export function SettingsPanel({
             ))}
           </select>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4 }}>
-            {t(language, 'settings.voice.hint')}
+            {t('settings.voiceHint')}
           </div>
         </div>
 
         <div>
           <label style={{ display: 'flex', justifyContent: 'space-between', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            <span>{t(language, 'settings.sensitivity')}</span>
+            <span>{t('settings.sensitivity')}</span>
             <span style={{ color: '#f59e0b', fontVariantNumeric: 'tabular-nums' }}>
               {vadThreshold.toFixed(2)}
             </span>
@@ -236,26 +237,26 @@ export function SettingsPanel({
             />
           </div>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            {t(language, 'settings.sensitivity.hint')}
+            {t('settings.sensitivityHint')}
           </div>
         </div>
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            {t(language, 'settings.language')}
+            {t('settings.language')}
           </label>
           <LanguageSelect
             language={language}
             onSelectLanguage={onSelectLanguage}
           />
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            {t(language, 'settings.language.hint')}
+            {t('settings.languageHint')}
           </div>
         </div>
 
         <div>
           <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-            {t(language, 'settings.connection')}
+            {t('settings.connection')}
           </label>
           <select
             value={originPref}
@@ -270,12 +271,12 @@ export function SettingsPanel({
               borderRadius: 4,
             }}
           >
-            <option value="auto">{t(language, 'settings.connection.auto')}</option>
-            <option value="direct">{t(language, 'settings.connection.direct')}</option>
-            <option value="ru">{t(language, 'settings.connection.ru')}</option>
+            <option value="auto">{t('settings.connectionAuto')}</option>
+            <option value="direct">{t('settings.connectionDirect')}</option>
+            <option value="ru">{t('settings.connectionRu')}</option>
           </select>
           <div style={{ fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.4 }}>
-            {t(language, 'settings.connection.hint')}
+            {t('settings.connectionHint')}
           </div>
         </div>
 
@@ -286,10 +287,10 @@ export function SettingsPanel({
         />
 
         <div style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.5, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12 }}>
-          <div style={{ marginBottom: 4 }}>{t(language, 'settings.hotkeys')}</div>
-          <div>• <b>Ctrl+Z</b> — {t(language, 'settings.hotkey.handsfree')}</div>
-          <div>• <b>Right Alt</b> — {t(language, 'settings.hotkey.dictation')}</div>
-          <div>• <b>Left Alt + `</b> — {t(language, 'settings.hotkey.shazam')}</div>
+          <div style={{ marginBottom: 4 }}>{t('settings.hotkeys')}</div>
+          <div>• <b>Ctrl+Z</b> — {t('settings.hotkeyHandsfree')}</div>
+          <div>• <b>Right Alt</b> — {t('settings.hotkeyDictation')}</div>
+          <div>• <b>Left Alt + `</b> — {t('settings.hotkeyShazam')}</div>
         </div>
 
         <a
@@ -321,9 +322,9 @@ export function SettingsPanel({
         >
           <span style={{ fontSize: 16 }}>💬</span>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, marginBottom: 2 }}>{t(language, 'settings.devchat.title')}</div>
+            <div style={{ fontWeight: 600, marginBottom: 2 }}>{t('settings.devchatTitle')}</div>
             <div style={{ color: '#9ca3af', fontSize: 10 }}>
-              {t(language, 'settings.devchat.hint')}
+              {t('settings.devchatHint')}
             </div>
           </div>
           <span style={{ color: '#6b7280' }}>→</span>
@@ -343,7 +344,7 @@ export function SettingsPanel({
             textDecoration: 'underline',
           }}
         >
-          {t(language, 'settings.show-onboarding')}
+          {t('settings.showOnboarding')}
         </button>
       </div>
     </div>
@@ -413,6 +414,8 @@ function LanguageSelect({
 }
 
 function AccountSection({ language }: { language: Language }) {
+  const t = useTranslations()
+  void language
   const { data: session, status } = useSession()
   const [quota, setQuota] = useState<Quota | null>(null)
 
@@ -435,7 +438,7 @@ function AccountSection({ language }: { language: Language }) {
   return (
     <div>
       <label style={{ display: 'block', color: '#9ca3af', marginBottom: 6, fontSize: 11 }}>
-        {t(language, 'settings.account')}
+        {t('settings.account')}
       </label>
       {session ? (
         <div
@@ -469,7 +472,7 @@ function AccountSection({ language }: { language: Language }) {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 11, color: '#9ca3af' }}>
-              {t(language, 'settings.account.signedIn')}
+              {t('settings.accountSignedIn')}
             </div>
             <div
               style={{
@@ -502,7 +505,7 @@ function AccountSection({ language }: { language: Language }) {
               flexShrink: 0,
             }}
           >
-            {t(language, 'settings.account.signout')}
+            {t('settings.accountSignout')}
           </button>
           </div>
           {quota && <QuotaWidget quota={quota} language={language} />}
@@ -518,7 +521,7 @@ function AccountSection({ language }: { language: Language }) {
             color: '#fda4af',
           }}
         >
-          {t(language, 'settings.account.notSignedIn')}
+          {t('settings.accountNotSignedIn')}
         </div>
       )}
     </div>
@@ -526,10 +529,12 @@ function AccountSection({ language }: { language: Language }) {
 }
 
 function QuotaWidget({ quota, language }: { quota: Quota; language: Language }) {
+  const t = useTranslations()
+  void language
   const tierLabel = {
-    trial: t(language, 'quota.tier.trial'),
-    free: t(language, 'quota.tier.free'),
-    paid: t(language, 'quota.tier.paid'),
+    trial: t('quota.tier.trial'),
+    free: t('quota.tier.free'),
+    paid: t('quota.tier.paid'),
   }[quota.tier]
 
   const barColor =
@@ -551,7 +556,7 @@ function QuotaWidget({ quota, language }: { quota: Quota; language: Language }) 
         }}
       >
         <span style={{ color: '#9ca3af' }}>
-          {t(language, 'quota.today')}{' '}
+          {t('quota.today')}{' '}
           <span style={{ color: '#e5e7eb', fontWeight: 600 }}>
             ${quota.spent.toFixed(quota.spent < 0.01 ? 4 : 2)} / ${quota.limit.toFixed(2)}
           </span>
@@ -589,8 +594,8 @@ function QuotaWidget({ quota, language }: { quota: Quota; language: Language }) 
       {quota.tier === 'trial' && quota.trialDaysLeft !== null && (
         <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 6 }}>
           {quota.trialDaysLeft > 0
-            ? t(language, 'quota.trialLeft').replace('{days}', String(quota.trialDaysLeft))
-            : t(language, 'quota.trialExpired')}
+            ? t('quota.trialLeft').replace('{days}', String(quota.trialDaysLeft))
+            : t('quota.trialExpired')}
         </div>
       )}
     </div>
