@@ -793,6 +793,77 @@ export const BUILTIN_VOICES: Voice[] = [
     langs: ['en'],
     avatar: '/voice-avatars/f6dd56e4c58e417e814d6620980a78d8.jpg',
   },
+  {
+    id: 'fish-kokomi',
+    label: "Fish — Sangonomiya Kokomi (English)",
+    provider: 'fish',
+    voiceId: 'b70e5f4d550647eb9927359d133c8e3a',
+    langs: ['en'],
+    avatar: '/voice-avatars/b70e5f4d550647eb9927359d133c8e3a.jpg',
+  },
+  {
+    id: 'fish-sameko-saba',
+    label: "Fish — Sameko Saba (English)",
+    provider: 'fish',
+    voiceId: '29fcfca65a2247e38618e271b987c624',
+    langs: ['en'],
+    avatar: '/voice-avatars/29fcfca65a2247e38618e271b987c624.jpg',
+  },
+  {
+    id: 'fish-shinobu-en',
+    label: "Fish — Shinobu Kochou (English)",
+    provider: 'fish',
+    voiceId: '3483d3c2cd5d4d6eba8fec7a177145fe',
+    langs: ['en'],
+    avatar: '/voice-avatars/3483d3c2cd5d4d6eba8fec7a177145fe.jpg',
+  },
+  {
+    id: 'fish-ai-hoshino',
+    label: "Fish — Ai Hoshino (English)",
+    provider: 'fish',
+    voiceId: 'd970471562434767a186a142fd436c6a',
+    langs: ['en'],
+    avatar: '/voice-avatars/d970471562434767a186a142fd436c6a.jpg',
+  },
+  {
+    id: 'fish-maka-albarn',
+    label: "Fish — Maka Albarn (English)",
+    provider: 'fish',
+    voiceId: '640f4eb6a3204ef0bfdc427c2b7ee531',
+    langs: ['en'],
+    avatar: '/voice-avatars/640f4eb6a3204ef0bfdc427c2b7ee531.jpg',
+  },
+  {
+    id: 'fish-riyo',
+    label: "Fish — Riyo (English)",
+    provider: 'fish',
+    voiceId: '79a5fee961ea4e55b46457a6ca2d30fc',
+    langs: ['en'],
+  },
+  {
+    id: 'fish-pinky-pie',
+    label: "Fish — Pinky Pie (English)",
+    provider: 'fish',
+    voiceId: 'b7e4738e9ad9482aa00c813fb3bb63b0',
+    langs: ['en'],
+    avatar: '/voice-avatars/b7e4738e9ad9482aa00c813fb3bb63b0.jpg',
+  },
+  {
+    id: 'fish-momo',
+    label: "Fish — Momo (English)",
+    provider: 'fish',
+    voiceId: '77c4ca611a6245d3b44857329b02ce0f',
+    langs: ['en'],
+    avatar: '/voice-avatars/77c4ca611a6245d3b44857329b02ce0f.jpg',
+  },
+  {
+    id: 'fish-yun-yun',
+    label: "Fish — Yun-Yun (English)",
+    provider: 'fish',
+    voiceId: '5bb7bdadf013453590f53e5d7c2b49e1',
+    langs: ['en'],
+    avatar: '/voice-avatars/5bb7bdadf013453590f53e5d7c2b49e1.jpg',
+  },
 ]
 
 export const DEFAULT_VOICE_ID = 'fish-voice-1'
@@ -831,7 +902,7 @@ const LOCALE_DEFAULT_VOICE: Record<string, string> = {
   de: 'fish-egirl',            // e girl
   pt: 'fish-garota-fofa',      // Garota fofa
   es: 'fish-madoka',           // Madoka
-  en: 'fish-pretty-girl',      // Pretty girl
+  en: 'fish-yun-yun',          // Yun-Yun (KonoSuba) — основной EN голос
 }
 
 export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = []): string {
