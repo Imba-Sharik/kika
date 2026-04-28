@@ -80,14 +80,10 @@ export default {
       return ctx.badRequest('text required')
     }
 
-    const voice =
-      voiceId ||
-      (provider === 'fish'
-        ? process.env.FISH_VOICE_KIKA
-        : process.env.ELEVENLABS_VOICE_KIKA)
-    if (!voice) {
+    if (!voiceId) {
       return ctx.badRequest('voiceId not provided')
     }
+    const voice = voiceId
 
     const startedAt = Date.now()
     const userId = ctx.state.user?.id

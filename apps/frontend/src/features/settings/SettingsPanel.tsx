@@ -162,7 +162,7 @@ export function SettingsPanel({
           >
             {BUILTIN_VOICES.map((v) => (
               <option key={v.id} value={v.id}>
-                {v.label}
+                {v.label.replace(/^(Fish|ElevenLabs)\s—\s/, '')}
               </option>
             ))}
           </select>
