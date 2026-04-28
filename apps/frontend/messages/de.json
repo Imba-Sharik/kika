@@ -116,15 +116,15 @@
   "dictation": {
     "title": "Diktieren",
     "empty": "Halte Rechte Alt und sprich — Text wird eingefügt und hier gespeichert",
-    "repaste-tooltip": "Klick zum erneuten Einfügen"
+    "repasteTooltip": "Klick zum erneuten Einfügen"
   },
   "screenshot": {
     "title": "Screenshots",
     "region": "▭ Bereich",
     "full": "+ Ganzer Bildschirm",
-    "region-tooltip": "Bereich mit Maus auswählen",
-    "full-tooltip": "Ganzen Bildschirm aufnehmen",
-    "anime-tooltip": "Präzise Anime-Frame-Suche (Episode + Zeitstempel)",
+    "regionTooltip": "Bereich mit Maus auswählen",
+    "fullTooltip": "Ganzen Bildschirm aufnehmen",
+    "animeTooltip": "Präzise Anime-Frame-Suche (Episode + Zeitstempel)",
     "empty": {
       "hint": "Klicke \"+ Ganzer Bildschirm\" oder sage \"was ist auf dem Bildschirm?\" / \"Bereich auswählen und sag was es ist\""
     }
@@ -135,9 +135,9 @@
     "settings": "Einstellungen"
   },
   "overlay": {
-    "close-chat": "Chat schließen",
-    "settings-btn": "⚙ Einstellungen",
-    "settings-title": "Einstellungen",
+    "closeChat": "Chat schließen",
+    "settingsBtn": "⚙ Einstellungen",
+    "settingsTitle": "Einstellungen",
     "send": "Senden",
     "placeholder": "Nachricht..."
   },

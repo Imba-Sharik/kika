@@ -99,7 +99,7 @@ export function DictationPanel({ history, onClose }: Props) {
                   const api = (window as any).electronAPI
                   api?.pasteText?.(it.text)
                 }}
-                title={t('dictation.repaste-tooltip')}
+                title={t('dictation.repasteTooltip')}
               >
                 <div style={{ color: '#f3f4f6', whiteSpace: 'pre-wrap' }}>{it.text}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, fontSize: 10, color: '#6b7280' }}>

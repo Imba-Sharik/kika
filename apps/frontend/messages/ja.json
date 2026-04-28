@@ -116,15 +116,15 @@
   "dictation": {
     "title": "ディクテーション",
     "empty": "Right Altを長押しして話すと — テキストが貼り付けられ、ここに保存されます",
-    "repaste-tooltip": "クリックでもう一度貼り付け"
+    "repasteTooltip": "クリックでもう一度貼り付け"
   },
   "screenshot": {
     "title": "スクリーンショット",
     "region": "▭ 領域",
     "full": "+ 全画面",
-    "region-tooltip": "マウスで領域を選択",
-    "full-tooltip": "全画面キャプチャ",
-    "anime-tooltip": "アニメフレームの正確な検索 (エピソード + タイムスタンプ)",
+    "regionTooltip": "マウスで領域を選択",
+    "fullTooltip": "全画面キャプチャ",
+    "animeTooltip": "アニメフレームの正確な検索 (エピソード + タイムスタンプ)",
     "empty": {
       "hint": "「+ 全画面」をクリック、または「画面に何がある?」「領域を選択して何か教えて」と話しかけてください"
     }
@@ -135,9 +135,9 @@
     "settings": "設定"
   },
   "overlay": {
-    "close-chat": "チャットを閉じる",
-    "settings-btn": "⚙ 設定",
-    "settings-title": "設定",
+    "closeChat": "チャットを閉じる",
+    "settingsBtn": "⚙ 設定",
+    "settingsTitle": "設定",
     "send": "送信",
     "placeholder": "メッセージ..."
   },

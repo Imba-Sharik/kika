@@ -12,7 +12,7 @@ export const BUILTIN_CHARACTERS: Character[] = [
     id: 'yukai-default',
     name: 'Юкай',
     persona: YUKAI_DEFAULT_PERSONA,
-    voiceId: 'eleven-kika',
+    voiceId: 'fish-pretty-girl',
   },
 ]
 

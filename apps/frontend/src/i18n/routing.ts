@@ -16,6 +16,10 @@ export const routing = defineRouting({
   locales: ['en', 'ru', 'ja', 'ko', 'zh', 'de', 'fr', 'pt', 'es'],
   defaultLocale: 'en',
   localePrefix: 'as-needed',
+  // URL — единственный source of truth для локали. Без этого middleware
+  // читает Accept-Language header / NEXT_LOCALE cookie и может редиректить
+  // обратно на старую локаль, ломая router.replace при ручной смене.
+  localeDetection: false,
 })
 
 export type Locale = (typeof routing.locales)[number]

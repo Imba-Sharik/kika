@@ -24,9 +24,27 @@ import {
   type Emotion,
   type Language,
 } from '@/shared/yukai/persona'
-import { useLocale, useTranslations } from 'next-intl'
+import { NextIntlClientProvider, useLocale, useTranslations } from 'next-intl'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
 import { DEFAULT_VOICE_ID, findVoice, getDefaultVoiceForLocale } from '@/shared/yukai/voices'
+
+// Все 9 messages JSON импортируются статически — нужны для мгновенной смены
+// языка в overlay через NextIntlClientProvider (без full navigation Next.js).
+// Bundle-size: ~50KB total для overlay chunk.
+import enMessages from '../../../../messages/en.json'
+import ruMessages from '../../../../messages/ru.json'
+import jaMessages from '../../../../messages/ja.json'
+import koMessages from '../../../../messages/ko.json'
+import zhMessages from '../../../../messages/zh.json'
+import deMessages from '../../../../messages/de.json'
+import frMessages from '../../../../messages/fr.json'
+import ptMessages from '../../../../messages/pt.json'
+import esMessages from '../../../../messages/es.json'
+
+const ALL_MESSAGES: Record<string, Record<string, unknown>> = {
+  en: enMessages, ru: ruMessages, ja: jaMessages, ko: koMessages,
+  zh: zhMessages, de: deMessages, fr: frMessages, pt: ptMessages, es: esMessages,
+}
 
 // Фиксированные настройки — как в chat-test с дефолтами
 const CHARACTER = BUILTIN_CHARACTERS[0]
@@ -62,8 +80,35 @@ const kbdStyle: React.CSSProperties = {
   color: '#e5e7eb',
 }
 
-export default function OverlayPage() {
-  // i18n — useTranslations берёт строки из messages/{locale}.json
+// Локаль overlay-а живёт в client-state (не URL) — смена языка мгновенная,
+// без навигации Next.js. Лендинг остаётся URL-routed для SEO.
+// localStorage persistит выбор между запусками. NextIntlClientProvider раздаёт
+// messages через useTranslations/useLocale во все child-компоненты.
+const LOCALE_STORAGE_KEY = 'kika:overlay:locale'
+
+export default function OverlayWithLocale() {
+  const urlLocale = useLocale()
+  const [locale, setLocale] = useState<string>(urlLocale)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(LOCALE_STORAGE_KEY)
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage init требует setState в effect (нет другого способа без hydration mismatch)
+      if (saved && saved in ALL_MESSAGES) setLocale(saved)
+    } catch {}
+  }, [])
+  const onLocaleChange = (l: string) => {
+    setLocale(l)
+    try { localStorage.setItem(LOCALE_STORAGE_KEY, l) } catch {}
+  }
+  return (
+    <NextIntlClientProvider locale={locale} messages={ALL_MESSAGES[locale]}>
+      <OverlayPage onLocaleChange={onLocaleChange} />
+    </NextIntlClientProvider>
+  )
+}
+
+function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }) {
+  // i18n — useTranslations берёт строки из NextIntlClientProvider выше (наш state)
   const tt = useTranslations()
   const currentLocale = useLocale()
   // Auth-state — если юзер не залогинен, поверх персонажа покажется AuthGateBubble
@@ -78,6 +123,7 @@ export default function OverlayPage() {
   // в useEffect — иначе hydration mismatch на каждом из <select value=...>.
   const [micDeviceId, setMicDeviceId] = useState<string>('')
   const [voiceId, setVoiceId] = useState<string>(DEFAULT_VOICE_ID)
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage init требует setState (нет другого способа без hydration mismatch) */
   useEffect(() => {
     try {
       const m = localStorage.getItem(MIC_STORAGE_KEY)
@@ -86,6 +132,7 @@ export default function OverlayPage() {
       if (v) setVoiceId(v)
     } catch {}
   }, [])
+  /* eslint-enable react-hooks/set-state-in-effect */
   const voice = findVoice(voiceId, [])
   function selectVoice(id: string) {
     setVoiceId(id)
@@ -97,24 +144,27 @@ export default function OverlayPage() {
     selectVoice(id)
     try { localStorage.setItem('kika:overlay:voice-user-picked', 'true') } catch {}
   }
-  // При смене локали (через URL /ja /ko etc) — авто-подбираем подходящий voice.
-  // Юзер всё равно может вручную поменять в Settings, тогда оставим выбор.
-  // Используем localStorage VOICE_USER_PICKED флаг чтобы не перезаписывать ручной выбор.
+  // При смене локали — всегда переключаем на дефолтный voice для нового языка
+  // (ru→Mita, ja→フェルン и т.д.). Юзер может вручную выбрать другой — выбор
+  // продержится до следующей смены locale. Сбрасываем user-picked флаг чтобы
+  // следующий auto-pick тоже сработал.
+  /* eslint-disable react-hooks/set-state-in-effect -- voice auto-pick on locale change */
   useEffect(() => {
     if (typeof window === 'undefined') return
     try {
-      const userPicked = localStorage.getItem('kika:overlay:voice-user-picked') === 'true'
-      if (userPicked) return
       const recommended = getDefaultVoiceForLocale(currentLocale)
       if (recommended !== voiceId) {
         setVoiceId(recommended)
         localStorage.setItem(VOICE_STORAGE_KEY, recommended)
+        localStorage.removeItem('kika:overlay:voice-user-picked')
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLocale])
+  /* eslint-enable react-hooks/set-state-in-effect */
   const [micLevel, setMicLevel] = useState(0)
   const [vadThreshold, setVadThreshold] = useState<number>(DEFAULT_VAD_THRESHOLD)
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage init */
   useEffect(() => {
     try {
       const saved = localStorage.getItem(VAD_THRESHOLD_KEY)
@@ -123,6 +173,7 @@ export default function OverlayPage() {
       if (Number.isFinite(num) && num > 0 && num < 1) setVadThreshold(num)
     } catch {}
   }, [])
+  /* eslint-enable react-hooks/set-state-in-effect */
   function selectVadThreshold(v: number) {
     setVadThreshold(v)
     try { localStorage.setItem(VAD_THRESHOLD_KEY, String(v)) } catch {}
@@ -132,9 +183,11 @@ export default function OverlayPage() {
   // localStorage LANGUAGE_KEY оставлен только для legacy-миграции (старые версии
   // хранили 'ru'/'en' там), сейчас не используется.
   const language = currentLocale as Language
-  // No-op для совместимости с SettingsPanel onSelectLanguage prop.
-  // Реальное переключение делает LocalePicker внутри Settings.
-  const selectLanguage = (_l: Language) => { void _l }
+  // Меняет client-locale в OverlayWithLocale через колбэк — мгновенный
+  // re-render overlay с новыми messages, без navigation.
+  const selectLanguage = (l: Language) => {
+    onLocaleChange(l)
+  }
   const [compact, setCompact] = useState(true)
   const [settingsOpen, setSettingsOpen] = useState(false)
   // Показываем первую подсказку «как начать разговор» один раз. Ключ версионирован —
@@ -143,11 +196,13 @@ export default function OverlayPage() {
   // Default false на SSR и первом рендере → совпадает с клиентом → нет hydration mismatch.
   // useEffect читает localStorage уже после маунта.
   const [showOnboarding, setShowOnboarding] = useState(false)
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage init */
   useEffect(() => {
     try {
       if (localStorage.getItem(ONBOARDING_KEY) !== 'true') setShowOnboarding(true)
     } catch {}
   }, [])
+  /* eslint-enable react-hooks/set-state-in-effect */
   function dismissOnboarding() {
     setShowOnboarding(false)
     try { localStorage.setItem(ONBOARDING_KEY, 'true') } catch {}
@@ -206,6 +261,7 @@ export default function OverlayPage() {
     vadThreshold,
     // Когда Settings открыты и мик авто-поднят — крутим VAD для UI-бара,
     // но не шлём речь в STT/Клода (иначе каждое тестовое «привет» = разговор).
+    // eslint-disable-next-line react-hooks/refs -- ref-чтение в config-объекте useMicListener; передаётся в effect внутри хука
     testMode: settingsOpen && autoStartedByPanelRef.current,
   })
 
@@ -654,6 +710,7 @@ export default function OverlayPage() {
           {/* В test-mode (VAD крутится только для слайдера в настройках) показываем
               MicBars как выключенный — чтобы юзера не сбивало «режим включился сам». */}
           <MicBars
+            // eslint-disable-next-line react-hooks/refs -- читаем ref для UI-стейта (режим тестирования при открытых Settings)
             state={autoStartedByPanelRef.current && settingsOpen ? 'off' : mic.state}
             micLevel={micLevel}
             onClick={mic.toggle}
@@ -780,7 +837,7 @@ export default function OverlayPage() {
           )}
           <button
             onClick={() => togglePanel('chat')}
-            title={tt('overlay.close-chat')}
+            title={tt('overlay.closeChat')}
             style={{
               width: 22,
               height: 22,

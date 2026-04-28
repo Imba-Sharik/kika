@@ -220,7 +220,7 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
         <span style={{ color: '#9ca3af', flex: 1 }}>· {history.length}</span>
         <button
           onClick={() => { void doCapture(ctx, { mode: 'region' }) }}
-          title={t('screenshot.region-tooltip')}
+          title={t('screenshot.regionTooltip')}
           style={{
             background: 'rgba(59,130,246,0.2)',
             border: '1px solid rgba(59,130,246,0.4)',
@@ -235,7 +235,7 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
         </button>
         <button
           onClick={() => { void doCapture(ctx, { mode: 'full' }) }}
-          title={t('screenshot.full-tooltip')}
+          title={t('screenshot.fullTooltip')}
           style={{
             background: 'rgba(236,72,153,0.2)',
             border: '1px solid rgba(236,72,153,0.4)',
@@ -321,7 +321,7 @@ function ScreenshotPanel({ ctx }: { ctx: YukaiContext }) {
                       <button
                         onClick={() => openSearchSite(item, 'https://trace.moe')}
                         style={actionBtnStyle}
-                        title={t('screenshot.anime-tooltip')}
+                        title={t('screenshot.animeTooltip')}
                       >
                         🔗 trace.moe
                       </button>

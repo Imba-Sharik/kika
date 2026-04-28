@@ -554,7 +554,15 @@ function VoiceSelect({
                   value={v.id}
                   className="relative pr-10 text-white focus:bg-white/10 focus:text-white"
                 >
-                  <span className="block truncate">{label}</span>
+                  <span className="flex items-center gap-2">
+                    {v.avatar && (
+                      <span className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full bg-white/5">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- avatar from public/, не нужно next/image overhead */}
+                        <img src={v.avatar} alt="" className="h-full w-full object-cover" />
+                      </span>
+                    )}
+                    <span className="block truncate">{label}</span>
+                  </span>
                   {!isSelected && (
                     <div
                       role="button"
@@ -621,9 +629,9 @@ function VoiceSelect({
 }
 
 /**
- * Селект языка — все 8 локалей через next-intl router.
- * Дополнительно зовём onSelectLanguage для обратной совместимости с overlay
- * (он меняет voice по выбранному языку).
+ * Селект языка в Settings — отдаёт смену локали в overlay через
+ * onSelectLanguage. NextIntlClientProvider в overlay подхватывает мгновенно
+ * (без URL-навигации Next.js).
  */
 function LanguageSelect({
   language,
@@ -633,11 +641,12 @@ function LanguageSelect({
   onSelectLanguage: (l: Language) => void
 }) {
   void language
-  void onSelectLanguage
-  // Используем общий LocalePicker (shadcn Select с PNG-флагами) — то же что
-  // в Header. switchTo меняет URL → next-intl router, overlay через useEffect
-  // подхватит и переключит voice по локали.
-  return <LocalePicker className="h-9 w-full justify-between gap-2 rounded border border-[#374151] bg-[#1f2937] px-2 text-xs text-white hover:bg-[#374151]" />
+  return (
+    <LocalePicker
+      className="h-9 w-full justify-between gap-2 rounded border border-[#374151] bg-[#1f2937] px-2 text-xs text-white hover:bg-[#374151]"
+      onLocaleChange={(l) => onSelectLanguage(l as Language)}
+    />
+  )
 }
 
 function AccountSection({ language }: { language: Language }) {

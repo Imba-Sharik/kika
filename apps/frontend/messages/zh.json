@@ -116,15 +116,15 @@
   "dictation": {
     "title": "听写",
     "empty": "按住Right Alt并说话 — 文本被粘贴并保存在这里",
-    "repaste-tooltip": "点击再次粘贴"
+    "repasteTooltip": "点击再次粘贴"
   },
   "screenshot": {
     "title": "截图",
     "region": "▭ 区域",
     "full": "+ 全屏",
-    "region-tooltip": "用鼠标选择区域",
-    "full-tooltip": "捕获全屏",
-    "anime-tooltip": "精确动漫帧搜索 (剧集 + 时间戳)",
+    "regionTooltip": "用鼠标选择区域",
+    "fullTooltip": "捕获全屏",
+    "animeTooltip": "精确动漫帧搜索 (剧集 + 时间戳)",
     "empty": {
       "hint": "点击\"+ 全屏\"或说\"屏幕上有什么?\" / \"选择一个区域告诉我那是什么\""
     }
@@ -135,9 +135,9 @@
     "settings": "设置"
   },
   "overlay": {
-    "close-chat": "关闭聊天",
-    "settings-btn": "⚙ 设置",
-    "settings-title": "设置",
+    "closeChat": "关闭聊天",
+    "settingsBtn": "⚙ 设置",
+    "settingsTitle": "设置",
     "send": "发送",
     "placeholder": "消息..."
   },

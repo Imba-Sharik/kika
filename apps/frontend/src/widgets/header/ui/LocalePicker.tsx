@@ -14,14 +14,29 @@ import { ALL_LOCALES, type LocaleCode } from '@/shared/yukai/useLanguage'
 
 /**
  * Dropdown переключатель локали через shadcn Select. Флаги — PNG-кружки
- * из public/language/. При смене локали сохраняем текущий pathname.
+ * из public/language/.
+ *
+ * По умолчанию меняет URL через next-intl router (для лендинга — нужно для SEO).
+ * Если передан `onLocaleChange` — вызывает только его, без navigation. Это для
+ * overlay/Settings где локаль живёт в client-state (мгновенная смена без
+ * перезагрузки React-tree).
  */
-export function LocalePicker({ className }: { className?: string }) {
+export function LocalePicker({
+  className,
+  onLocaleChange,
+}: {
+  className?: string
+  onLocaleChange?: (locale: string) => void
+}) {
   const locale = useLocale() as LocaleCode
   const router = useRouter()
   const pathname = usePathname()
 
   function onChange(newLocale: string) {
+    if (onLocaleChange) {
+      onLocaleChange(newLocale)
+      return
+    }
     router.replace(pathname, { locale: newLocale as LocaleCode })
   }
 
@@ -38,9 +53,7 @@ export function LocalePicker({ className }: { className?: string }) {
         <SelectValue />
       </SelectTrigger>
       <SelectContent
-        side="top"
         align="end"
-        avoidCollisions={false}
         className="border-white/10 bg-[#0F0E15] text-white"
       >
         {ALL_LOCALES.map((l) => (

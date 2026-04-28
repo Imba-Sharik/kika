@@ -30,32 +30,30 @@
     "title": "Settings",
     "close": "Close",
     "mic": "Microphone",
-    "mic_default": "Default",
+    "micDefault": "Default",
     "voice": "Yukai voice",
-    "voice_hint": "ElevenLabs — best for English. Fish — natural Russian.",
+    "voiceHint": "ElevenLabs — best for English. Fish — natural Russian.",
     "sensitivity": "Mic sensitivity",
-    "sensitivity_hint": "Fill = VAD speech probability. Drag the orange threshold — that's where \"speech\" starts. Applies instantly.",
+    "sensitivityHint": "Fill = VAD speech probability. Drag the orange threshold — that's where \"speech\" starts. Applies instantly.",
     "language": "Language",
-    "language_hint": "Changes the language Yukai responds in. Voice auto-adjusts.",
+    "languageHint": "Changes the language Yukai responds in. Voice auto-adjusts.",
     "connection": "Connection",
-    "connection_auto": "Auto (recommended)",
-    "connection_direct": "Direct — yukai.app",
-    "connection_ru": "RU mirror — ru.yukai.app",
-    "connection_hint": "If the app fails to connect — try the RU mirror. Window reloads on change.",
+    "connectionAuto": "Auto (recommended)",
+    "connectionDirect": "Direct — yukai.app",
+    "connectionRu": "RU mirror — ru.yukai.app",
+    "connectionHint": "If the app fails to connect — try the RU mirror. Window reloads on change.",
     "hotkeys": "Hotkeys:",
-    "hotkey_handsfree": "hands-free on/off",
-    "hotkey_dictation": "dictation (hold)",
-    "hotkey_shazam": "recognize song",
-    "devchat_title": "Chat with the developer",
-    "devchat_hint": "Tell me what broke, what's missing, what you liked",
-    "show_onboarding": "Show beginner tooltip again",
-    "account": {
-      "title": "Account",
-      "signedIn": "Signed in as",
-      "notSignedIn": "Not signed in — Yukai can't respond",
-      "signin": "Sign in",
-      "signout": "Sign out"
-    }
+    "hotkeyHandsfree": "hands-free on/off",
+    "hotkeyDictation": "dictation (hold)",
+    "hotkeyShazam": "recognize song",
+    "devchatTitle": "Chat with the developer",
+    "devchatHint": "Tell me what broke, what's missing, what you liked",
+    "showOnboarding": "Show beginner tooltip again",
+    "account": "Account",
+    "accountSignedIn": "Signed in as",
+    "accountNotSignedIn": "Not signed in — Yukai can't respond",
+    "accountSignin": "Sign in",
+    "accountSignout": "Sign out"
   },
   "quota": {
     "today": "Today:",
@@ -118,15 +116,15 @@
   "dictation": {
     "title": "Dictation",
     "empty": "Hold Right Alt and speak — text gets pasted and saved here",
-    "repaste-tooltip": "Click to paste again"
+    "repasteTooltip": "Click to paste again"
   },
   "screenshot": {
     "title": "Screenshots",
     "region": "▭ region",
     "full": "+ full",
-    "region-tooltip": "Select region with mouse",
-    "full-tooltip": "Capture full screen",
-    "anime-tooltip": "Precise anime frame search (episode + timestamp)",
+    "regionTooltip": "Select region with mouse",
+    "fullTooltip": "Capture full screen",
+    "animeTooltip": "Precise anime frame search (episode + timestamp)",
     "empty": {
       "hint": "Click \"+ full\" or say \"what's on screen?\" / \"select region and tell me what it is\""
     }
@@ -137,9 +135,9 @@
     "settings": "Settings"
   },
   "overlay": {
-    "close_chat": "Close chat",
-    "settings_btn": "⚙ Settings",
-    "settings_title": "Settings",
+    "closeChat": "Close chat",
+    "settingsBtn": "⚙ Settings",
+    "settingsTitle": "Settings",
     "send": "Send",
     "placeholder": "Message..."
   },

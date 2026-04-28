@@ -116,15 +116,15 @@
   "dictation": {
     "title": "받아쓰기",
     "empty": "Right Alt를 길게 누르고 말하면 — 텍스트가 붙여넣어지고 여기에 저장됩니다",
-    "repaste-tooltip": "클릭하여 다시 붙여넣기"
+    "repasteTooltip": "클릭하여 다시 붙여넣기"
   },
   "screenshot": {
     "title": "스크린샷",
     "region": "▭ 영역",
     "full": "+ 전체",
-    "region-tooltip": "마우스로 영역 선택",
-    "full-tooltip": "전체 화면 캡처",
-    "anime-tooltip": "정확한 애니 프레임 검색 (에피소드 + 타임스탬프)",
+    "regionTooltip": "마우스로 영역 선택",
+    "fullTooltip": "전체 화면 캡처",
+    "animeTooltip": "정확한 애니 프레임 검색 (에피소드 + 타임스탬프)",
     "empty": {
       "hint": "\"+ 전체\"를 클릭하거나 \"화면에 뭐가 있어?\" / \"영역 선택해서 무엇인지 알려줘\"라고 말하세요"
     }
@@ -135,9 +135,9 @@
     "settings": "설정"
   },
   "overlay": {
-    "close-chat": "채팅 닫기",
-    "settings-btn": "⚙ 설정",
-    "settings-title": "설정",
+    "closeChat": "채팅 닫기",
+    "settingsBtn": "⚙ 설정",
+    "settingsTitle": "설정",
     "send": "전송",
     "placeholder": "메시지..."
   },

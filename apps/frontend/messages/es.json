@@ -30,32 +30,30 @@
     "title": "Ajustes",
     "close": "Cerrar",
     "mic": "Micrófono",
-    "mic_default": "Predeterminado",
+    "micDefault": "Predeterminado",
     "voice": "Voz de Yukai",
-    "voice_hint": "ElevenLabs — ideal para inglés. Fish — ruso natural.",
+    "voiceHint": "ElevenLabs — ideal para inglés. Fish — ruso natural.",
     "sensitivity": "Sensibilidad del micro",
-    "sensitivity_hint": "Relleno = probabilidad de voz del VAD. Arrastra el umbral naranja — ahí empieza la \"voz\". Se aplica al instante.",
+    "sensitivityHint": "Relleno = probabilidad de voz del VAD. Arrastra el umbral naranja — ahí empieza la \"voz\". Se aplica al instante.",
     "language": "Idioma",
-    "language_hint": "Cambia el idioma en el que responde Yukai. La voz se ajusta automáticamente.",
+    "languageHint": "Cambia el idioma en el que responde Yukai. La voz se ajusta automáticamente.",
     "connection": "Conexión",
-    "connection_auto": "Automático (recomendado)",
-    "connection_direct": "Directo — yukai.app",
-    "connection_ru": "Espejo RU — ru.yukai.app",
-    "connection_hint": "Si la app no conecta — prueba el espejo RU. La ventana se recarga al cambiar.",
+    "connectionAuto": "Automático (recomendado)",
+    "connectionDirect": "Directo — yukai.app",
+    "connectionRu": "Espejo RU — ru.yukai.app",
+    "connectionHint": "Si la app no conecta — prueba el espejo RU. La ventana se recarga al cambiar.",
     "hotkeys": "Atajos:",
-    "hotkey_handsfree": "manos libres on/off",
-    "hotkey_dictation": "dictado (mantener)",
-    "hotkey_shazam": "reconocer canción",
-    "devchat_title": "Chatear con el desarrollador",
-    "devchat_hint": "Cuéntame qué se rompió, qué falta, qué te gustó",
-    "show_onboarding": "Mostrar consejo para principiantes otra vez",
-    "account": {
-      "title": "Cuenta",
-      "signedIn": "Sesión iniciada como",
-      "notSignedIn": "Sin sesión — Yukai no puede responder",
-      "signin": "Iniciar sesión",
-      "signout": "Cerrar sesión"
-    }
+    "hotkeyHandsfree": "manos libres on/off",
+    "hotkeyDictation": "dictado (mantener)",
+    "hotkeyShazam": "reconocer canción",
+    "devchatTitle": "Chatear con el desarrollador",
+    "devchatHint": "Cuéntame qué se rompió, qué falta, qué te gustó",
+    "showOnboarding": "Mostrar consejo para principiantes otra vez",
+    "account": "Cuenta",
+    "accountSignedIn": "Sesión iniciada como",
+    "accountNotSignedIn": "Sin sesión — Yukai no puede responder",
+    "accountSignin": "Iniciar sesión",
+    "accountSignout": "Cerrar sesión"
   },
   "quota": {
     "today": "Hoy:",
@@ -118,15 +116,15 @@
   "dictation": {
     "title": "Dictado",
     "empty": "Mantén Alt derecho y habla — el texto se pega y se guarda aquí",
-    "repaste-tooltip": "Haz clic para pegar de nuevo"
+    "repasteTooltip": "Haz clic para pegar de nuevo"
   },
   "screenshot": {
     "title": "Capturas",
     "region": "▭ zona",
     "full": "+ completa",
-    "region-tooltip": "Selecciona zona con el ratón",
-    "full-tooltip": "Capturar pantalla completa",
-    "anime-tooltip": "Búsqueda precisa de fotograma de anime (episodio + marca de tiempo)",
+    "regionTooltip": "Selecciona zona con el ratón",
+    "fullTooltip": "Capturar pantalla completa",
+    "animeTooltip": "Búsqueda precisa de fotograma de anime (episodio + marca de tiempo)",
     "empty": {
       "hint": "Haz clic en \"+ completa\" o di \"¿qué hay en pantalla?\" / \"selecciona zona y dime qué es\""
     }
@@ -137,9 +135,9 @@
     "settings": "Ajustes"
   },
   "overlay": {
-    "close_chat": "Cerrar chat",
-    "settings_btn": "⚙ Ajustes",
-    "settings_title": "Ajustes",
+    "closeChat": "Cerrar chat",
+    "settingsBtn": "⚙ Ajustes",
+    "settingsTitle": "Ajustes",
     "send": "Enviar",
     "placeholder": "Mensaje..."
   },

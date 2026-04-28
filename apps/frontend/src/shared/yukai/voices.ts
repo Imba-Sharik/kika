@@ -10,17 +10,14 @@ export type Voice = {
    * getDefaultVoiceForLocale() при автоподборе голоса под выбранный язык.
    */
   langs?: string[]
+  /**
+   * Путь к круглой аватарке голоса в /public/voice-avatars/. Если задан —
+   * рендерится в VoiceSelect рядом с именем (как флаг в LocalePicker).
+   */
+  avatar?: string
 }
 
 export const BUILTIN_VOICES: Voice[] = [
-  {
-    id: 'eleven-kika',
-    label: 'ElevenLabs — Yukai (multilingual)',
-    provider: 'elevenlabs',
-    voiceId: 'YQ8Df5FlfEfMCfGNZHsN',
-    // ElevenLabs Turbo v2.5 поддерживает 30+ языков. Отлично для en, ko, de, fr, pt, zh.
-    langs: ['en', 'ko', 'de', 'fr', 'pt', 'zh'],
-  },
   {
     id: 'fish-ochitsuita-josei',
     label: "Fish — 落ち着いた女性 (Japanese)",
@@ -321,6 +318,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: '6dc11f3f67a543f6ad4537a4a347e224',
     langs: ['ru'],
+    avatar: '/voice-avatars/6dc11f3f67a543f6ad4537a4a347e224.jpg',
   },
   {
     id: 'fish-ja-70216001',
@@ -335,6 +333,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: '70f4bab034954cc186cab3a69fe3fd2a',
     langs: ['ja', 'en'],
+    avatar: '/voice-avatars/70f4bab034954cc186cab3a69fe3fd2a.jpg',
   },
   {
     id: 'fish-voice-3',
@@ -377,6 +376,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: '83c19893c4974594839bd2d101b1fd66',
     langs: ['en'],
+    avatar: '/voice-avatars/83c19893c4974594839bd2d101b1fd66.jpg',
   },
   {
     id: 'fish-ja-871cff8b',
@@ -405,6 +405,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: '91a9ac2cf92a46e8a742c3a8145750f9',
     langs: ['en', 'ru', 'ja'],
+    avatar: '/voice-avatars/91a9ac2cf92a46e8a742c3a8145750f9.webp',
   },
   {
     id: 'fish-ja-92c556e1',
@@ -419,6 +420,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: '933563129e564b19a115bedd57b7406a',
     langs: ['en'],
+    avatar: '/voice-avatars/933563129e564b19a115bedd57b7406a.jpg',
   },
   {
     id: 'fish-ja-94cffec5',
@@ -524,6 +526,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: 'ae90570e089f410ca8a8ed3672f235ea',
     langs: ['ja', 'en'],
+    avatar: '/voice-avatars/ae90570e089f410ca8a8ed3672f235ea.jpg',
   },
   {
     id: 'fish-rem-re-zero',
@@ -657,6 +660,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: 'd9708e800c754f0c876953e74d846f5a',
     langs: ['en', 'ko'],
+    avatar: '/voice-avatars/d9708e800c754f0c876953e74d846f5a.jpg',
   },
   {
     id: 'fish-ja-dc506e3a',
@@ -699,6 +703,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: 'e40dc2616cad4ce899ee3abda491b251',
     langs: ['en', 'ja'],
+    avatar: '/voice-avatars/e40dc2616cad4ce899ee3abda491b251.webp',
   },
   {
     id: 'fish-mita-pt-br',
@@ -720,6 +725,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: 'f2e45ab1a4a548e2860efea1aa2b416e',
     langs: ['en', 'ja'],
+    avatar: '/voice-avatars/f2e45ab1a4a548e2860efea1aa2b416e.webp',
   },
   {
     id: 'fish-kurumi-tokisaki-nightmare',
@@ -727,6 +733,7 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: 'f9f294f55fd24e28b5b6469ae7e17ea9',
     langs: ['en', 'ja'],
+    avatar: '/voice-avatars/f9f294f55fd24e28b5b6469ae7e17ea9.jpg',
   },
   {
     id: 'fish-ja-fa051072',
@@ -762,6 +769,29 @@ export const BUILTIN_VOICES: Voice[] = [
     provider: 'fish',
     voiceId: 'ffe41701970d4b339ef7906300716f99',
     langs: ['pt'],
+  },
+  {
+    id: 'fish-maxine',
+    label: "Fish — Maxine (English)",
+    provider: 'fish',
+    voiceId: '41796518a7b2498cae6ae54dbc15fbe2',
+    langs: ['en'],
+  },
+  {
+    id: 'fish-yuki',
+    label: "Fish — Yuki (English)",
+    provider: 'fish',
+    voiceId: 'd427e4301693475a9398fe2bae68b82c',
+    langs: ['en'],
+    avatar: '/voice-avatars/d427e4301693475a9398fe2bae68b82c.jpg',
+  },
+  {
+    id: 'fish-panty-stocking',
+    label: "Fish — Panty Stocking (English)",
+    provider: 'fish',
+    voiceId: 'f6dd56e4c58e417e814d6620980a78d8',
+    langs: ['en'],
+    avatar: '/voice-avatars/f6dd56e4c58e417e814d6620980a78d8.jpg',
   },
 ]
 
@@ -801,7 +831,7 @@ const LOCALE_DEFAULT_VOICE: Record<string, string> = {
   de: 'fish-egirl',            // e girl
   pt: 'fish-garota-fofa',      // Garota fofa
   es: 'fish-madoka',           // Madoka
-  en: 'eleven-kika',           // ElevenLabs Yukai
+  en: 'fish-pretty-girl',      // Pretty girl
 }
 
 export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = []): string {
@@ -811,7 +841,7 @@ export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = [
   const all = [...BUILTIN_VOICES, ...userVoices]
   const match = all.find((v) => v.langs?.[0] === locale)
   if (match) return match.id
-  return 'eleven-kika'
+  return 'fish-pretty-girl' // глобальный fallback
 }
 
 const STORAGE_KEY = 'kika:user-voices:v1'
