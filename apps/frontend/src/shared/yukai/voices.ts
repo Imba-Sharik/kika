@@ -401,10 +401,10 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-sukuna-mido',
-    label: "Fish — Sukuna Mido (English)",
+    label: "Fish — Sukuna Mido (Japanese)",
     provider: 'fish',
     voiceId: '91a9ac2cf92a46e8a742c3a8145750f9',
-    langs: ['en', 'ru', 'ja'],
+    langs: ['ja', 'en', 'ru'],
     avatar: '/voice-avatars/91a9ac2cf92a46e8a742c3a8145750f9.webp',
   },
   {
@@ -656,10 +656,10 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-till-alien-stage',
-    label: "Fish — Till^^ (Alien stage) (English)",
+    label: "Fish — Till^^ Alien stage (Korean)",
     provider: 'fish',
     voiceId: 'd9708e800c754f0c876953e74d846f5a',
-    langs: ['en', 'ko'],
+    langs: ['ko', 'en'],
     avatar: '/voice-avatars/d9708e800c754f0c876953e74d846f5a.jpg',
   },
   {
@@ -699,10 +699,10 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-isagi-yoichi-v2',
-    label: "Fish — Isagi Yoichi v2 (English)",
+    label: "Fish — Isagi Yoichi v2 (Japanese)",
     provider: 'fish',
     voiceId: 'e40dc2616cad4ce899ee3abda491b251',
-    langs: ['en', 'ja'],
+    langs: ['ja', 'en'],
     avatar: '/voice-avatars/e40dc2616cad4ce899ee3abda491b251.webp',
   },
   {
@@ -721,18 +721,18 @@ export const BUILTIN_VOICES: Voice[] = [
   },
   {
     id: 'fish-en-f2e45ab1',
-    label: "Fish — アスナ (English)",
+    label: "Fish — アスナ (Japanese)",
     provider: 'fish',
     voiceId: 'f2e45ab1a4a548e2860efea1aa2b416e',
-    langs: ['en', 'ja'],
+    langs: ['ja', 'en'],
     avatar: '/voice-avatars/f2e45ab1a4a548e2860efea1aa2b416e.webp',
   },
   {
     id: 'fish-kurumi-tokisaki-nightmare',
-    label: "Fish — Kurumi Tokisaki (English)",
+    label: "Fish — Kurumi Tokisaki (Japanese)",
     provider: 'fish',
     voiceId: 'f9f294f55fd24e28b5b6469ae7e17ea9',
-    langs: ['en', 'ja'],
+    langs: ['ja', 'en'],
     avatar: '/voice-avatars/f9f294f55fd24e28b5b6469ae7e17ea9.jpg',
   },
   {

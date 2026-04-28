@@ -173,29 +173,37 @@ export function SettingsPanel({
   const [previewingId, setPreviewingId] = useState<string | null>(null)
   const [previewLoading, setPreviewLoading] = useState<string | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  // operationId — гонка-protection. Каждый клик инкрементит. Если во время
+  // await fetch юзер кликнул ▶ другого голоса → старая операция видит
+  // что её opId устарел и тихо выходит, не запуская audio.play() и не путая state.
+  const operationIdRef = useRef(0)
+  function stopPreview() {
+    operationIdRef.current++ // инвалидирует все in-flight операции
+    audioRef.current?.pause()
+    setPreviewingId(null)
+    setPreviewLoading(null)
+  }
   async function previewVoiceById(id: string) {
-    // Toggle: тот же id → стоп
+    // Toggle: клик на ту же строку — стоп
     if (previewingId === id || previewLoading === id) {
-      audioRef.current?.pause()
-      setPreviewingId(null)
-      setPreviewLoading(null)
+      stopPreview()
       return
     }
-    // Другой id → прерываем текущее проигрывание и стартуем новое
+    const opId = ++operationIdRef.current
     audioRef.current?.pause()
     const voice = findVoice(id, [])
     setPreviewLoading(id)
     try {
-      // Сначала пробуем pre-generated mp3 (быстрее: ~50ms vs ~1.5-2s live TTS)
       let res: Response
       const cachedUrl = `/voice-samples/${voice.voiceId}.mp3`
       const cached = await fetch(cachedUrl).catch(() => null)
+      if (opId !== operationIdRef.current) return // отменён более новым кликом
       if (cached?.ok) {
         res = cached
       } else {
-        // Fallback на live TTS (новый голос ещё не пре-сгенерён или путь сломан)
         const text = getVoiceSampleText(voice, locale)
         res = await fetchTts(text, { provider: voice.provider, voiceId: voice.voiceId })
+        if (opId !== operationIdRef.current) return
       }
       if (!audioRef.current) audioRef.current = new Audio()
       setPreviewLoading(null)
@@ -204,9 +212,16 @@ export function SettingsPanel({
     } catch (e) {
       console.warn('[voice-preview] failed:', e)
     } finally {
-      setPreviewLoading(null)
-      setPreviewingId((cur) => (cur === id ? null : cur))
+      if (opId === operationIdRef.current) {
+        setPreviewLoading(null)
+        setPreviewingId((cur) => (cur === id ? null : cur))
+      }
     }
+  }
+  // Выбор голоса в dropdown — останавливает любой текущий preview.
+  function handleSelectVoice(id: string) {
+    stopPreview()
+    onSelectVoice(id)
   }
 
   // Origin preference — где грузится фронт. Auto / прямое / РФ-зеркало.
@@ -310,7 +325,7 @@ export function SettingsPanel({
           </label>
           <VoiceSelect
             voiceId={voiceId}
-            onSelectVoice={onSelectVoice}
+            onSelectVoice={handleSelectVoice}
             languageGroups={voiceGroups.languageGroups}
             previewingId={previewingId}
             previewLoading={previewLoading}
