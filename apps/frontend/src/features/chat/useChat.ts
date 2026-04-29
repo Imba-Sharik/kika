@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import type { ModelMessage } from 'ai'
 import {
   buildSystemPrompt,
+  LANG_NAME,
   type Emotion,
   type Language,
 } from '@/shared/yukai/persona'
@@ -170,15 +171,26 @@ export function useChat(opts: UseChatOptions) {
       // Собираем system prompt: персона + profile + инъекции плагинов
       // (каждый плагин может добавить свою "память" типа английского словаря)
       let systemPrompt = buildSystemPrompt(opts.persona, opts.language)
+      // Memory + plugin инъекции могут содержать факты на любом языке (русское
+      // имя в profile.md, английский словарь в English-плагине). Sandwich-prompt:
+      // напоминаем Claude перед инжектом и после — отвечать ТОЛЬКО на UI-locale,
+      // независимо от языка фактов. Это фиксит code-switching на mixed-context.
+      const langName = LANG_NAME[opts.language] ?? opts.language
+      const memoryGuard = `\n\n---\nIMPORTANT: The following memory blocks may contain facts in any language (Russian names, English vocabulary, etc.). Use facts as data, but YOUR REPLY MUST BE IN ${langName} ONLY. Do not echo or quote in the source language. Translate names if needed.`
       if (opts.profileMd && opts.profileMd.trim()) {
-        systemPrompt += '\n\n---\n[ПАМЯТЬ: profile.md]\n' + opts.profileMd
+        systemPrompt += memoryGuard
+        systemPrompt += '\n\n[MEMORY: profile.md]\n' + opts.profileMd
       }
       for (const plugin of opts.plugins) {
         const injection = plugin.injectSystemContext?.()
         if (injection && injection.trim()) {
-          systemPrompt += '\n\n---\n' + injection
+          if (!opts.profileMd?.trim()) systemPrompt += memoryGuard
+          systemPrompt += '\n\n' + injection
         }
       }
+      // Финальный reminder в самом конце system prompt — последнее что Claude
+      // прочитает перед user message. Помогает на длинных prompt'ах.
+      systemPrompt += `\n\n---\nFINAL REMINDER: Reply in ${langName}. Never code-switch.`
 
       // Multi-step loop: пока Claude зовёт tools — выполняем локально, продолжаем.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -32,7 +32,7 @@ concisely. Adapt the warmth to the user's language and culture.`
 
 export type Language = 'en' | 'ru' | 'ja' | 'ko' | 'zh' | 'de' | 'fr' | 'pt' | 'es'
 
-const LANG_NAME: Record<Language, string> = {
+export const LANG_NAME: Record<Language, string> = {
   en: 'English',
   ru: 'Russian (русский)',
   ja: 'Japanese (日本語)',
