@@ -77,8 +77,12 @@ export function useChat(opts: UseChatOptions) {
   async function send(userText: string, attachments?: ChatAttachment[]) {
     const userMsg = userText.trim()
     if (!userMsg && (!attachments || attachments.length === 0)) return
-    // Если уже идёт активный send — прерываем его перед началом нового.
-    if (abortRef.current) abortRef.current.abort()
+    // Если уже идёт активный send — прерываем его ПОЛНОСТЬЮ (abort fetch +
+    // очистка TTS-очереди + остановка audio). Раньше был только abortRef.abort()
+    // — fetch отменялся, но уже декодированный TTS audio продолжал играть и
+    // очередь не очищалась → накопление параллельных pipeline'ов при быстрой
+    // последовательности transcripts.
+    interrupt()
     const abortController = new AbortController()
     abortRef.current = abortController
     interruptedRef.current = false
