@@ -550,7 +550,15 @@ app.whenReady().then(() => {
 
   // Left Alt + ` : music recognition hold-to-listen (нужны оба)
   const LEFT_ALT = 56   // 0x38
-  const BACKTICK = 41   // 0x29
+  // Tilde/backquote — позиция слева от "1". На US layout libuiohook отдаёт
+  // VC_BACKQUOTE = 41. На Russian (где эта клавиша = "ё") keycode может
+  // отличаться, но Windows virtual key (rawcode) остаётся VK_OEM_3 = 0xC0.
+  // Принимаем оба значения, иначе Alt+` не срабатывает на не-US раскладках.
+  const BACKTICK = 41   // 0x29 (VC_BACKQUOTE)
+  const TILDE_VK = 0xC0 // Windows VK_OEM_3 — layout-независимо
+  function isTildeKey(e) {
+    return e.keycode === BACKTICK || e.rawcode === TILDE_VK
+  }
   let leftAltDown = false
   let backtickDown = false
   let musicActive = false
@@ -576,7 +584,7 @@ app.whenReady().then(() => {
       if (mainWindow) mainWindow.webContents.send('dictation-start')
     }
     if (e.keycode === LEFT_ALT) { leftAltDown = true; updateMusicState() }
-    if (e.keycode === BACKTICK) { backtickDown = true; updateMusicState() }
+    if (isTildeKey(e)) { backtickDown = true; updateMusicState() }
     if (e.keycode === Z && e.ctrlKey) {
       // e.ctrlKey — состояние Ctrl из самого события (uIOhook), не ломается
       // если keyup пропустился. Повторы отсеиваем по таймстемпу.
@@ -594,7 +602,7 @@ app.whenReady().then(() => {
       if (mainWindow) mainWindow.webContents.send('dictation-stop')
     }
     if (e.keycode === LEFT_ALT) { leftAltDown = false; updateMusicState() }
-    if (e.keycode === BACKTICK) { backtickDown = false; updateMusicState() }
+    if (isTildeKey(e)) { backtickDown = false; updateMusicState() }
   })
 
   try {
