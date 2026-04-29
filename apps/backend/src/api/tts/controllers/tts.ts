@@ -36,7 +36,12 @@ async function ttsFishStream(ctx, text: string, voiceId: string) {
     latency: 'normal',
     temperature: 0.7,
     top_p: 0.7,
-    chunk_length: 200, // меньше chunk → быстрее first byte
+    // chunk_length: 300 (дефолт Fish, диапазон 100-300). Раньше стоял 200 для быстрее
+    // first byte — но Fish сам говорит "higher chunk_length = more consistent voice".
+    // На длинных репликах голос уходил в верхний регистр. 300 = pitch стабильнее, latency +~30%.
+    chunk_length: 300,
+    // Явно: каждый следующий чанк использует предыдущий как контекст → сохраняет тон.
+    condition_on_previous_chunks: true,
   })
 
   for (let attempt = 0; attempt < 3; attempt++) {

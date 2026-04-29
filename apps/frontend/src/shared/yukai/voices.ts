@@ -902,7 +902,7 @@ const LOCALE_DEFAULT_VOICE: Record<string, string> = {
   de: 'fish-egirl',            // e girl
   pt: 'fish-garota-fofa',      // Garota fofa
   es: 'fish-madoka',           // Madoka
-  en: 'fish-yun-yun',          // Yun-Yun (KonoSuba) — основной EN голос
+  en: 'fish-pretty-girl',      // Pretty girl — основной EN голос
 }
 
 export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = []): string {

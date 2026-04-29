@@ -73,7 +73,10 @@ async function ttsFish(text, voiceId, apiKey) {
       latency: 'normal',
       temperature: 0.7,
       top_p: 0.7,
-      chunk_length: 200,
+      // Параметры зеркалят backend tts.ts — иначе сэмпл и реальный чат звучат
+      // по-разному (preview писклявее/глуше, чем то, что юзер слышит в чате).
+      chunk_length: 300,
+      condition_on_previous_chunks: true,
     }),
   })
   if (!res.ok) throw new Error(`Fish ${res.status}: ${await res.text()}`)
