@@ -91,12 +91,16 @@
     "music": {
       "title": "歌曲历史",
       "name": "音乐识别",
-      "desc": "Shazam风格: 按住Left Alt + ` 让Yukai识别正在播放的歌曲"
+      "desc": "Shazam风格: 按住Left Alt + ` 让Yukai识别正在播放的歌曲",
+      "listening": "聆听中",
+      "recognizing": "识别中"
     },
     "dictation": {
       "title": "听写历史",
       "name": "听写",
-      "desc": "按住Right Alt并说话 — 文本被转录并粘贴到活动字段"
+      "desc": "按住Right Alt并说话 — 文本被转录并粘贴到活动字段",
+      "recording": "录音中",
+      "transcribing": "转写中"
     },
     "english": {
       "title": "英语历史",
@@ -195,8 +199,16 @@
     "ctaDownload": "下载Windows版",
     "ctaHow": "如何运作",
     "betaNote": "Beta期间免费 · macOS和Linux即将推出",
-    "yukaiBubbleLabel": "Yukai · 开心",
-    "yukaiBubbleText": "嘿,今天准备好帮你了。先做什么 — 检查邮件还是听音乐?",
+    "yukaiBubble1Label": "Yukai · 开心",
+    "yukaiBubble1Text": "嘿,今天准备好帮你了。先做什么 — 检查邮件还是听音乐?",
+    "yukaiBubble2Label": "Yukai · 兴奋",
+    "yukaiBubble2Text": "好耶!开始吧 — 今天的任务是什么?",
+    "yukaiBubble3Label": "Yukai · 思考",
+    "yukaiBubble3Text": "嗯... 让我想想。",
+    "yukaiBubble4Label": "Yukai · 喜爱",
+    "yukaiBubble4Text": "你最棒了。能在一起工作真好。",
+    "yukaiBubble5Label": "Yukai · 眨眼",
+    "yukaiBubble5Text": "告诉你一个小秘密...",
     "featuresTitle": "她能做什么",
     "featuresSubtitle": "三大主要功能 — 每个都替代一个独立应用。全在Yukai一个里。",
     "feature1Title": "活生生的伙伴",

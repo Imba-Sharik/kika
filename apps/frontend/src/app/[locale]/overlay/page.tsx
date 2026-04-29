@@ -245,6 +245,19 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     onProfileUpdate: setProfileMd,
   })
 
+  // Пока юзер диктует (Right Alt hold), VAD-мик паузится — иначе ловит ту же
+  // речь параллельно и шлёт в чат, и Yukai отвечает на твою диктовку.
+  const [dictating, setDictating] = useState(false)
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const api = (window as any).electronAPI
+    if (!api) return
+    const unsubs: Array<(() => void) | undefined> = []
+    if (api.onDictationStart) unsubs.push(api.onDictationStart(() => setDictating(true)))
+    if (api.onDictationStop) unsubs.push(api.onDictationStop(() => setDictating(false)))
+    return () => { unsubs.forEach((fn) => { if (typeof fn === 'function') fn() }) }
+  }, [])
+
   // Hands-free listener — headless VAD. UI рисует MicBars под персонажем.
   // Barge-in: мик слушает во время ответа Кики. Когда VAD ловит речь юзера
   // в момент TTS — прерываем Кику (chat.interrupt), VAD продолжает запись
@@ -261,6 +274,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     // Язык STT = текущая UI-локаль. Без этого Whisper получал 'ru' (default)
     // и транскрибировал английскую речь как русские фонемы → Claude отвечал на ru.
     language: currentLocale,
+    paused: dictating,
   })
 
   // Dictation и Music — теперь плагины. Их Provider'ы монтируются в

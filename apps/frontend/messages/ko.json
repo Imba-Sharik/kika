@@ -91,12 +91,16 @@
     "music": {
       "title": "노래 기록",
       "name": "음악 인식",
-      "desc": "Shazam 스타일: Left Alt + `를 길게 눌러 Yukai가 재생 중인 곡을 식별"
+      "desc": "Shazam 스타일: Left Alt + `를 길게 눌러 Yukai가 재생 중인 곡을 식별",
+      "listening": "듣는 중",
+      "recognizing": "인식 중"
     },
     "dictation": {
       "title": "받아쓰기 기록",
       "name": "받아쓰기",
-      "desc": "Right Alt를 길게 누르고 말하면 — 텍스트가 활성 필드에 붙여넣어집니다"
+      "desc": "Right Alt를 길게 누르고 말하면 — 텍스트가 활성 필드에 붙여넣어집니다",
+      "recording": "녹음 중",
+      "transcribing": "변환 중"
     },
     "english": {
       "title": "영어 학습 기록",
@@ -195,8 +199,16 @@
     "ctaDownload": "Windows용 다운로드",
     "ctaHow": "작동 방식",
     "betaNote": "베타 기간 무료 · macOS와 Linux 곧 출시",
-    "yukaiBubbleLabel": "Yukai · 행복",
-    "yukaiBubbleText": "안녕! 오늘도 도와줄 준비됐어. 먼저 뭐 할까 — 이메일 확인할까 음악 들을까?",
+    "yukaiBubble1Label": "Yukai · 행복",
+    "yukaiBubble1Text": "안녕! 오늘도 도와줄 준비됐어. 먼저 뭐 할까 — 이메일 확인할까 음악 들을까?",
+    "yukaiBubble2Label": "Yukai · 신남",
+    "yukaiBubble2Text": "좋아! 시작해보자 — 오늘의 미션은 뭐야?",
+    "yukaiBubble3Label": "Yukai · 생각 중",
+    "yukaiBubble3Text": "음... 잠깐 생각 좀 하게 해줘.",
+    "yukaiBubble4Label": "Yukai · 사랑",
+    "yukaiBubble4Text": "넌 최고야. 같이 있어서 좋아.",
+    "yukaiBubble5Label": "Yukai · 윙크",
+    "yukaiBubble5Text": "작은 비밀 하나 알려줄게...",
     "featuresTitle": "그녀가 할 수 있는 것",
     "featuresSubtitle": "세 가지 주요 기능 — 각각 별도의 앱을 대체합니다. 모두 Yukai 안에.",
     "feature1Title": "살아있는 동반자",

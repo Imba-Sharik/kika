@@ -91,12 +91,16 @@
     "music": {
       "title": "Historique des chansons",
       "name": "Reconnaissance musicale",
-      "desc": "Style Shazam: maintiens Alt gauche + ` pour que Yukai identifie ce qui joue"
+      "desc": "Style Shazam: maintiens Alt gauche + ` pour que Yukai identifie ce qui joue",
+      "listening": "J'ÉCOUTE",
+      "recognizing": "RECONNAISSANCE"
     },
     "dictation": {
       "title": "Historique de dictée",
       "name": "Dictée",
-      "desc": "Maintiens Alt droit et parle — le texte est transcrit et collé dans le champ actif"
+      "desc": "Maintiens Alt droit et parle — le texte est transcrit et collé dans le champ actif",
+      "recording": "ENREGISTREMENT",
+      "transcribing": "TRANSCRIPTION"
     },
     "english": {
       "title": "Historique d'anglais",
@@ -195,8 +199,16 @@
     "ctaDownload": "Télécharger pour Windows",
     "ctaHow": "Comment ça marche",
     "betaNote": "Gratuit pendant la beta · macOS et Linux bientôt",
-    "yukaiBubbleLabel": "Yukai · heureuse",
-    "yukaiBubbleText": "Salut, prête à t'aider aujourd'hui. On commence par quoi — vérifier les emails ou écouter de la musique?",
+    "yukaiBubble1Label": "Yukai · heureuse",
+    "yukaiBubble1Text": "Salut, prête à t'aider aujourd'hui. On commence par quoi — vérifier les emails ou écouter de la musique?",
+    "yukaiBubble2Label": "Yukai · excitée",
+    "yukaiBubble2Text": "Ouais! On y va — c'est quoi notre mission aujourd'hui?",
+    "yukaiBubble3Label": "Yukai · pensive",
+    "yukaiBubble3Text": "Hmm... laisse-moi réfléchir une seconde.",
+    "yukaiBubble4Label": "Yukai · amoureuse",
+    "yukaiBubble4Text": "Tu es le meilleur. Je suis contente qu'on travaille ensemble.",
+    "yukaiBubble5Label": "Yukai · clin d'œil",
+    "yukaiBubble5Text": "J'ai un petit secret à te confier...",
     "featuresTitle": "Ce qu'elle sait faire",
     "featuresSubtitle": "Trois fonctionnalités principales — chacune remplace une app séparée. Tout dans un seul Yukai.",
     "feature1Title": "Compagnon vivant",

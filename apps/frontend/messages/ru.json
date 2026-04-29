@@ -91,12 +91,16 @@
     "music": {
       "title": "История песен",
       "name": "Распознавание песен",
-      "desc": "Shazam-style: зажми Left Alt + ` чтобы Yukai узнала что играет"
+      "desc": "Shazam-style: зажми Left Alt + ` чтобы Yukai узнала что играет",
+      "listening": "СЛУШАЮ",
+      "recognizing": "РАСПОЗНАЮ"
     },
     "dictation": {
       "title": "История диктовки",
       "name": "Диктовка",
-      "desc": "Зажми Right Alt и говори — текст распознается и вставится в активное поле"
+      "desc": "Зажми Right Alt и говори — текст распознается и вставится в активное поле",
+      "recording": "ЗАПИСЬ",
+      "transcribing": "РАСШИФРОВКА"
     },
     "english": {
       "title": "История английского",
@@ -195,8 +199,16 @@
     "ctaDownload": "Скачать для Windows",
     "ctaHow": "Как это работает",
     "betaNote": "Бесплатно в beta · macOS и Linux скоро",
-    "yukaiBubbleLabel": "Yukai · счастлива",
-    "yukaiBubbleText": "Привет! Готова помочь тебе сегодня. Что сделаем первым — проверим почту или послушаем музыку?",
+    "yukaiBubble1Label": "Yukai · счастлива",
+    "yukaiBubble1Text": "Привет! Готова помочь тебе сегодня. Что сделаем первым — проверим почту или послушаем музыку?",
+    "yukaiBubble2Label": "Yukai · вдохновлена",
+    "yukaiBubble2Text": "Дааа! Поехали — какая у нас миссия сегодня?",
+    "yukaiBubble3Label": "Yukai · задумалась",
+    "yukaiBubble3Text": "Хмм... дай мне секунду подумать.",
+    "yukaiBubble4Label": "Yukai · влюблена",
+    "yukaiBubble4Text": "Ты лучший. Я рада, что мы вместе работаем.",
+    "yukaiBubble5Label": "Yukai · подмигивает",
+    "yukaiBubble5Text": "Расскажу тебе один маленький секрет...",
     "featuresTitle": "Что она умеет",
     "featuresSubtitle": "Три главные фичи — каждая заменяет отдельное приложение. Всё в одной Yukai.",
     "feature1Title": "Живой компаньон",

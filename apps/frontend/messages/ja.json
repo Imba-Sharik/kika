@@ -91,12 +91,16 @@
     "music": {
       "title": "曲の履歴",
       "name": "音楽認識",
-      "desc": "Shazamスタイル: Left Alt + ` を長押しでYukaiが再生中の曲を認識"
+      "desc": "Shazamスタイル: Left Alt + ` を長押しでYukaiが再生中の曲を認識",
+      "listening": "聴いてる",
+      "recognizing": "認識中"
     },
     "dictation": {
       "title": "ディクテーション履歴",
       "name": "ディクテーション",
-      "desc": "Right Altを長押しして話すと — テキストが文字起こしされアクティブなフィールドに貼り付けられます"
+      "desc": "Right Altを長押しして話すと — テキストが文字起こしされアクティブなフィールドに貼り付けられます",
+      "recording": "録音中",
+      "transcribing": "文字起こし中"
     },
     "english": {
       "title": "英語学習履歴",
@@ -195,8 +199,16 @@
     "ctaDownload": "Windows版をダウンロード",
     "ctaHow": "使い方を見る",
     "betaNote": "ベータ期間中は無料 · macOS / Linux版は近日公開",
-    "yukaiBubbleLabel": "Yukai · 嬉しい",
-    "yukaiBubbleText": "やっほー!今日も一緒に頑張ろうね。まず何する? メールチェック? それとも音楽でも聴く?",
+    "yukaiBubble1Label": "Yukai · 嬉しい",
+    "yukaiBubble1Text": "やっほー!今日も一緒に頑張ろうね。まず何する? メールチェック? それとも音楽でも聴く?",
+    "yukaiBubble2Label": "Yukai · ワクワク",
+    "yukaiBubble2Text": "やったー!さっそく始めよう — 今日のミッションは何?",
+    "yukaiBubble3Label": "Yukai · 考え中",
+    "yukaiBubble3Text": "うーん... ちょっと考えさせて。",
+    "yukaiBubble4Label": "Yukai · 大好き",
+    "yukaiBubble4Text": "あなたが一番!一緒にいられて嬉しいな。",
+    "yukaiBubble5Label": "Yukai · ウィンク",
+    "yukaiBubble5Text": "ちょっとした秘密、教えてあげる...",
     "featuresTitle": "Yukaiができること",
     "featuresSubtitle": "3つのメイン機能 — それぞれが別アプリの代わりに。全部Yukaiの中に。",
     "feature1Title": "生きてるコンパニオン",

@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 import { useDictation, type DictationItem } from './useDictation'
 import { DictationPanel } from './DictationPanel'
@@ -70,6 +70,7 @@ function DictPanelSlot({ ctx }: { ctx: YukaiContext }) {
 
 function DictStatusBadge() {
   const dict = useDictPlugin()
+  const t = useTranslations('plugin.dictation')
   if (!dict.recording && !dict.transcribing) return null
   return (
     <div
@@ -99,7 +100,7 @@ function DictStatusBadge() {
           animation: 'pulse 1s infinite',
         }}
       />
-      {dict.recording ? 'ЗАПИСЬ' : 'ТРАНСКРИПЦИЯ'}
+      {dict.recording ? t('recording') : t('transcribing')}
     </div>
   )
 }

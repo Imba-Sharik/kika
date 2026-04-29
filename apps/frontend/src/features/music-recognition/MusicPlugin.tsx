@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, type ReactNode } from 'react'
+import { useTranslations } from 'next-intl'
 import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
 import { useMusicRecognition, type MusicItem } from './useMusicRecognition'
 import { MusicPanel } from './MusicPanel'
@@ -49,6 +50,7 @@ function MusicPanelSlot({ ctx }: { ctx: YukaiContext }) {
 
 function MusicStatusBadge() {
   const music = useMusicPlugin()
+  const t = useTranslations('plugin.music')
   if (!music.listening && !music.recognizing) return null
   return (
     <div
@@ -70,7 +72,7 @@ function MusicStatusBadge() {
       }}
     >
       <span style={{ fontSize: 12 }}>♪</span>
-      {music.listening ? 'LISTENING' : 'RECOGNIZING'}
+      {music.listening ? t('listening') : t('recognizing')}
     </div>
   )
 }

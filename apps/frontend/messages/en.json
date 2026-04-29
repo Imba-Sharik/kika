@@ -91,12 +91,16 @@
     "music": {
       "title": "Song history",
       "name": "Music recognition",
-      "desc": "Shazam-style: hold Left Alt + ` for Yukai to identify what's playing"
+      "desc": "Shazam-style: hold Left Alt + ` for Yukai to identify what's playing",
+      "listening": "LISTENING",
+      "recognizing": "RECOGNIZING"
     },
     "dictation": {
       "title": "Dictation history",
       "name": "Dictation",
-      "desc": "Hold Right Alt and speak — text is transcribed and pasted into the active field"
+      "desc": "Hold Right Alt and speak — text is transcribed and pasted into the active field",
+      "recording": "RECORDING",
+      "transcribing": "TRANSCRIBING"
     },
     "english": {
       "title": "English history",
@@ -191,8 +195,16 @@
     "ctaDownload": "Download for Windows",
     "ctaHow": "How it works",
     "betaNote": "Free during beta · macOS and Linux coming soon",
-    "yukaiBubbleLabel": "Yukai · happy",
-    "yukaiBubbleText": "Hey, ready to help today. What should we do first — check your email or listen to some music?",
+    "yukaiBubble1Label": "Yukai · happy",
+    "yukaiBubble1Text": "Hey, ready to help today. What should we do first — check your email or listen to some music?",
+    "yukaiBubble2Label": "Yukai · excited",
+    "yukaiBubble2Text": "Yes! Let's get started — what's our mission today?",
+    "yukaiBubble3Label": "Yukai · thinking",
+    "yukaiBubble3Text": "Hmm... let me think about that for a sec.",
+    "yukaiBubble4Label": "Yukai · love",
+    "yukaiBubble4Text": "You're the best. I'm glad we're working together.",
+    "yukaiBubble5Label": "Yukai · wink",
+    "yukaiBubble5Text": "Got a little secret to share with you...",
     "featuresTitle": "What she can do",
     "featuresSubtitle": "Three main features — each replaces a separate app. All in one Yukai.",
     "feature1Title": "Live companion",

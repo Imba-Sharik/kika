@@ -91,12 +91,16 @@
     "music": {
       "title": "Lied-Verlauf",
       "name": "Musikerkennung",
-      "desc": "Shazam-Stil: Halte Linke Alt + ` damit Yukai erkennt was läuft"
+      "desc": "Shazam-Stil: Halte Linke Alt + ` damit Yukai erkennt was läuft",
+      "listening": "HÖRT ZU",
+      "recognizing": "ERKENNT"
     },
     "dictation": {
       "title": "Diktier-Verlauf",
       "name": "Diktieren",
-      "desc": "Halte Rechte Alt und sprich — Text wird transkribiert und ins aktive Feld eingefügt"
+      "desc": "Halte Rechte Alt und sprich — Text wird transkribiert und ins aktive Feld eingefügt",
+      "recording": "AUFNAHME",
+      "transcribing": "TRANSKRIPTION"
     },
     "english": {
       "title": "Englisch-Verlauf",
@@ -195,8 +199,16 @@
     "ctaDownload": "Für Windows herunterladen",
     "ctaHow": "Wie es funktioniert",
     "betaNote": "Kostenlos in der Beta · macOS und Linux bald",
-    "yukaiBubbleLabel": "Yukai · glücklich",
-    "yukaiBubbleText": "Hey, bereit dir heute zu helfen. Was machen wir zuerst — E-Mails checken oder Musik hören?",
+    "yukaiBubble1Label": "Yukai · glücklich",
+    "yukaiBubble1Text": "Hey, bereit dir heute zu helfen. Was machen wir zuerst — E-Mails checken oder Musik hören?",
+    "yukaiBubble2Label": "Yukai · aufgeregt",
+    "yukaiBubble2Text": "Yay! Los geht's — was ist unsere Mission heute?",
+    "yukaiBubble3Label": "Yukai · nachdenklich",
+    "yukaiBubble3Text": "Hmm... lass mich kurz nachdenken.",
+    "yukaiBubble4Label": "Yukai · verliebt",
+    "yukaiBubble4Text": "Du bist der Beste. Ich freue mich, dass wir zusammen arbeiten.",
+    "yukaiBubble5Label": "Yukai · zwinkernd",
+    "yukaiBubble5Text": "Ich verrate dir ein kleines Geheimnis...",
     "featuresTitle": "Was sie kann",
     "featuresSubtitle": "Drei Hauptfunktionen — jede ersetzt eine separate App. Alles in einem Yukai.",
     "feature1Title": "Lebendiger Begleiter",

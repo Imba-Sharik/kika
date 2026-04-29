@@ -1,9 +1,14 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { UserNav } from '@/widgets/header/ui/UserNav'
 import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
+
+// Эмоции персонажа в hero-блоке. Цикл по 5 секунд — длинно достаточно
+// прочесть баббл, коротко чтобы не дать заскучать. 5 эмоций × 5с = 25с круг.
+const HERO_EMOTIONS = ['happy', 'excited', 'thinking', 'love', 'wink'] as const
 
 const DOWNLOAD_URL = 'https://github.com/Imba-Sharik/kika/releases/latest/download/Yukai-Setup-x64.exe'
 const TELEGRAM_URL = 'https://t.me/+O_SNPGI-CGI0ZjUy'
@@ -37,6 +42,17 @@ function RedditIcon({ className = "h-4 w-4" }: { className?: string }) {
 export default function Landing() {
   const t = useTranslations('landing')
   const tNav = useTranslations('nav')
+
+  // Cross-fade между эмоциями: индекс активной картинки. Все 5 рендерим стопкой,
+  // меняем opacity — Next.js Image кэширует уже загруженные, мерцания нет.
+  const [emotionIdx, setEmotionIdx] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => {
+      setEmotionIdx((i) => (i + 1) % HERO_EMOTIONS.length)
+    }, 5000)
+    return () => clearInterval(id)
+  }, [])
+  const bubbleNum = emotionIdx + 1
 
   return (
     <main className="relative overflow-hidden">
@@ -133,21 +149,40 @@ export default function Landing() {
         {/* Hero illustration */}
         <div className="relative mt-16 mx-auto max-w-3xl">
           <div className="absolute inset-0 -z-10 bg-linear-to-b from-pink-500/20 to-violet-500/20 blur-3xl" />
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+          <div
+            className="relative overflow-hidden rounded-3xl border border-white/10 p-8 backdrop-blur"
+            style={{
+              backgroundImage: "url('/table.png')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
             <div className="flex items-center justify-center">
-              <Image
-                src="/yukai/emotions/happy.png"
-                alt="Yukai"
-                width={928}
-                height={1232}
-                className="h-auto w-64 md:w-80"
-                priority
-                unoptimized
-              />
+              {/* Все 5 эмоций — стопка с opacity-fade. Активная видна, остальные
+                  прозрачные. Next.js кэширует, после первого цикла переключения мгновенные. */}
+              <div className="relative h-auto w-64 md:w-80" style={{ aspectRatio: '928 / 1232' }}>
+                {HERO_EMOTIONS.map((emotion, i) => (
+                  <Image
+                    key={emotion}
+                    src={`/yukai/emotions/${emotion}.png`}
+                    alt={`Yukai ${emotion}`}
+                    fill
+                    sizes="(min-width: 768px) 320px, 256px"
+                    className="object-contain transition-opacity duration-700"
+                    style={{ opacity: i === emotionIdx ? 1 : 0 }}
+                    priority={i === 0}
+                    unoptimized
+                  />
+                ))}
+              </div>
             </div>
             <div className="mt-6 rounded-2xl bg-black/40 p-4 text-left">
-              <div className="mb-2 text-xs font-medium text-pink-400">{t('yukaiBubbleLabel')}</div>
-              <div className="text-sm text-white/80">&ldquo;{t('yukaiBubbleText')}&rdquo;</div>
+              <div className="mb-2 text-xs font-medium text-pink-400 transition-opacity duration-500">
+                {t(`yukaiBubble${bubbleNum}Label`)}
+              </div>
+              <div className="text-sm text-white/80 transition-opacity duration-500">
+                &ldquo;{t(`yukaiBubble${bubbleNum}Text`)}&rdquo;
+              </div>
             </div>
           </div>
         </div>

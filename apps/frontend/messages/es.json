@@ -91,12 +91,16 @@
     "music": {
       "title": "Historial de canciones",
       "name": "Reconocimiento de música",
-      "desc": "Estilo Shazam: mantén Alt izquierdo + ` para que Yukai identifique lo que suena"
+      "desc": "Estilo Shazam: mantén Alt izquierdo + ` para que Yukai identifique lo que suena",
+      "listening": "ESCUCHANDO",
+      "recognizing": "RECONOCIENDO"
     },
     "dictation": {
       "title": "Historial de dictado",
       "name": "Dictado",
-      "desc": "Mantén Alt derecho y habla — el texto se transcribe y se pega en el campo activo"
+      "desc": "Mantén Alt derecho y habla — el texto se transcribe y se pega en el campo activo",
+      "recording": "GRABANDO",
+      "transcribing": "TRANSCRIBIENDO"
     },
     "english": {
       "title": "Historial de inglés",
@@ -191,8 +195,16 @@
     "ctaDownload": "Descargar para Windows",
     "ctaHow": "Cómo funciona",
     "betaNote": "Gratis durante la beta · macOS y Linux pronto",
-    "yukaiBubbleLabel": "Yukai · feliz",
-    "yukaiBubbleText": "Hola, lista para ayudar hoy. ¿Qué hacemos primero — revisar el correo o escuchar algo de música?",
+    "yukaiBubble1Label": "Yukai · feliz",
+    "yukaiBubble1Text": "Hola, lista para ayudar hoy. ¿Qué hacemos primero — revisar el correo o escuchar algo de música?",
+    "yukaiBubble2Label": "Yukai · emocionada",
+    "yukaiBubble2Text": "¡Sí! Empecemos — ¿cuál es nuestra misión hoy?",
+    "yukaiBubble3Label": "Yukai · pensando",
+    "yukaiBubble3Text": "Hmm... déjame pensarlo un segundo.",
+    "yukaiBubble4Label": "Yukai · enamorada",
+    "yukaiBubble4Text": "Eres el mejor. Me alegra trabajar contigo.",
+    "yukaiBubble5Label": "Yukai · guiño",
+    "yukaiBubble5Text": "Tengo un secretito que contarte...",
     "featuresTitle": "Lo que sabe hacer",
     "featuresSubtitle": "Tres funciones principales — cada una sustituye una app aparte. Todo en una sola Yukai.",
     "feature1Title": "Compañera viva",
