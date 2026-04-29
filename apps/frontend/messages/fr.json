@@ -65,7 +65,7 @@
     "trialLeft": "Essai gratuit: {days} jours restants",
     "trialExpired": "Essai expiré — paiement bientôt disponible",
     "subUntil": "Actif jusqu'au {date}",
-    "subscribeCta": "S'abonner · 19$/mois",
+    "subscribeCta": "S'abonner · 9.99$/mois",
     "manageSub": "Gérer l'abonnement"
   },
   "plugins": {
@@ -248,6 +248,7 @@
     "pricingFeature5": "Accès aux futurs personnages de la marketplace",
     "pricingFeature6": "Support prioritaire",
     "pricingNote": "Gratuit pendant la beta. Abonnement — quand v1 sort.",
+    "subscribeBtn": "S'abonner — 9.99$/mois",
     "faqTitle": "Questions fréquentes",
     "faq1q": "Sur quels systèmes ça marche?",
     "faq1a": "Windows 10/11 — maintenant. macOS et Linux — en développement. Minimum: 4 Go RAM, microphone.",
@@ -275,7 +276,31 @@
     "trialExpiredBody": "On continue ensemble? Abonne-toi et je reviens.",
     "subExpiredTitle": "Abonnement expiré",
     "subExpiredBody": "Renouvelle pour continuer à utiliser la voix et les plugins de Yukai.",
-    "subscribeCta": "S'abonner · 19$/mois",
+    "subscribeCta": "S'abonner · 9.99$/mois",
     "paymentMethods": "USDT · Carte"
+  },
+  "billingPage": {
+    "successTitle": "C'est bon !",
+    "successBody": "Abonnement activé. Yukai est maintenant illimité — télécharge l'app ou ouvre-la si elle est déjà installée.",
+    "successDownload": "Télécharger pour Windows",
+    "successBackHome": "Retour à l'accueil",
+    "cancelTitle": "Paiement annulé",
+    "cancelBody": "Pas de souci — rien n'a été débité. Réessaie quand tu veux.",
+    "cancelTryAgain": "Réessayer",
+    "cancelBackHome": "Retour à l'accueil"
+  },
+  "subscribe": {
+    "title": "S'abonner à Yukai",
+    "subtitle": "Choisis ton mode de paiement. Annulable à tout moment.",
+    "perMonth": "/ mois",
+    "badge": "Populaire",
+    "usdtTitle": "USDT (TRC-20)",
+    "usdtSubtitle": "Crypto · frais faibles · instantané",
+    "cardTitle": "Carte",
+    "cardSubtitle": "Visa · MasterCard",
+    "cardSoon": "Bientôt",
+    "comingSoon": "Paiement bientôt intégré — écris à hello@yukai.app pour un accès anticipé",
+    "checkoutError": "Échec de création du paiement. Réessaie ou écris à hello@yukai.app",
+    "terms": "En continuant tu acceptes les Conditions et la Politique de confidentialité. L'abonnement se renouvelle mensuellement jusqu'à annulation."
   }
 }

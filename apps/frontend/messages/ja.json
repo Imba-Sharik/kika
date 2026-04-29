@@ -65,7 +65,7 @@
     "trialLeft": "無料トライアル: 残り{days}日",
     "trialExpired": "トライアル終了 — お支払い機能は近日リリース予定",
     "subUntil": "{date}まで有効",
-    "subscribeCta": "登録 · $19/月",
+    "subscribeCta": "登録 · $9.99/月",
     "manageSub": "サブスク管理"
   },
   "plugins": {
@@ -248,6 +248,7 @@
     "pricingFeature5": "今後追加されるマーケットプレイスのキャラへのアクセス",
     "pricingFeature6": "優先サポート",
     "pricingNote": "ベータ期間中は無料。サブスクはv1リリース時から。",
+    "subscribeBtn": "登録 — $9.99/月",
     "faqTitle": "よくある質問",
     "faq1q": "どのOSで動きますか?",
     "faq1a": "現在はWindows 10/11対応。macOS / Linuxは開発中。推奨スペック: 4GB RAM、マイク。",
@@ -275,7 +276,31 @@
     "trialExpiredBody": "これからも一緒にいたい?サブスクすればまた会えるよ。",
     "subExpiredTitle": "サブスクが切れちゃった",
     "subExpiredBody": "更新したら音声とプラグインがまた使えるよ。",
-    "subscribeCta": "登録 · $19/月",
+    "subscribeCta": "登録 · $9.99/月",
     "paymentMethods": "USDT · カード"
+  },
+  "billingPage": {
+    "successTitle": "完了!",
+    "successBody": "サブスク有効化。Yukaiは無制限になったよ — アプリをダウンロードするか、すでにあれば起動してね。",
+    "successDownload": "Windows版をダウンロード",
+    "successBackHome": "ホームへ戻る",
+    "cancelTitle": "支払いキャンセル",
+    "cancelBody": "大丈夫 — 料金は発生してないよ。気が向いたらまた試してね。",
+    "cancelTryAgain": "もう一度",
+    "cancelBackHome": "ホームへ戻る"
+  },
+  "subscribe": {
+    "title": "Yukaiに登録",
+    "subtitle": "支払い方法を選んでね。いつでも解約できるよ。",
+    "perMonth": "/ 月",
+    "badge": "人気",
+    "usdtTitle": "USDT (TRC-20)",
+    "usdtSubtitle": "暗号通貨 · 低手数料 · 即時",
+    "cardTitle": "クレカ",
+    "cardSubtitle": "Visa · MasterCard",
+    "cardSoon": "近日",
+    "comingSoon": "支払い機能は近日公開 — hello@yukai.app に連絡で早期アクセス",
+    "checkoutError": "支払いの作成に失敗。もう一度試すか hello@yukai.app に連絡してね",
+    "terms": "続行すると利用規約とプライバシーポリシーに同意したものとみなされます。サブスクは解約まで毎月自動更新されます。"
   }
 }

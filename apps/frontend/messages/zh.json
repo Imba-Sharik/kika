@@ -65,7 +65,7 @@
     "trialLeft": "免费试用: 还剩{days}天",
     "trialExpired": "试用已过期 — 付款即将上线",
     "subUntil": "有效期至 {date}",
-    "subscribeCta": "订阅 · $19/月",
+    "subscribeCta": "订阅 · $9.99/月",
     "manageSub": "管理订阅"
   },
   "plugins": {
@@ -248,6 +248,7 @@
     "pricingFeature5": "未来市场角色访问",
     "pricingFeature6": "优先支持",
     "pricingNote": "Beta期间免费。订阅 — v1发布时。",
+    "subscribeBtn": "订阅 — $9.99/月",
     "faqTitle": "常见问题",
     "faq1q": "在哪些系统上运行?",
     "faq1a": "Windows 10/11 — 现在。macOS和Linux — 开发中。最低: 4GB RAM,麦克风。",
@@ -275,7 +276,31 @@
     "trialExpiredBody": "想继续一起吗?订阅后我就能回来。",
     "subExpiredTitle": "订阅已过期",
     "subExpiredBody": "续费即可继续使用Yukai的语音和插件。",
-    "subscribeCta": "订阅 · $19/月",
+    "subscribeCta": "订阅 · $9.99/月",
     "paymentMethods": "USDT · 银行卡"
+  },
+  "billingPage": {
+    "successTitle": "完成!",
+    "successBody": "订阅已激活。Yukai 现在无限制 — 下载应用,如果已安装则打开它。",
+    "successDownload": "下载 Windows 版",
+    "successBackHome": "返回首页",
+    "cancelTitle": "支付已取消",
+    "cancelBody": "别担心 — 没有扣费。准备好时再试一次。",
+    "cancelTryAgain": "重试",
+    "cancelBackHome": "返回首页"
+  },
+  "subscribe": {
+    "title": "订阅 Yukai",
+    "subtitle": "选择支付方式。随时取消。",
+    "perMonth": "/ 月",
+    "badge": "热门",
+    "usdtTitle": "USDT (TRC-20)",
+    "usdtSubtitle": "加密货币 · 低手续费 · 即时",
+    "cardTitle": "银行卡",
+    "cardSubtitle": "Visa · MasterCard",
+    "cardSoon": "即将",
+    "comingSoon": "支付集成即将上线 — 写信到 hello@yukai.app 获取早期访问",
+    "checkoutError": "无法创建付款。请重试或写信到 hello@yukai.app",
+    "terms": "继续即表示您同意服务条款和隐私政策。订阅将每月自动续订,直到取消。"
   }
 }

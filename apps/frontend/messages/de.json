@@ -65,7 +65,7 @@
     "trialLeft": "Kostenlose Testphase: noch {days} Tage",
     "trialExpired": "Testphase abgelaufen — Bezahlung kommt bald",
     "subUntil": "Aktiv bis {date}",
-    "subscribeCta": "Abonnieren · $19/Monat",
+    "subscribeCta": "Abonnieren · $9.99/Monat",
     "manageSub": "Abo verwalten"
   },
   "plugins": {
@@ -248,6 +248,7 @@
     "pricingFeature5": "Zugang zu zukünftigen Marketplace-Charakteren",
     "pricingFeature6": "Priorisierter Support",
     "pricingNote": "Kostenlos während Beta. Abo — wenn v1 erscheint.",
+    "subscribeBtn": "Abonnieren — $9.99/Monat",
     "faqTitle": "Häufige Fragen",
     "faq1q": "Auf welchen Systemen funktioniert es?",
     "faq1a": "Windows 10/11 — jetzt. macOS und Linux — in Entwicklung. Mindestanforderungen: 4 GB RAM, Mikrofon.",
@@ -275,7 +276,31 @@
     "trialExpiredBody": "Willst du weitermachen? Abonniere und ich bin wieder da.",
     "subExpiredTitle": "Abo abgelaufen",
     "subExpiredBody": "Verlängere, um Yukais Stimme und Plugins weiter zu nutzen.",
-    "subscribeCta": "Abonnieren · $19/Monat",
+    "subscribeCta": "Abonnieren · $9.99/Monat",
     "paymentMethods": "USDT · Karte"
+  },
+  "billingPage": {
+    "successTitle": "Geschafft!",
+    "successBody": "Abo aktiviert. Yukai ist jetzt unbegrenzt — lade die App herunter oder öffne sie, falls schon installiert.",
+    "successDownload": "Für Windows herunterladen",
+    "successBackHome": "Zurück zur Startseite",
+    "cancelTitle": "Zahlung abgebrochen",
+    "cancelBody": "Kein Problem — nichts wurde abgebucht. Versuch's wieder, wann du willst.",
+    "cancelTryAgain": "Nochmal versuchen",
+    "cancelBackHome": "Zurück zur Startseite"
+  },
+  "subscribe": {
+    "title": "Yukai abonnieren",
+    "subtitle": "Wähle deine Zahlungsmethode. Jederzeit kündbar.",
+    "perMonth": "/ Monat",
+    "badge": "Beliebt",
+    "usdtTitle": "USDT (TRC-20)",
+    "usdtSubtitle": "Krypto · niedrige Gebühr · sofort",
+    "cardTitle": "Karte",
+    "cardSubtitle": "Visa · MasterCard",
+    "cardSoon": "Bald",
+    "comingSoon": "Zahlungsintegration kommt bald — schreib an hello@yukai.app für Early Access",
+    "checkoutError": "Zahlung konnte nicht erstellt werden. Versuch es nochmal oder schreib an hello@yukai.app",
+    "terms": "Mit dem Fortfahren stimmst du den AGB und der Datenschutzerklärung zu. Das Abo verlängert sich monatlich automatisch bis zur Kündigung."
   }
 }

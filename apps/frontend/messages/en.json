@@ -65,7 +65,7 @@
     "trialLeft": "Free trial: {days} days left",
     "trialExpired": "Trial expired — payment coming soon",
     "subUntil": "Active until {date}",
-    "subscribeCta": "Subscribe · $19/mo",
+    "subscribeCta": "Subscribe · $9.99/mo",
     "manageSub": "Manage subscription"
   },
   "plugins": {
@@ -244,6 +244,7 @@
     "pricingFeature5": "Access to future marketplace characters",
     "pricingFeature6": "Priority support",
     "pricingNote": "Free during beta. Subscription — when v1 ships.",
+    "subscribeBtn": "Subscribe — $9.99/mo",
     "faqTitle": "FAQ",
     "faq1q": "What systems does it work on?",
     "faq1a": "Windows 10/11 — now. macOS and Linux — in development. Minimum: 4 GB RAM, microphone.",
@@ -271,7 +272,31 @@
     "trialExpiredBody": "Want to keep going together? Subscribe and I'll be back.",
     "subExpiredTitle": "Subscription expired",
     "subExpiredBody": "Renew to continue using Yukai's voice and plugins.",
-    "subscribeCta": "Subscribe · $19/mo",
+    "subscribeCta": "Subscribe · $9.99/mo",
     "paymentMethods": "USDT · Card"
+  },
+  "billingPage": {
+    "successTitle": "You're in!",
+    "successBody": "Subscription activated. Yukai is now unlimited — download the app or open it if it's already running.",
+    "successDownload": "Download for Windows",
+    "successBackHome": "Back to home",
+    "cancelTitle": "Payment cancelled",
+    "cancelBody": "No worries — nothing was charged. Try again whenever you're ready.",
+    "cancelTryAgain": "Try again",
+    "cancelBackHome": "Back to home"
+  },
+  "subscribe": {
+    "title": "Subscribe to Yukai",
+    "subtitle": "Pick how you'd like to pay. Cancel anytime.",
+    "perMonth": "/ month",
+    "badge": "Most popular",
+    "usdtTitle": "USDT (TRC-20)",
+    "usdtSubtitle": "Crypto · low fee · instant",
+    "cardTitle": "Card",
+    "cardSubtitle": "Visa · MasterCard",
+    "cardSoon": "Soon",
+    "comingSoon": "Payment integration coming soon — drop a note at hello@yukai.app for early access",
+    "checkoutError": "Couldn't create payment. Try again or write to hello@yukai.app",
+    "terms": "By continuing you agree to the Terms and Privacy Policy. Subscription auto-renews monthly until cancelled."
   }
 }

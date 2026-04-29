@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Play } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { SubscribeButton } from '@/features/billing/SubscribeButton'
 import { UserNav } from '@/widgets/header/ui/UserNav'
 import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
 
@@ -316,6 +317,14 @@ export default function Landing() {
             >
               {t('ctaDownload')}
             </a>
+            <SubscribeButton>
+              <button
+                type="button"
+                className="mt-3 block w-full cursor-pointer rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-center text-sm font-medium text-white/80 transition hover:bg-white/10"
+              >
+                {t('subscribeBtn')}
+              </button>
+            </SubscribeButton>
             <p className="mt-3 text-center text-xs text-white/50">{t('pricingNote')}</p>
           </div>
         </div>

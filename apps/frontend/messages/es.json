@@ -65,7 +65,7 @@
     "trialLeft": "Prueba gratuita: quedan {days} días",
     "trialExpired": "Prueba caducada — pago en camino",
     "subUntil": "Activa hasta {date}",
-    "subscribeCta": "Suscribirse · $19/mes",
+    "subscribeCta": "Suscribirse · $9.99/mes",
     "manageSub": "Gestionar suscripción"
   },
   "plugins": {
@@ -244,6 +244,7 @@
     "pricingFeature5": "Acceso a futuros personajes del marketplace",
     "pricingFeature6": "Soporte prioritario",
     "pricingNote": "Gratis durante la beta. Suscripción — cuando salga la v1.",
+    "subscribeBtn": "Suscribirse — $9.99/mes",
     "faqTitle": "FAQ",
     "faq1q": "¿En qué sistemas funciona?",
     "faq1a": "Windows 10/11 — ya. macOS y Linux — en desarrollo. Mínimo: 4 GB de RAM, micrófono.",
@@ -271,7 +272,31 @@
     "trialExpiredBody": "¿Seguimos juntos? Suscríbete y vuelvo.",
     "subExpiredTitle": "Suscripción expirada",
     "subExpiredBody": "Renueva para seguir usando la voz y plugins de Yukai.",
-    "subscribeCta": "Suscribirse · $19/mes",
+    "subscribeCta": "Suscribirse · $9.99/mes",
     "paymentMethods": "USDT · Tarjeta"
+  },
+  "billingPage": {
+    "successTitle": "¡Listo!",
+    "successBody": "Suscripción activada. Yukai ahora es ilimitada — descarga la app o ábrela si ya está instalada.",
+    "successDownload": "Descargar para Windows",
+    "successBackHome": "Volver al inicio",
+    "cancelTitle": "Pago cancelado",
+    "cancelBody": "Tranqui — no se cobró nada. Inténtalo de nuevo cuando quieras.",
+    "cancelTryAgain": "Intentar de nuevo",
+    "cancelBackHome": "Volver al inicio"
+  },
+  "subscribe": {
+    "title": "Suscribirse a Yukai",
+    "subtitle": "Elige cómo pagar. Cancela cuando quieras.",
+    "perMonth": "/ mes",
+    "badge": "Popular",
+    "usdtTitle": "USDT (TRC-20)",
+    "usdtSubtitle": "Cripto · comisión baja · instantáneo",
+    "cardTitle": "Tarjeta",
+    "cardSubtitle": "Visa · MasterCard",
+    "cardSoon": "Pronto",
+    "comingSoon": "Integración de pago próximamente — escribe a hello@yukai.app para acceso anticipado",
+    "checkoutError": "No se pudo crear el pago. Inténtalo de nuevo o escribe a hello@yukai.app",
+    "terms": "Al continuar aceptas los Términos y la Política de Privacidad. La suscripción se renueva mensualmente hasta cancelarla."
   }
 }
