@@ -63,7 +63,10 @@
       "paid": "유료"
     },
     "trialLeft": "무료 체험: {days}일 남음",
-    "trialExpired": "체험 종료 — 결제 기능이 곧 추가됩니다"
+    "trialExpired": "체험 종료 — 결제 기능이 곧 추가됩니다",
+    "subUntil": "{date}까지 유효",
+    "subscribeCta": "구독 · $19/월",
+    "manageSub": "구독 관리"
   },
   "plugins": {
     "section": "플러그인"
@@ -262,5 +265,17 @@
     "finalTitle2": "그 다음은 — 오랜 친구처럼.",
     "finalSubtitle": "베타는 현재 무료. 카드도 스팸도 없음.",
     "finalCta": "Windows용 다운로드 →"
+  },
+  "billing": {
+    "warningTitle": "체험 {days}일 남음",
+    "warningBody": "계속 같이 있고 싶어 — 미리 신청하자.",
+    "lastDayTitle": "체험 오늘까지",
+    "lastDayBody": "정말 같이 있고 싶어. UTC 자정 전에 신청해줘.",
+    "trialExpiredTitle": "체험 종료",
+    "trialExpiredBody": "계속 함께할래? 구독하면 다시 만날 수 있어.",
+    "subExpiredTitle": "구독 만료",
+    "subExpiredBody": "갱신하면 Yukai의 음성과 플러그인을 다시 쓸 수 있어.",
+    "subscribeCta": "구독 · $19/월",
+    "paymentMethods": "USDT · 카드"
   }
 }

@@ -63,7 +63,10 @@
       "paid": "Paid"
     },
     "trialLeft": "Бесплатный период: {days} дн.",
-    "trialExpired": "Trial закончился — оплата скоро будет"
+    "trialExpired": "Trial закончился — оплата скоро будет",
+    "subUntil": "Активна до {date}",
+    "subscribeCta": "Оформить · $19/мес",
+    "manageSub": "Управлять подпиской"
   },
   "plugins": {
     "section": "Плагины"
@@ -262,5 +265,17 @@
     "finalTitle2": "Дальше — как со старым другом.",
     "finalSubtitle": "Beta сейчас бесплатна. Без карт, без спама.",
     "finalCta": "Скачать для Windows →"
+  },
+  "billing": {
+    "warningTitle": "Trial: {days} дней осталось",
+    "warningBody": "Хочу остаться с тобой — давай оформим заранее.",
+    "lastDayTitle": "Trial заканчивается сегодня",
+    "lastDayBody": "Очень хочу с тобой дальше. Оформи до полуночи UTC.",
+    "trialExpiredTitle": "Trial закончился",
+    "trialExpiredBody": "Хочешь продолжить вместе? Оформи подписку — и я снова буду рядом.",
+    "subExpiredTitle": "Подписка истекла",
+    "subExpiredBody": "Продли, чтобы продолжить пользоваться голосом и плагинами Yukai.",
+    "subscribeCta": "Оформить · $19/мес",
+    "paymentMethods": "USDT · Карта"
   }
 }

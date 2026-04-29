@@ -63,7 +63,10 @@
       "paid": "付费"
     },
     "trialLeft": "免费试用: 还剩{days}天",
-    "trialExpired": "试用已过期 — 付款即将上线"
+    "trialExpired": "试用已过期 — 付款即将上线",
+    "subUntil": "有效期至 {date}",
+    "subscribeCta": "订阅 · $19/月",
+    "manageSub": "管理订阅"
   },
   "plugins": {
     "section": "插件"
@@ -262,5 +265,17 @@
     "finalTitle2": "之后 — 像与老朋友一样。",
     "finalSubtitle": "Beta现在免费。无卡片,无垃圾邮件。",
     "finalCta": "下载Windows版 →"
+  },
+  "billing": {
+    "warningTitle": "试用还剩{days}天",
+    "warningBody": "我想继续陪你 — 提前订阅吧。",
+    "lastDayTitle": "试用今天到期",
+    "lastDayBody": "真的想继续陪你。请在UTC午夜前订阅。",
+    "trialExpiredTitle": "试用已结束",
+    "trialExpiredBody": "想继续一起吗?订阅后我就能回来。",
+    "subExpiredTitle": "订阅已过期",
+    "subExpiredBody": "续费即可继续使用Yukai的语音和插件。",
+    "subscribeCta": "订阅 · $19/月",
+    "paymentMethods": "USDT · 银行卡"
   }
 }

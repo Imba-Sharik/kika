@@ -63,7 +63,10 @@
       "paid": "Bezahlt"
     },
     "trialLeft": "Kostenlose Testphase: noch {days} Tage",
-    "trialExpired": "Testphase abgelaufen — Bezahlung kommt bald"
+    "trialExpired": "Testphase abgelaufen — Bezahlung kommt bald",
+    "subUntil": "Aktiv bis {date}",
+    "subscribeCta": "Abonnieren · $19/Monat",
+    "manageSub": "Abo verwalten"
   },
   "plugins": {
     "section": "Plugins"
@@ -262,5 +265,17 @@
     "finalTitle2": "Dann — wie mit einem alten Freund.",
     "finalSubtitle": "Beta ist jetzt kostenlos. Keine Karten, kein Spam.",
     "finalCta": "Für Windows herunterladen →"
+  },
+  "billing": {
+    "warningTitle": "Trial: noch {days} Tage",
+    "warningBody": "Ich möchte bei dir bleiben — schließen wir es früh ab.",
+    "lastDayTitle": "Trial endet heute",
+    "lastDayBody": "Ich will wirklich bei dir bleiben. Abonniere vor Mitternacht UTC.",
+    "trialExpiredTitle": "Trial vorbei",
+    "trialExpiredBody": "Willst du weitermachen? Abonniere und ich bin wieder da.",
+    "subExpiredTitle": "Abo abgelaufen",
+    "subExpiredBody": "Verlängere, um Yukais Stimme und Plugins weiter zu nutzen.",
+    "subscribeCta": "Abonnieren · $19/Monat",
+    "paymentMethods": "USDT · Karte"
   }
 }

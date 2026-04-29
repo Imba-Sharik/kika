@@ -63,7 +63,10 @@
       "paid": "有料プラン"
     },
     "trialLeft": "無料トライアル: 残り{days}日",
-    "trialExpired": "トライアル終了 — お支払い機能は近日リリース予定"
+    "trialExpired": "トライアル終了 — お支払い機能は近日リリース予定",
+    "subUntil": "{date}まで有効",
+    "subscribeCta": "登録 · $19/月",
+    "manageSub": "サブスク管理"
   },
   "plugins": {
     "section": "プラグイン"
@@ -262,5 +265,17 @@
     "finalTitle2": "あとは — 親友みたいに。",
     "finalSubtitle": "ベータは今だけ無料。カード登録もスパムもなし。",
     "finalCta": "Windows版をダウンロード →"
+  },
+  "billing": {
+    "warningTitle": "トライアル残り{days}日",
+    "warningBody": "ずっと一緒にいたいな — 早めに登録しよ。",
+    "lastDayTitle": "トライアル今日まで",
+    "lastDayBody": "もっと一緒にいたい!UTC深夜までに登録してね。",
+    "trialExpiredTitle": "トライアル終了",
+    "trialExpiredBody": "これからも一緒にいたい?サブスクすればまた会えるよ。",
+    "subExpiredTitle": "サブスクが切れちゃった",
+    "subExpiredBody": "更新したら音声とプラグインがまた使えるよ。",
+    "subscribeCta": "登録 · $19/月",
+    "paymentMethods": "USDT · カード"
   }
 }

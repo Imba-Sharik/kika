@@ -25,5 +25,13 @@ export async function aiFetch(path: string, init: RequestInit = {}): Promise<Res
     headers.set('Authorization', `Bearer ${jwt}`)
   }
 
-  return fetch(`${getAiBaseUrl()}${path}`, { ...init, headers })
+  const res = await fetch(`${getAiBaseUrl()}${path}`, { ...init, headers })
+
+  // 402 Payment Required — trial закончился или подписка истекла. Сигналим
+  // глобально, чтобы useTrialStatus мог обновиться и показать blocking-bubble.
+  if (res.status === 402 && typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('billing:expired'))
+  }
+
+  return res
 }

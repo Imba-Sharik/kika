@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { YukaiFace } from '@/widgets/yukai-face/YukaiFace'
 import { AuthGateBubble } from '@/features/auth/ui/AuthGateBubble'
+import { TrialStatusBubble } from '@/features/billing/TrialStatusBubble'
+import { useTrialStatus } from '@/features/billing/useTrialStatus'
 import { useMicListener } from '@/features/mic-input/useMicListener'
 import { MicBars } from '@/features/mic-input/MicBars'
 import { EnglishImages } from '@/features/english-images/EnglishImages'
@@ -226,6 +228,27 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   const audioElRef = useRef<HTMLAudioElement | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Trial / subscription статус. isBlocked = trial истёк или подписка просрочена —
+  // блокируем мик и chat-input. Баббл рядом с персонажем объяснит юзеру почему.
+  const trial = useTrialStatus()
+  // localStorage ключ для dismiss warning'а — уникальный per-day чтобы он
+  // не назойничал в течение одного дня но возвращался следующим утром.
+  const dismissKey = `kika:trial-dismissed:${new Date().toISOString().slice(0, 10)}`
+  const [trialDismissed, setTrialDismissed] = useState(false)
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage init */
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(dismissKey) === 'true') setTrialDismissed(true)
+    } catch {}
+  }, [dismissKey])
+  /* eslint-enable react-hooks/set-state-in-effect */
+  function dismissTrial() {
+    setTrialDismissed(true)
+    try { localStorage.setItem(dismissKey, 'true') } catch {}
+  }
+  // Показываем баббл если: статус не 'ok' И (это блок ИЛИ юзер не дисмиссил warning сегодня)
+  const showTrialBubble = trial.status !== 'ok' && (trial.isBlocked || !trialDismissed)
+
   // Главный чат-пайплайн вынесен в useChat — хук держит messages/streaming/loading/speaking/error.
   // Plugin registry — фильтруем по enabled-state юзера. Объявлено здесь,
   // чтобы передать plugins в useChat (для injectSystemContext/onChatResponse).
@@ -274,7 +297,9 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     // Язык STT = текущая UI-локаль. Без этого Whisper получал 'ru' (default)
     // и транскрибировал английскую речь как русские фонемы → Claude отвечал на ru.
     language: currentLocale,
-    paused: dictating,
+    // Паузим VAD когда диктуем (Right Alt) ИЛИ когда trial истёк/подписка просрочена.
+    // В обоих случаях STT-запросы всё равно вернут ошибку, нет смысла слушать.
+    paused: dictating || trial.isBlocked,
   })
 
   // Dictation и Music — теперь плагины. Их Provider'ы монтируются в
@@ -570,10 +595,23 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
           <AuthGateBubble />
         )}
 
+        {/* Trial/subscription баббл — показываем только залогиненным.
+            Имеет приоритет над онбордингом: если trial expired или warning,
+            юзеру важнее узнать что AI отключился, а не "как начать разговор". */}
+        {session && showTrialBubble && (
+          <TrialStatusBubble
+            status={trial.status}
+            quota={trial.quota}
+            onDismiss={trial.isBlocked ? undefined : dismissTrial}
+          />
+        )}
+
         {/* Онбординг: показывается один раз при первом запуске справа от персонажа.
             Объясняет главное — Ctrl+Z чтобы начать разговор. Dismiss → localStorage.
-            Скрыт пока юзер не залогинен — иначе перекроется AuthGateBubble. */}
-        {session && showOnboarding && (
+            Скрыт пока юзер не залогинен — иначе перекроется AuthGateBubble.
+            Также не показываем когда висит trial-баббл — две всплывающие подсказки рядом
+            с персонажем перекрывают друг друга и мешают читать. */}
+        {session && showOnboarding && !showTrialBubble && (
           <div
             onMouseDown={(e) => e.stopPropagation()}
             style={{

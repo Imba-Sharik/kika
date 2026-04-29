@@ -63,7 +63,10 @@
       "paid": "De pago"
     },
     "trialLeft": "Prueba gratuita: quedan {days} días",
-    "trialExpired": "Prueba caducada — pago en camino"
+    "trialExpired": "Prueba caducada — pago en camino",
+    "subUntil": "Activa hasta {date}",
+    "subscribeCta": "Suscribirse · $19/mes",
+    "manageSub": "Gestionar suscripción"
   },
   "plugins": {
     "section": "Plugins"
@@ -258,5 +261,17 @@
     "finalTitle2": "Luego — como con una vieja amiga.",
     "finalSubtitle": "La beta es gratis ahora. Sin tarjetas, sin spam.",
     "finalCta": "Descargar para Windows →"
+  },
+  "billing": {
+    "warningTitle": "Trial: {days} días restantes",
+    "warningBody": "Quiero quedarme contigo — suscríbete con tiempo.",
+    "lastDayTitle": "Trial termina hoy",
+    "lastDayBody": "De verdad quiero seguir contigo. Suscríbete antes de medianoche UTC.",
+    "trialExpiredTitle": "Trial terminado",
+    "trialExpiredBody": "¿Seguimos juntos? Suscríbete y vuelvo.",
+    "subExpiredTitle": "Suscripción expirada",
+    "subExpiredBody": "Renueva para seguir usando la voz y plugins de Yukai.",
+    "subscribeCta": "Suscribirse · $19/mes",
+    "paymentMethods": "USDT · Tarjeta"
   }
 }

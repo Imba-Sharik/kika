@@ -512,6 +512,16 @@ type Quota = {
   resetsAt: string
   tier: 'trial' | 'free' | 'paid'
   trialDaysLeft: number | null
+  subscriptionUntil: string | null
+}
+
+const BILLING_URL = 'https://yukai.app/billing'
+
+function openBilling() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const api = (window as any).electronAPI
+  if (api?.openExternal) api.openExternal(BILLING_URL)
+  else window.open(BILLING_URL, '_blank', 'noopener,noreferrer')
 }
 
 /**
@@ -848,6 +858,38 @@ function QuotaWidget({ quota, language }: { quota: Quota; language: Language }) 
             ? t('quota.trialLeft').replace('{days}', String(quota.trialDaysLeft))
             : t('quota.trialExpired')}
         </div>
+      )}
+      {quota.tier === 'paid' && quota.subscriptionUntil && (
+        <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 6 }}>
+          {t('quota.subUntil').replace(
+            '{date}',
+            new Date(quota.subscriptionUntil).toLocaleDateString(),
+          )}
+        </div>
+      )}
+      {/* CTA "Оформить" / "Управлять" — показываем для trial и paid (для free скрываем) */}
+      {(quota.tier === 'trial' || quota.tier === 'paid') && (
+        <button
+          type="button"
+          onClick={openBilling}
+          style={{
+            marginTop: 8,
+            width: '100%',
+            padding: '6px 10px',
+            background:
+              quota.tier === 'trial' && (quota.trialDaysLeft ?? 0) <= 2
+                ? 'linear-gradient(135deg, #ec4899, #8b5cf6)'
+                : 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            borderRadius: 4,
+            color: '#e5e7eb',
+            fontSize: 11,
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          {quota.tier === 'paid' ? t('quota.manageSub') : t('quota.subscribeCta')}
+        </button>
       )}
     </div>
   )
