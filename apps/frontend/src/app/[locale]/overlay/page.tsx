@@ -246,10 +246,6 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   })
 
   // Hands-free listener — headless VAD. UI рисует MicBars под персонажем.
-  // Флаг что VAD подняли авто-для-настроек, а не юзер через Ctrl+Z.
-  // Объявлено до useMicListener потому что используется в testMode prop.
-  const autoStartedByPanelRef = useRef(false)
-
   // Barge-in: мик слушает во время ответа Кики. Когда VAD ловит речь юзера
   // в момент TTS — прерываем Кику (chat.interrupt), VAD продолжает запись
   // и по концу реплики шлёт транскрипт в send.
@@ -265,10 +261,6 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     // Язык STT = текущая UI-локаль. Без этого Whisper получал 'ru' (default)
     // и транскрибировал английскую речь как русские фонемы → Claude отвечал на ru.
     language: currentLocale,
-    // Когда Settings открыты и мик авто-поднят — крутим VAD для UI-бара,
-    // но не шлём речь в STT/Клода (иначе каждое тестовое «привет» = разговор).
-    // eslint-disable-next-line react-hooks/refs -- ref-чтение в config-объекте useMicListener; передаётся в effect внутри хука
-    testMode: settingsOpen && autoStartedByPanelRef.current,
   })
 
   // Dictation и Music — теперь плагины. Их Provider'ы монтируются в
@@ -386,22 +378,6 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mic.state])
-
-  // Авто-старт VAD при открытии настроек — чтобы юзер видел как его голос
-  // реагирует на порог даже без Ctrl+Z. При закрытии — стопим VAD только если
-  // это мы его сами подняли (не трогаем hands-free который юзер включил руками).
-  useEffect(() => {
-    if (settingsOpen) {
-      if (mic.state === 'off' || mic.state === 'error') {
-        autoStartedByPanelRef.current = true
-        mic.start()
-      }
-    } else if (autoStartedByPanelRef.current) {
-      autoStartedByPanelRef.current = false
-      mic.stop()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settingsOpen])
 
   useEffect(() => {
     // micDeviceId уже загружен через lazy useState initializer
@@ -713,11 +689,8 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
             zIndex: 3,
           }}
         >
-          {/* В test-mode (VAD крутится только для слайдера в настройках) показываем
-              MicBars как выключенный — чтобы юзера не сбивало «режим включился сам». */}
           <MicBars
-            // eslint-disable-next-line react-hooks/refs -- читаем ref для UI-стейта (режим тестирования при открытых Settings)
-            state={autoStartedByPanelRef.current && settingsOpen ? 'off' : mic.state}
+            state={mic.state}
             micLevel={micLevel}
             onClick={mic.toggle}
             error={mic.error}
