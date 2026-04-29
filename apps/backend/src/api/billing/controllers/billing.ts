@@ -24,7 +24,7 @@ import crypto from 'node:crypto'
 const NP_API = 'https://api.nowpayments.io/v1'
 
 function priceUsd(): number {
-  return Number(process.env.BILLING_PRICE_USD ?? 9.99)
+  return Number(process.env.BILLING_PRICE_USD ?? 19)
 }
 
 function periodDays(): number {

@@ -341,6 +341,7 @@ export default function Landing() {
             { q: t('faq4q'), a: t('faq4a') },
             { q: t('faq5q'), a: t('faq5a') },
             { q: t('faq6q'), a: t('faq6a') },
+            { q: t('faq7q'), a: t('faq7a') },
           ].map((item) => (
             <details key={item.q} className="group rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur">
               <summary className="flex cursor-pointer items-center justify-between font-medium list-none">

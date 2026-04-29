@@ -4,7 +4,7 @@ export default {
       method: 'POST',
       path: '/trace-moe',
       handler: 'trace-moe.identify',
-      config: { auth: false },
+      config: { auth: {} },
     },
   ],
 }

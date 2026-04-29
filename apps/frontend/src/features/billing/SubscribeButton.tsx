@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import { Bitcoin, CreditCard, Loader2, Sparkles } from 'lucide-react'
+import { Bitcoin, CreditCard, Loader2 } from 'lucide-react'
 import { aiFetch } from '@/shared/api/aiFetch'
 import {
   Dialog,
@@ -113,11 +113,10 @@ function SubscribeBody() {
   return (
     <div className="px-4 pb-4 md:px-0 md:pb-0">
       <div className="my-6 flex items-baseline gap-2">
-        <span className="text-5xl font-bold">$9.99</span>
+        <span className="text-5xl font-bold">$19</span>
         <span className="text-white/60">{t('perMonth')}</span>
         <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-pink-500/20 px-3 py-1 text-xs font-medium text-pink-300">
-          <Sparkles className="h-3 w-3" />
-          {t('badge')}
+          ✨ {t('badge')}
         </span>
       </div>
 

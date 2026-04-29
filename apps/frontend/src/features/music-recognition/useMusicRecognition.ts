@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { getAiBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 export type MusicItem = {
   ts: number
@@ -99,7 +99,7 @@ export function useMusicRecognition({ onResult, onEmotion }: Options) {
         try {
           const form = new FormData()
           form.append('audio', new File([blob], 'sample.webm', { type: mimeType }))
-          const res = await fetch(`${getAiBaseUrl()}/recognize-music`, { method: 'POST', body: form })
+          const res = await aiFetch(`/recognize-music`, { method: 'POST', body: form })
           if (!res.ok) throw new Error(await res.text())
           const result = await res.json()
           if (!result.found) {

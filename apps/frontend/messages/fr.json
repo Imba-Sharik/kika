@@ -65,7 +65,7 @@
     "trialLeft": "Essai gratuit: {days} jours restants",
     "trialExpired": "Essai expiré — paiement bientôt disponible",
     "subUntil": "Actif jusqu'au {date}",
-    "subscribeCta": "S'abonner · 9.99$/mois",
+    "subscribeCta": "S'abonner · 19$/mois",
     "manageSub": "Gérer l'abonnement"
   },
   "plugins": {
@@ -248,7 +248,7 @@
     "pricingFeature5": "Accès aux futurs personnages de la marketplace",
     "pricingFeature6": "Support prioritaire",
     "pricingNote": "Gratuit pendant la beta. Abonnement — quand v1 sort.",
-    "subscribeBtn": "S'abonner — 9.99$/mois",
+    "subscribeBtn": "S'abonner — 19$/mois",
     "faqTitle": "Questions fréquentes",
     "faq1q": "Sur quels systèmes ça marche?",
     "faq1a": "Windows 10/11 — maintenant. macOS et Linux — en développement. Minimum: 4 Go RAM, microphone.",
@@ -262,6 +262,8 @@
     "faq5a": "Les conversations ne sont pas stockées sur les serveurs au-delà du traitement. La mémoire locale reste uniquement sur ton ordinateur.",
     "faq6q": "Et si j'annule l'abonnement?",
     "faq6a": "L'accès reste jusqu'à la fin de la période payée. Mémoire locale et paramètres restent avec toi.",
+    "faq7q": "Windows dit \"Éditeur inconnu\" — est-ce sûr?",
+    "faq7a": "Oui, l'app est sûre — on n'a juste pas encore acheté de certificat de signature de code (~300$/an). Clique \"Informations complémentaires\" → \"Exécuter quand même\" pour installer. Après quelques centaines d'installations Defender reconnaîtra le fichier et arrêtera d'alerter. La signature est dans la roadmap.",
     "finalTitle1": "Installe en une minute.",
     "finalTitle2": "Ensuite — comme avec un vieil ami.",
     "finalSubtitle": "Beta gratuite maintenant. Pas de cartes, pas de spam.",
@@ -276,7 +278,7 @@
     "trialExpiredBody": "On continue ensemble? Abonne-toi et je reviens.",
     "subExpiredTitle": "Abonnement expiré",
     "subExpiredBody": "Renouvelle pour continuer à utiliser la voix et les plugins de Yukai.",
-    "subscribeCta": "S'abonner · 9.99$/mois",
+    "subscribeCta": "S'abonner · 19$/mois",
     "paymentMethods": "USDT · Carte"
   },
   "billingPage": {

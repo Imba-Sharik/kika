@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import type { YukaiPlugin, YukaiContext } from '@/features/plugin-system/types'
-import { getAiBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 
 // Явный запрос про аниме → запускаем trace.moe параллельно с Claude.
@@ -58,7 +58,7 @@ export function useScreenshotHistory(): ScreenshotItem[] {
 
 async function identifyAnime(imageDataUrl: string): Promise<TraceMoeHit | null> {
   try {
-    const res = await fetch(`${getAiBaseUrl()}/trace-moe`, {
+    const res = await aiFetch(`/trace-moe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: imageDataUrl }),

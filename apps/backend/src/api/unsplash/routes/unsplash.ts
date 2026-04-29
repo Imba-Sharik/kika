@@ -4,7 +4,7 @@ export default {
       method: 'GET',
       path: '/unsplash',
       handler: 'unsplash.search',
-      config: { auth: false },
+      config: { auth: {} },
     },
   ],
 }

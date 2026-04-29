@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { statusOf, type EnglishItem, type EnglishStatus } from './english-md'
-import { getAiBaseUrl, getAssetBaseUrl } from '@/shared/api/strapi'
+import { getAssetBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 const STATUS_META: Record<EnglishStatus, { color: string; bg: string }> = {
   new: { color: '#9ca3af', bg: 'rgba(156,163,175,0.2)' },
@@ -25,7 +26,7 @@ export function EnglishCard({ item, statusLabels }: CardProps) {
   useEffect(() => {
     let cancelled = false
     const assetBase = getAssetBaseUrl()
-    fetch(`${getAiBaseUrl()}/unsplash?q=${encodeURIComponent(word)}&per_page=1`)
+    aiFetch(`/unsplash?q=${encodeURIComponent(word)}&per_page=1`)
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
         if (!cancelled && j?.photos?.[0]) {

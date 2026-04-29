@@ -65,7 +65,7 @@
     "trialLeft": "無料トライアル: 残り{days}日",
     "trialExpired": "トライアル終了 — お支払い機能は近日リリース予定",
     "subUntil": "{date}まで有効",
-    "subscribeCta": "登録 · $9.99/月",
+    "subscribeCta": "登録 · $19/月",
     "manageSub": "サブスク管理"
   },
   "plugins": {
@@ -248,7 +248,7 @@
     "pricingFeature5": "今後追加されるマーケットプレイスのキャラへのアクセス",
     "pricingFeature6": "優先サポート",
     "pricingNote": "ベータ期間中は無料。サブスクはv1リリース時から。",
-    "subscribeBtn": "登録 — $9.99/月",
+    "subscribeBtn": "登録 — $19/月",
     "faqTitle": "よくある質問",
     "faq1q": "どのOSで動きますか?",
     "faq1a": "現在はWindows 10/11対応。macOS / Linuxは開発中。推奨スペック: 4GB RAM、マイク。",
@@ -262,6 +262,8 @@
     "faq5a": "会話データは処理に必要な時間以上はサーバーに残らない。ローカルメモリは君のPCの中だけに保存される。",
     "faq6q": "解約したらどうなる?",
     "faq6a": "支払済みの期間が終わるまでは利用可能。ローカルメモリと設定は君のPCに残る。",
+    "faq7q": "Windowsが「不明な発行元」と表示する — 安全?",
+    "faq7a": "うん、安全だよ — まだコード署名証明書を買ってないだけ（年$300くらい）。「詳細情報」→「実行」をクリックでインストールできる。何百回かインストールされたらDefenderが認識して警告しなくなるよ。署名は今後対応予定。",
     "finalTitle1": "1分でインストール。",
     "finalTitle2": "あとは — 親友みたいに。",
     "finalSubtitle": "ベータは今だけ無料。カード登録もスパムもなし。",
@@ -276,7 +278,7 @@
     "trialExpiredBody": "これからも一緒にいたい?サブスクすればまた会えるよ。",
     "subExpiredTitle": "サブスクが切れちゃった",
     "subExpiredBody": "更新したら音声とプラグインがまた使えるよ。",
-    "subscribeCta": "登録 · $9.99/月",
+    "subscribeCta": "登録 · $19/月",
     "paymentMethods": "USDT · カード"
   },
   "billingPage": {

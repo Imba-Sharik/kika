@@ -65,7 +65,7 @@
     "trialLeft": "免费试用: 还剩{days}天",
     "trialExpired": "试用已过期 — 付款即将上线",
     "subUntil": "有效期至 {date}",
-    "subscribeCta": "订阅 · $9.99/月",
+    "subscribeCta": "订阅 · $19/月",
     "manageSub": "管理订阅"
   },
   "plugins": {
@@ -248,7 +248,7 @@
     "pricingFeature5": "未来市场角色访问",
     "pricingFeature6": "优先支持",
     "pricingNote": "Beta期间免费。订阅 — v1发布时。",
-    "subscribeBtn": "订阅 — $9.99/月",
+    "subscribeBtn": "订阅 — $19/月",
     "faqTitle": "常见问题",
     "faq1q": "在哪些系统上运行?",
     "faq1a": "Windows 10/11 — 现在。macOS和Linux — 开发中。最低: 4GB RAM,麦克风。",
@@ -262,6 +262,8 @@
     "faq5a": "对话不会在服务器上存储超过处理时间。本地记忆只保留在你的电脑上。",
     "faq6q": "如果我取消订阅?",
     "faq6a": "访问保持到付费期结束。本地记忆和设置保留在你身边。",
+    "faq7q": "Windows 提示\"未知发布者\" — 安全吗?",
+    "faq7a": "是的, 应用是安全的 — 我们只是还没购买代码签名证书 (约 $300/年)。点击\"更多信息\" → \"仍要运行\"即可安装。安装几百次后 Defender 会识别文件并停止警告。代码签名在计划中。",
     "finalTitle1": "一分钟安装。",
     "finalTitle2": "之后 — 像与老朋友一样。",
     "finalSubtitle": "Beta现在免费。无卡片,无垃圾邮件。",
@@ -276,7 +278,7 @@
     "trialExpiredBody": "想继续一起吗?订阅后我就能回来。",
     "subExpiredTitle": "订阅已过期",
     "subExpiredBody": "续费即可继续使用Yukai的语音和插件。",
-    "subscribeCta": "订阅 · $9.99/月",
+    "subscribeCta": "订阅 · $19/月",
     "paymentMethods": "USDT · 银行卡"
   },
   "billingPage": {

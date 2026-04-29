@@ -65,7 +65,7 @@
     "trialLeft": "Free trial: {days} days left",
     "trialExpired": "Trial expired — payment coming soon",
     "subUntil": "Active until {date}",
-    "subscribeCta": "Subscribe · $9.99/mo",
+    "subscribeCta": "Subscribe · $19/mo",
     "manageSub": "Manage subscription"
   },
   "plugins": {
@@ -244,7 +244,7 @@
     "pricingFeature5": "Access to future marketplace characters",
     "pricingFeature6": "Priority support",
     "pricingNote": "Free during beta. Subscription — when v1 ships.",
-    "subscribeBtn": "Subscribe — $9.99/mo",
+    "subscribeBtn": "Subscribe — $19/mo",
     "faqTitle": "FAQ",
     "faq1q": "What systems does it work on?",
     "faq1a": "Windows 10/11 — now. macOS and Linux — in development. Minimum: 4 GB RAM, microphone.",
@@ -258,6 +258,8 @@
     "faq5a": "Conversations are not stored on servers longer than processing. Local memory stays only on your computer.",
     "faq6q": "What if I cancel my subscription?",
     "faq6a": "Access stays until the end of the paid period. Local memory and settings remain with you.",
+    "faq7q": "Windows says \"Unknown Publisher\" — is it safe?",
+    "faq7a": "Yes, the app is safe — we just haven't bought a code-signing certificate yet (~$300/year). Click \"More info\" → \"Run anyway\" to install. Defender will recognize the file after a few hundred installs and stop warning. Code signing is on the roadmap.",
     "finalTitle1": "Install in a minute.",
     "finalTitle2": "Then — like with an old friend.",
     "finalSubtitle": "Beta is free now. No cards, no spam.",
@@ -272,7 +274,7 @@
     "trialExpiredBody": "Want to keep going together? Subscribe and I'll be back.",
     "subExpiredTitle": "Subscription expired",
     "subExpiredBody": "Renew to continue using Yukai's voice and plugins.",
-    "subscribeCta": "Subscribe · $9.99/mo",
+    "subscribeCta": "Subscribe · $19/mo",
     "paymentMethods": "USDT · Card"
   },
   "billingPage": {

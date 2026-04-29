@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { extractMediaRequests } from '@/shared/yukai/persona'
-import { getAiBaseUrl, getAssetBaseUrl } from '@/shared/api/strapi'
+import { getAssetBaseUrl } from '@/shared/api/strapi'
+import { aiFetch } from '@/shared/api/aiFetch'
 
 type ImageHit = {
   word: string
@@ -19,7 +20,7 @@ async function fetchImage(word: string): Promise<ImageHit> {
   if (cached) return cached
 
   try {
-    const res = await fetch(`${getAiBaseUrl()}/unsplash?q=${encodeURIComponent(key)}&per_page=1`)
+    const res = await aiFetch(`/unsplash?q=${encodeURIComponent(key)}&per_page=1`)
     if (!res.ok) {
       const miss: ImageHit = { word: key, url: null }
       cache.set(key, miss)

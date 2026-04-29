@@ -65,7 +65,7 @@
     "trialLeft": "Prueba gratuita: quedan {days} días",
     "trialExpired": "Prueba caducada — pago en camino",
     "subUntil": "Activa hasta {date}",
-    "subscribeCta": "Suscribirse · $9.99/mes",
+    "subscribeCta": "Suscribirse · $19/mes",
     "manageSub": "Gestionar suscripción"
   },
   "plugins": {
@@ -244,7 +244,7 @@
     "pricingFeature5": "Acceso a futuros personajes del marketplace",
     "pricingFeature6": "Soporte prioritario",
     "pricingNote": "Gratis durante la beta. Suscripción — cuando salga la v1.",
-    "subscribeBtn": "Suscribirse — $9.99/mes",
+    "subscribeBtn": "Suscribirse — $19/mes",
     "faqTitle": "FAQ",
     "faq1q": "¿En qué sistemas funciona?",
     "faq1a": "Windows 10/11 — ya. macOS y Linux — en desarrollo. Mínimo: 4 GB de RAM, micrófono.",
@@ -258,6 +258,8 @@
     "faq5a": "Las conversaciones no se guardan en servidores más allá del procesamiento. La memoria local se queda solo en tu ordenador.",
     "faq6q": "¿Y si cancelo la suscripción?",
     "faq6a": "El acceso continúa hasta el final del periodo pagado. La memoria local y los ajustes se quedan contigo.",
+    "faq7q": "Windows dice \"Editor desconocido\" — ¿es seguro?",
+    "faq7a": "Sí, la app es segura — solo no hemos comprado aún certificado de firma de código (~$300/año). Haz clic en \"Más información\" → \"Ejecutar de todos modos\" para instalar. Tras unos cientos de instalaciones Defender reconocerá el archivo y dejará de avisar. La firma está en el roadmap.",
     "finalTitle1": "Instala en un minuto.",
     "finalTitle2": "Luego — como con una vieja amiga.",
     "finalSubtitle": "La beta es gratis ahora. Sin tarjetas, sin spam.",
@@ -272,7 +274,7 @@
     "trialExpiredBody": "¿Seguimos juntos? Suscríbete y vuelvo.",
     "subExpiredTitle": "Suscripción expirada",
     "subExpiredBody": "Renueva para seguir usando la voz y plugins de Yukai.",
-    "subscribeCta": "Suscribirse · $9.99/mes",
+    "subscribeCta": "Suscribirse · $19/mes",
     "paymentMethods": "USDT · Tarjeta"
   },
   "billingPage": {

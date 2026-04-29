@@ -65,7 +65,7 @@
     "trialLeft": "Kostenlose Testphase: noch {days} Tage",
     "trialExpired": "Testphase abgelaufen — Bezahlung kommt bald",
     "subUntil": "Aktiv bis {date}",
-    "subscribeCta": "Abonnieren · $9.99/Monat",
+    "subscribeCta": "Abonnieren · $19/Monat",
     "manageSub": "Abo verwalten"
   },
   "plugins": {
@@ -248,7 +248,7 @@
     "pricingFeature5": "Zugang zu zukünftigen Marketplace-Charakteren",
     "pricingFeature6": "Priorisierter Support",
     "pricingNote": "Kostenlos während Beta. Abo — wenn v1 erscheint.",
-    "subscribeBtn": "Abonnieren — $9.99/Monat",
+    "subscribeBtn": "Abonnieren — $19/Monat",
     "faqTitle": "Häufige Fragen",
     "faq1q": "Auf welchen Systemen funktioniert es?",
     "faq1a": "Windows 10/11 — jetzt. macOS und Linux — in Entwicklung. Mindestanforderungen: 4 GB RAM, Mikrofon.",
@@ -262,6 +262,8 @@
     "faq5a": "Gespräche werden nicht länger als zur Verarbeitung auf Servern gespeichert. Lokaler Speicher bleibt nur auf deinem Computer.",
     "faq6q": "Was, wenn ich das Abo kündige?",
     "faq6a": "Zugang bleibt bis zum Ende der bezahlten Periode. Lokaler Speicher und Einstellungen bleiben bei dir.",
+    "faq7q": "Windows sagt \"Unbekannter Herausgeber\" — ist das sicher?",
+    "faq7a": "Ja, die App ist sicher — wir haben nur noch kein Code-Signing-Zertifikat gekauft (~$300/Jahr). Klick \"Weitere Informationen\" → \"Trotzdem ausführen\" zum Installieren. Nach ein paar hundert Installationen erkennt Defender die Datei und warnt nicht mehr. Code-Signing ist in der Roadmap.",
     "finalTitle1": "Installiere in einer Minute.",
     "finalTitle2": "Dann — wie mit einem alten Freund.",
     "finalSubtitle": "Beta ist jetzt kostenlos. Keine Karten, kein Spam.",
@@ -276,7 +278,7 @@
     "trialExpiredBody": "Willst du weitermachen? Abonniere und ich bin wieder da.",
     "subExpiredTitle": "Abo abgelaufen",
     "subExpiredBody": "Verlängere, um Yukais Stimme und Plugins weiter zu nutzen.",
-    "subscribeCta": "Abonnieren · $9.99/Monat",
+    "subscribeCta": "Abonnieren · $19/Monat",
     "paymentMethods": "USDT · Karte"
   },
   "billingPage": {

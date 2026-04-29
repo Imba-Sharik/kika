@@ -65,7 +65,7 @@
     "trialLeft": "Teste grátis: {days} dias restantes",
     "trialExpired": "Teste expirado — pagamento em breve",
     "subUntil": "Ativa até {date}",
-    "subscribeCta": "Assinar · $9.99/mês",
+    "subscribeCta": "Assinar · $19/mês",
     "manageSub": "Gerenciar assinatura"
   },
   "plugins": {
@@ -248,7 +248,7 @@
     "pricingFeature5": "Acesso a futuros personagens do marketplace",
     "pricingFeature6": "Suporte prioritário",
     "pricingNote": "Grátis durante beta. Assinatura — quando v1 sair.",
-    "subscribeBtn": "Assinar — $9.99/mês",
+    "subscribeBtn": "Assinar — $19/mês",
     "faqTitle": "Perguntas frequentes",
     "faq1q": "Em quais sistemas funciona?",
     "faq1a": "Windows 10/11 — agora. macOS e Linux — em desenvolvimento. Mínimo: 4 GB RAM, microfone.",
@@ -262,6 +262,8 @@
     "faq5a": "Conversas não são armazenadas em servidores além do processamento. Memória local fica só no seu computador.",
     "faq6q": "E se cancelar a assinatura?",
     "faq6a": "Acesso fica até o fim do período pago. Memória local e configurações ficam com você.",
+    "faq7q": "O Windows diz \"Editor desconhecido\" — é seguro?",
+    "faq7a": "Sim, o app é seguro — só ainda não compramos certificado de assinatura de código (~$300/ano). Clique \"Mais informações\" → \"Executar mesmo assim\" para instalar. Após algumas centenas de instalações o Defender reconhecerá o arquivo e parará de avisar. Assinatura está no roadmap.",
     "finalTitle1": "Instale em um minuto.",
     "finalTitle2": "Depois — como com um velho amigo.",
     "finalSubtitle": "Beta grátis agora. Sem cartões, sem spam.",
@@ -276,7 +278,7 @@
     "trialExpiredBody": "Quer continuar junto? Assine e eu volto.",
     "subExpiredTitle": "Assinatura expirou",
     "subExpiredBody": "Renove para continuar usando a voz e plugins da Yukai.",
-    "subscribeCta": "Assinar · $9.99/mês",
+    "subscribeCta": "Assinar · $19/mês",
     "paymentMethods": "USDT · Cartão"
   },
   "billingPage": {
