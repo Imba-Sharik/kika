@@ -3,13 +3,13 @@
 // Usage: node scripts/import-voice-data.mjs <path-to-json>
 //
 // Что делает:
-//   1. Читает JSON {id, title, avatar_url, samples: [{title, text}]}
-//   2. Скачивает avatar_url → apps/frontend/public/voice-avatars/{id}.{ext}
-//   3. Генерит TTS из samples[0].text → apps/frontend/public/voice-samples/{id}.mp3
-//      (перезаписывает существующий — теперь с native default-текстом голоса)
+//   1. Читает JSON {id, title, cover_image_url, samples: [{title, text}]}
+//   2. Скачивает cover_image_url → apps/frontend/public/voice-avatars/{id}.{ext}
+//   3. Генерит TTS из samples[].text где title === "Default Sample"
+//      (fallback на samples[0] если "Default Sample" нет) → apps/frontend/public/voice-samples/{id}.mp3
 //   4. Печатает список voiceId которым нужно добавить avatar в voices.ts
 //
-// Если у голоса нет avatar_url или samples — пропускает (оставляет как было).
+// Если у голоса нет cover_image_url или samples — пропускает (оставляет как было).
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { dirname, join, extname } from 'node:path'
@@ -58,7 +58,9 @@ async function ttsFish(text, voiceId, apiKey) {
       latency: 'normal',
       temperature: 0.7,
       top_p: 0.7,
-      chunk_length: 200,
+      // Зеркалит backend tts.ts — иначе preview звучит иначе, чем чат.
+      chunk_length: 300,
+      condition_on_previous_chunks: true,
     }),
   })
   if (!res.ok) throw new Error(`Fish ${res.status}: ${await res.text()}`)
@@ -85,22 +87,26 @@ async function main() {
   for (const v of data) {
     const id = v.id
     const title = v.title?.trim() || id
-    const hasAvatar = !!v.avatar_url
-    const sample = v.samples?.[0]
+    const avatarUrl = v.cover_image_url || v.avatar_url
+    // Предпочитаем sample с title === "Default Sample" — Fish сам помечает его
+    // как канонический для голоса. Если такого нет, fallback на первый sample.
+    const samples = Array.isArray(v.samples) ? v.samples : []
+    const defaultSample = samples.find((s) => s?.title?.trim() === 'Default Sample')
+    const sample = defaultSample ?? samples[0]
     const sampleText = sample?.text?.trim()
 
     let avatarPath = null
-    if (hasAvatar) {
+    if (avatarUrl) {
       try {
         process.stdout.write(`[avatar] ${title} ... `)
-        const r = await downloadAvatar(v.avatar_url, avatarDir, id)
+        const r = await downloadAvatar(avatarUrl, avatarDir, id)
         avatarPath = r.path
         console.log(`${(r.size / 1024).toFixed(1)} KB → ${r.path}`)
       } catch (e) {
         console.log(`FAIL: ${e.message}`)
       }
     } else {
-      console.log(`[avatar] ${title} — skipped (no avatar_url)`)
+      console.log(`[avatar] ${title} — skipped (no cover_image_url)`)
     }
 
     if (sampleText) {
