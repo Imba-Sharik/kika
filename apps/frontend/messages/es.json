@@ -32,7 +32,7 @@
     "mic": "Micrófono",
     "micDefault": "Predeterminado",
     "voice": "Voz de Yukai",
-    "voiceHint": "ElevenLabs — ideal para inglés. Fish — ruso natural.",
+    "voiceHint": "Las voces con avatar son character voices. Agrupadas por idioma.",
     "sensitivity": "Sensibilidad del micro",
     "sensitivityHint": "Relleno = probabilidad de voz del VAD. Arrastra el umbral naranja — ahí empieza la \"voz\". Se aplica al instante.",
     "language": "Idioma",

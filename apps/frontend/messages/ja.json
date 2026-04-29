@@ -37,7 +37,7 @@
     "mic": "マイク",
     "micDefault": "デフォルト",
     "voice": "Yukaiの声",
-    "voiceHint": "ElevenLabsは英語向き、Fishはロシア語が自然。",
+    "voiceHint": "アバター付きはキャラクターボイス。言語ごとに分かれてるよ。",
     "sensitivity": "マイク感度",
     "sensitivityHint": "塗りつぶし=VADの音声検出度。オレンジのしきい値をドラッグして調整 — そこから「音声」と判定。すぐ反映されるよ。",
     "language": "言語",

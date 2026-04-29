@@ -37,7 +37,7 @@
     "mic": "麦克风",
     "micDefault": "默认",
     "voice": "Yukai声音",
-    "voiceHint": "ElevenLabs — 英语最佳。Fish — 自然俄语。",
+    "voiceHint": "带头像的是角色声音。按语言分组。",
     "sensitivity": "麦克风灵敏度",
     "sensitivityHint": "填充 = VAD语音概率。拖动橙色阈值 — 那里开始'说话'。立即应用。",
     "language": "语言",

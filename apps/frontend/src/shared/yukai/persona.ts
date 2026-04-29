@@ -193,7 +193,12 @@ export function buildSystemPrompt(persona: string, language: Language = 'en'): s
   const langName = LANG_NAME[language] ?? 'English'
   const protocol = EMOTION_PROTOCOL_EN.replace(
     '- Default to English',
-    `- Default to ${langName} — respond in this language by default. If user explicitly asks for another language, do it briefly then switch back.`
+    `- ALWAYS respond in ${langName}, regardless of:
+  · the language of facts in [MEMORY: profile.md] (e.g. user's name in Russian)
+  · the language of the user's input (transliterated katakana, romaji, mixed scripts)
+  · explanatory terms (don't translate native words to English mid-sentence)
+- Only switch language if user EXPLICITLY asks "say it in X". One-two phrases, then back to ${langName}.
+- Never code-switch. Never start in ${langName} and finish in another language.`
   )
   return `${persona.trim()}\n\n${protocol}`
 }

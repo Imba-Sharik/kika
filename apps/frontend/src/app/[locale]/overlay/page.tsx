@@ -48,7 +48,10 @@ const ALL_MESSAGES: Record<string, Record<string, unknown>> = {
 
 // Фиксированные настройки — как в chat-test с дефолтами
 const CHARACTER = BUILTIN_CHARACTERS[0]
-const MODEL = { provider: 'anthropic' as const, model: 'claude-haiku-4-5-20251001' }
+// Sonnet 4.6 — лучше следует instruction'ам в mixed-context (memory ru + ja input → ja ответ).
+// Стоимость ~3× выше Haiku ($3/$15 vs $1/$5 per 1M tokens). Если бюджет/latency заиграют —
+// откати на 'claude-haiku-4-5-20251001' или сделай гибрид (Haiku default + Sonnet для long context).
+const MODEL = { provider: 'anthropic' as const, model: 'claude-sonnet-4-6' }
 
 const EMOTION_STORAGE_KEY = 'kika:overlay:emotion'
 const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
