@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { Play } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { UserNav } from '@/widgets/header/ui/UserNav'
 import { LocalePicker } from '@/widgets/header/ui/LocalePicker'
@@ -53,6 +54,22 @@ export default function Landing() {
     return () => clearInterval(id)
   }, [])
   const bubbleNum = emotionIdx + 1
+
+  // Quick Look модалка — клик по карточке открывает видео в полный экран со звуком.
+  // Превью на карточках продолжает играть muted-loop для motion-attention.
+  const [openVideo, setOpenVideo] = useState<string | null>(null)
+  useEffect(() => {
+    if (!openVideo) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpenVideo(null) }
+    window.addEventListener('keydown', onKey)
+    // Лочим скролл body пока модалка открыта
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [openVideo])
 
   return (
     <main className="relative overflow-hidden">
@@ -188,25 +205,56 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="mx-auto max-w-6xl px-6 py-24">
-        <h2 className="mb-4 text-center text-4xl font-bold">{t('featuresTitle')}</h2>
-        <p className="mx-auto mb-16 max-w-2xl text-center text-white/60">{t('featuresSubtitle')}</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Quick Look — video gallery */}
+      <section id="features" className="mx-auto max-w-7xl px-6 py-24">
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.3em] text-pink-400">{t('quickLookKicker')}</p>
+        <h2 className="mt-3 text-center text-4xl font-bold md:text-5xl">{t('quickLookTitle')}</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-white/60">{t('quickLookSubtitle')}</p>
+
+        <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-5 md:gap-4">
           {[
-            { emoji: '🎭', title: t('feature1Title'), desc: t('feature1Desc'), color: 'from-pink-500/20 to-pink-600/5' },
-            { emoji: '⌨️', title: t('feature2Title'), desc: t('feature2Desc'), color: 'from-violet-500/20 to-violet-600/5' },
-            { emoji: '🎵', title: t('feature3Title'), desc: t('feature3Desc'), color: 'from-pink-500/20 to-violet-500/10' },
-          ].map((f) => (
-            <div
-              key={f.title}
-              className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b ${f.color} p-8 backdrop-blur transition hover:border-white/20`}
+            { src: '/video/Hello_yukai.mp4', title: t('quickLook1Title') },
+            { src: '/video/Change_voice.mp4', title: t('quickLook2Title') },
+            { src: '/video/flow_voice.mp4', title: t('quickLook3Title') },
+            { src: '/video/shazam_music.mp4', title: t('quickLook4Title') },
+          ].map((v) => (
+            <button
+              key={v.src}
+              type="button"
+              onClick={() => setOpenVideo(v.src)}
+              className="group relative aspect-9/16 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-lg shadow-black/40 transition hover:border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
             >
-              <div className="mb-4 text-4xl">{f.emoji}</div>
-              <h3 className="mb-3 text-xl font-semibold">{f.title}</h3>
-              <p className="text-sm text-white/70 leading-relaxed">{f.desc}</p>
-            </div>
+              <span className="absolute left-3 top-3 z-10 rounded-full bg-black/60 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur">
+                Yukai
+              </span>
+              <video
+                src={v.src}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {/* Play badge — появляется при наведении. Круглый, blur-фон, розовый Play. */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-black/45 backdrop-blur-md">
+                  <Play className="ml-0.5 h-4 w-4 fill-white text-white" />
+                </div>
+              </div>
+              <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/40 to-transparent p-4 text-left">
+                <h3 className="text-sm font-semibold text-white">{v.title}</h3>
+              </div>
+            </button>
           ))}
+          {/* Coming Soon — placeholder card */}
+          <div className="flex aspect-9/16 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-pink-400/30 to-violet-400/30">
+              <span className="text-2xl">✨</span>
+            </div>
+            <h3 className="text-sm font-semibold text-white">{t('quickLook5Title')}</h3>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/50">{t('quickLookComingSoon')}</p>
+          </div>
         </div>
       </section>
 
@@ -386,6 +434,35 @@ export default function Landing() {
           </a>
         </div>
       </footer>
+
+      {/* Видео-модалка для Quick Look. Клик по фону или ESC — закрыть. */}
+      {openVideo && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+          onClick={() => setOpenVideo(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setOpenVideo(null)}
+            aria-label="Close"
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5">
+              <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+            </svg>
+          </button>
+          <video
+            key={openVideo}
+            src={openVideo}
+            controls
+            autoPlay
+            playsInline
+            onLoadedMetadata={(e) => { e.currentTarget.volume = 0.5 }}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[90vh] max-w-full rounded-2xl shadow-2xl"
+          />
+        </div>
+      )}
     </main>
   )
 }
