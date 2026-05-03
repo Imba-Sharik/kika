@@ -74,7 +74,12 @@ export function EnglishCard({ item, statusLabels }: CardProps) {
       </div>
       <div style={{ padding: '4px 6px' }}>
         <div style={{ color: '#f3f4f6', fontWeight: 600, fontSize: 11 }}>{word}</div>
-        <div style={{ color: '#6b7280', fontSize: 9, display: 'flex', gap: 6 }}>
+        {item.translation && (
+          <div style={{ color: '#9ca3af', fontSize: 9, fontStyle: 'italic', lineHeight: 1.2 }}>
+            {item.translation}
+          </div>
+        )}
+        <div style={{ color: '#6b7280', fontSize: 9, display: 'flex', gap: 6, marginTop: 2 }}>
           <span>{date}</span>
           {(item.correct > 0 || item.wrong > 0) && (
             <span>

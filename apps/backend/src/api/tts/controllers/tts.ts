@@ -42,6 +42,9 @@ async function ttsFishStream(ctx, text: string, voiceId: string) {
     chunk_length: 300,
     // Явно: каждый следующий чанк использует предыдущий как контекст → сохраняет тон.
     condition_on_previous_chunks: true,
+    // normalize:true (default) читает английские слова в русском тексте по буквам.
+    // false → модель сама произносит как нативный английский внутри речи.
+    normalize: false,
   })
 
   for (let attempt = 0; attempt < 3; attempt++) {

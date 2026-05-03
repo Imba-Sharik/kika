@@ -3,16 +3,18 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { EnglishHistoryGrid } from './EnglishCard'
-import { statusOf, type EnglishItem, type EnglishStatus } from './english-md'
+import { ProgressBar } from './ProgressBar'
+import { statusOf, type EnglishItem, type EnglishStatus, type ProgressEntry } from './english-md'
 
 type Props = {
   items: EnglishItem[]
+  progress: ProgressEntry[]
   onClose: () => void
 }
 
 const noDragStyle = { WebkitAppRegion: 'no-drag' } as React.CSSProperties
 
-export function EnglishPanel({ items, onClose }: Props) {
+export function EnglishPanel({ items, progress, onClose }: Props) {
   const t = useTranslations()
   const [filter, setFilter] = useState<'all' | EnglishStatus>('all')
   const known = items.filter((it) => statusOf(it) === 'known').length
@@ -130,6 +132,8 @@ export function EnglishPanel({ items, onClose }: Props) {
           <EnglishHistoryGrid items={filtered} statusLabels={STATUS_LABEL} />
         )}
       </div>
+
+      {progress.length > 0 && <ProgressBar entries={progress} />}
 
       <div
         style={{
