@@ -27,7 +27,11 @@ type UseChatOptions = {
   persona: string                    // характер Yukai (для system prompt)
   language: Language                 // язык по умолчанию (ru / en) — меняет EMOTION_PROTOCOL
   model: ChatModel                   // какая LLM используется
-  voice: TtsVoice                    // голос для TTS
+  voice: TtsVoice                    // голос для TTS (дефолт)
+  // Опционально: динамический выбор голоса/скорости на каждое предложение.
+  // Используется English-plugin: если Yukai говорит на английском в русской сессии,
+  // нужен английский голос (Pretty girl), а не русская Mita.
+  resolveTts?: (sentence: string) => { voice: TtsVoice; speed?: number }
   profileMd: string                  // инжектится в [ПАМЯТЬ: profile.md]
   plugins: YukaiPlugin[]              // активные плагины — для injectSystemContext / onChatResponse
   audioElRef: React.RefObject<HTMLAudioElement | null>
@@ -124,8 +128,11 @@ export function useChat(opts: UseChatOptions) {
       const ms = performance.now() - t0
       if (firstEnqueueMs === null) firstEnqueueMs = ms
       console.log(`[timing] enqueue @ ${(ms / 1000).toFixed(2)}s:`, text)
+      const resolved = opts.resolveTts?.(text)
+      const v = resolved?.voice ?? opts.voice
+      const spd = resolved?.speed
       audioQueue.push({
-        resPromise: fetchTts(text, opts.voice).catch((e) => {
+        resPromise: fetchTts(text, v, spd).catch((e) => {
           console.error('[chat] TTS fetch:', e)
           return null
         }),

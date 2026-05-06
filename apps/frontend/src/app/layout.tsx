@@ -43,7 +43,15 @@ export default async function RootLayout({
 }>) {
   // Достаём session здесь и кидаем в SessionProvider initial-prop'ом —
   // useSession() сразу видит правильное состояние без лишнего рефетча.
-  const session = await auth();
+  // Stale/invalid JWT cookie (после смены AUTH_SECRET или версии next-auth)
+  // кидает JWTSessionError и роняет весь root layout — гасим как «нет сессии»,
+  // юзер просто увидит logged-out state и сможет залогиниться заново.
+  let session = null;
+  try {
+    session = await auth();
+  } catch (err) {
+    console.warn('[auth] session decode failed, treating as anonymous:', err);
+  }
 
   return (
     <html lang="en" className="h-full">

@@ -14,6 +14,11 @@ type Options = {
   // Порог срабатывания VAD: 0.3 (низкий = чувствительный, ловит тихий голос + шум) …
   // 0.9 (высокий = только уверенная речь). Дефолт 0.4 — компромисс для тихой комнаты.
   vadThreshold?: number
+  // Динамический hint для Whisper (например список английских слов из текущей
+  // English-сессии). Передаётся в /stt как extraHint, конкатенируется к языковому prompt
+  // на бэке. Без этого Whisper транскрибирует английские слова как русские фонемы.
+  // Функция вызывается на каждой записи, чтобы получить свежий список (плагин может обновиться).
+  getSttHint?: () => string | undefined
 }
 
 type MicVADInstance = {
@@ -32,6 +37,7 @@ export function useMicListener({
   language = 'ru',
   deviceId,
   vadThreshold = 0.4,
+  getSttHint,
 }: Options) {
   const [state, setState] = useState<VadState>('off')
   const [error, setError] = useState<string | null>(null)
@@ -51,6 +57,8 @@ export function useMicListener({
   // language через ref — иначе sendAudio замораживается на закрытии при start(),
   // и при смене UI-локали STT продолжает слать прежний (часто 'en' default).
   const languageRef = useRef(language)
+  // Аналогично — getSttHint захватывается замыканием при start().
+  const getSttHintRef = useRef(getSttHint)
 
   function setStateBoth(s: VadState) {
     if (s === 'off' && stateRef.current !== 'off') {
@@ -73,6 +81,11 @@ export function useMicListener({
   useEffect(() => {
     languageRef.current = language
   }, [language])
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- ref-обновление, не setState
+  useEffect(() => {
+    getSttHintRef.current = getSttHint
+  }, [getSttHint])
 
   // Живое обновление порога — без перезапуска VAD. setOptions пробрасывает
   // новые значения во frame-processor, следующий frame уже использует их.
@@ -116,6 +129,8 @@ export function useMicListener({
       const form = new FormData()
       form.append('audio', new File([blob], 'speech.wav', { type: 'audio/wav' }))
       form.append('language', languageRef.current)
+      const hint = getSttHintRef.current?.()
+      if (hint) form.append('extraHint', hint)
 
       const res = await aiFetch('/stt', { method: 'POST', body: form })
       if (!res.ok) throw new Error(await res.text())

@@ -9,6 +9,7 @@ import { useTrialStatus } from '@/features/billing/useTrialStatus'
 import { useMicListener } from '@/features/mic-input/useMicListener'
 import { MicBars } from '@/features/mic-input/MicBars'
 import { EnglishImages } from '@/features/english-images/EnglishImages'
+import { getEnglishSttHint } from '@/features/english/EnglishPlugin'
 import { useChat } from '@/features/chat/useChat'
 import { SettingsPanel } from '@/features/settings/SettingsPanel'
 import { RadialMenu } from '@/widgets/radial-menu/RadialMenu'
@@ -29,6 +30,7 @@ import {
 import { NextIntlClientProvider, useLocale, useTranslations } from 'next-intl'
 import { BUILTIN_CHARACTERS } from '@/shared/yukai/characters'
 import { DEFAULT_VOICE_ID, findVoice, getDefaultVoiceForLocale } from '@/shared/yukai/voices'
+import { detectLanguage } from '@/shared/yukai/detectLanguage'
 
 // Все 9 messages JSON импортируются статически — нужны для мгновенной смены
 // языка в overlay через NextIntlClientProvider (без full navigation Next.js).
@@ -252,12 +254,34 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   // чтобы передать plugins в useChat (для injectSystemContext/onChatResponse).
   const { isEnabled, setEnabled } = useEnabledPlugins()
   const activePlugins = BUILTIN_PLUGINS.filter((p) => isEnabled(p.id))
+  const englishActive = isEnabled('english')
+
+  // English-plugin: динамический voice/speed по детекту языка предложения.
+  // Yukai говорит на английском (immersion), но при lifeline ("по-русски") отвечает
+  // короткой русской фразой — нужен русский voice. Speed=0.9 для английского — A2-B1
+  // легче воспринимает на слух чуть замедленную речь.
+  const resolveTts = englishActive
+    ? (sentence: string) => {
+        const lang = detectLanguage(sentence)
+        if (lang === 'ru') {
+          // Если UI-локаль уже русская — берём выбранный юзером voice; иначе дефолт ru
+          const v = currentLocale === 'ru' ? voice : findVoice(getDefaultVoiceForLocale('ru'), [])
+          return { voice: v }
+        }
+        if (lang === 'en') {
+          const v = currentLocale === 'en' ? voice : findVoice(getDefaultVoiceForLocale('en'), [])
+          return { voice: v, speed: 0.9 }
+        }
+        return { voice }
+      }
+    : undefined
 
   const chat = useChat({
     persona: CHARACTER.persona,
     language,
     model: MODEL,
     voice,
+    resolveTts,
     profileMd,
     plugins: activePlugins,
     audioElRef,
@@ -295,6 +319,9 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     // Язык STT = текущая UI-локаль. Без этого Whisper получал 'ru' (default)
     // и транскрибировал английскую речь как русские фонемы → Claude отвечал на ru.
     language: currentLocale,
+    // Hint для Whisper — список изучаемых английских слов. Когда Игорь учит "decision"
+    // и говорит его в русской речи, без hint Whisper напишет "дисижн".
+    getSttHint: getEnglishSttHint,
     // Паузим VAD когда диктуем (Right Alt) ИЛИ когда trial истёк/подписка просрочена.
     // В обоих случаях STT-запросы всё равно вернут ошибку, нет смысла слушать.
     paused: dictating || trial.isBlocked,

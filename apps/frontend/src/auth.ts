@@ -72,4 +72,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/login',
   },
+  logger: {
+    // Глушим JWTSessionError — он стреляет когда у юзера в браузере осталась
+    // сессия с прошлым AUTH_SECRET (после смены секрета или версии next-auth).
+    // Сами ловим в RootLayout через try/catch и показываем как logged-out,
+    // юзер просто заново логинится.
+    error(error) {
+      if (error.name === 'JWTSessionError') return
+      console.error(error)
+    },
+  },
 })

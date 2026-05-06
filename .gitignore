@@ -31,3 +31,6 @@ Thumbs.db
 # Markdown заметки, планы, бизнес-контекст — не тащим в публичный репо
 *.md
 
+# Local-only debug/test scripts (могут содержать секреты, локальные конфиги)
+scripts/test-*.mjs
+

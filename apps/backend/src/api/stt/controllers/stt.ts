@@ -98,7 +98,12 @@ export default {
       const language = body.language || 'ru'
       // Per-language prompt — клиент может override через body.prompt, иначе
       // берётся из карты по language. Без этого Whisper bias'ил к русскому.
-      const prompt = body.prompt || PROMPTS[language] || DEFAULT_PROMPT
+      const basePrompt = body.prompt || PROMPTS[language] || DEFAULT_PROMPT
+      // extraHint — динамический контекст от плагинов (например английские слова
+      // из текущей сессии English-plugin). Конкатенируется к базовому prompt,
+      // чтобы Whisper знал ожидаемые редкие термины и не транскрибировал их фонетически.
+      const extraHint = body.extraHint || ''
+      const prompt = extraHint ? `${basePrompt} ${extraHint}`.slice(0, 800) : basePrompt
       const clean = body.clean === 'true'
 
       const bytes = await readFile(filepath)

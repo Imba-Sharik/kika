@@ -84,6 +84,11 @@ export function anthropicHaikuCost(tokensIn: number, tokensOut: number): number 
   return (tokensIn / 1_000_000) * 1 + (tokensOut / 1_000_000) * 5
 }
 
+/** Anthropic Claude Sonnet 4.6: $3/M input, $15/M output */
+export function anthropicSonnetCost(tokensIn: number, tokensOut: number): number {
+  return (tokensIn / 1_000_000) * 3 + (tokensOut / 1_000_000) * 15
+}
+
 /** Groq Whisper Large V3 Turbo: $0.04 за час аудио */
 export function groqWhisperCost(durationSec: number): number {
   return (durationSec / 3600) * 0.04

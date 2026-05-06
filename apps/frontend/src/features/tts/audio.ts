@@ -10,7 +10,9 @@ export type TtsVoice = {
 }
 
 // POST /api/tts → Response с mp3-потоком (может быть streaming, может быть полное тело).
-export async function fetchTts(text: string, voice: TtsVoice): Promise<Response> {
+// speed (опционально, 0.5-2.0) — Fish prosody.speed. Используется English-plugin
+// для замедления английской речи (0.9) — легче воспринимать на слух A2-B1 уровню.
+export async function fetchTts(text: string, voice: TtsVoice, speed?: number): Promise<Response> {
   const ttsText = text.replace(/\*\*?|__?|~~|`/g, '').replace(/\s+/g, ' ').trim()
   const res = await aiFetch('/tts', {
     method: 'POST',
@@ -19,6 +21,7 @@ export async function fetchTts(text: string, voice: TtsVoice): Promise<Response>
       text: ttsText,
       provider: voice.provider,
       voiceId: voice.voiceId,
+      ...(speed && speed !== 1.0 ? { speed } : {}),
     }),
   })
   if (!res.ok) throw new Error(await res.text())

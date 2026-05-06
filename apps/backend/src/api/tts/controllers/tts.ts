@@ -12,6 +12,7 @@ type Body = {
   voiceId?: string
   provider?: Provider
   model?: Model
+  speed?: number  // Fish prosody.speed, 0.5-2.0 — замедление/ускорение речи
 }
 
 async function ttsElevenLabs(ctx, text: string, voiceId: string, model: Model) {
@@ -25,7 +26,7 @@ async function ttsElevenLabs(ctx, text: string, voiceId: string, model: Model) {
   ctx.body = Buffer.from(audio.uint8Array)
 }
 
-async function ttsFishStream(ctx, text: string, voiceId: string) {
+async function ttsFishStream(ctx, text: string, voiceId: string, speed?: number) {
   const apiKey = process.env.FISH_AUDIO_API_KEY
   if (!apiKey) throw new Error('FISH_AUDIO_API_KEY not set')
 
@@ -45,6 +46,8 @@ async function ttsFishStream(ctx, text: string, voiceId: string) {
     // normalize:true (default) читает английские слова в русском тексте по буквам.
     // false → модель сама произносит как нативный английский внутри речи.
     normalize: false,
+    // prosody.speed — замедление/ускорение. Передаём только если задан и != 1.0.
+    ...(speed && speed !== 1.0 ? { prosody: { speed } } : {}),
   })
 
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -82,6 +85,7 @@ export default {
       voiceId,
       provider = 'elevenlabs',
       model = 'eleven_turbo_v2_5',
+      speed,
     }: Body = ctx.request.body || {}
 
     if (!text?.trim()) {
@@ -99,7 +103,7 @@ export default {
 
     try {
       if (provider === 'fish') {
-        await ttsFishStream(ctx, text, voice)
+        await ttsFishStream(ctx, text, voice, speed)
       } else {
         await ttsElevenLabs(ctx, text, voice, model)
       }

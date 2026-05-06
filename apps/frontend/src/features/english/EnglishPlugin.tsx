@@ -129,6 +129,16 @@ export const englishPlugin: YukaiPlugin = {
     }
 
     lines.push(`
+LANGUAGE POLICY (CRITICAL — overrides default UI-language behavior):
+- Default: speak ONLY in English using simple A2-B1 vocabulary, short sentences (5-10 words)
+- This is "comprehensible input" immersion — user learns by hearing English in context
+- NEVER mix Russian and English in the same response (one response = one language)
+- Lifeline: if user explicitly says "по-русски" / "не понял" / "что значит" / "translate" /
+  "переведи" → respond with ONE short Russian sentence (translation/explanation),
+  then your NEXT response continues in English
+- Russian responses are emergency only — keep them ≤2 sentences
+- Subtitles in chat panel = user's safety net for hearing comprehension; trust them
+
 Session methodology (proven SRS approach, follow strictly):
 1. Cap session at 15 reviews + max 7 new words. Session lasts 10-20 min.
 2. Review "due" words first (most overdue first), then introduce new
@@ -173,4 +183,17 @@ Tone: friendly, brief, voice-first conversation. No lectures. Praise progress, n
     }
     currentApplyTags(fullText)
   },
+}
+
+// STT hint для Whisper: список изучаемых английских слов. Без него
+// Whisper транскрибирует "decision" в русской речи как "дисижн" / "решение".
+// Берём learning + новые (skip known), ограничиваем 30 словами.
+export function getEnglishSttHint(): string | undefined {
+  if (currentItems.length === 0) return undefined
+  const words = currentItems
+    .filter((it) => statusOf(it) !== 'known')
+    .slice(0, 30)
+    .map((it) => it.word)
+  if (words.length === 0) return undefined
+  return `English words being practiced: ${words.join(', ')}.`
 }
