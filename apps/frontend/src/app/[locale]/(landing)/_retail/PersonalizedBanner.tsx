@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { MapPin } from "lucide-react"
-import { getAiBaseUrl } from "@/shared/api/strapi"
+import { getAiBaseUrl, getAssetBaseUrl } from "@/shared/api/strapi"
 import { useHyperlocalContext, type HyperlocalContext } from "./useHyperlocalContext"
 
 type BannerMode = "profile" | "hyperlocal"
@@ -70,7 +70,9 @@ type Props = {
 }
 
 export function PersonalizedBanner({ mode, brandKey, brandColor, profileText = "", products, onApplyFilter }: Props) {
-  const cacheKey = `${brandKey}:banner:v3`
+  // v4: бэк теперь возвращает imageUrl как `/api/img?url=...` (proxy для fal.media).
+  // Прежние v3-кэши с прямыми fal-ссылками не грузятся в РФ без VPN — инвалидируем.
+  const cacheKey = `${brandKey}:banner:v4`
   const [banner, setBanner] = useState<BannerData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -182,11 +184,17 @@ export function PersonalizedBanner({ mode, brandKey, brandColor, profileText = "
   if (error || !banner) return null
 
   const modeBadge = mode === "profile" ? "AI · персональный" : "AI · гиперлокальный"
+  // Бэк отдаёт относительный `/api/img?url=...` — префиксим origin'ом бэка.
+  // Старые v3-кэши уже инвалидированы (cacheKey bump), но абсолютный URL обрабатываем
+  // на всякий случай, чтобы не моргнуло на проде в момент деплоя.
+  const imgSrc = banner.imageUrl.startsWith("/")
+    ? `${getAssetBaseUrl()}${banner.imageUrl}`
+    : banner.imageUrl
 
   return (
     <section className="relative overflow-hidden rounded-2xl shadow-sm">
       <img
-        src={banner.imageUrl}
+        src={imgSrc}
         alt={banner.headline}
         className="aspect-video w-full max-h-72 object-cover"
         draggable={false}

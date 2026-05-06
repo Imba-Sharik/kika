@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream'
 
 // Whitelist обязателен — иначе endpoint станет open proxy для anonymous-юзеров.
-// Только хосты которые отдают unsplash/klipy сами.
+// Только хосты которые отдают unsplash/klipy/fal сами.
 const ALLOWED_HOSTS = new Set([
   'images.unsplash.com',
   'plus.unsplash.com',
@@ -9,6 +9,11 @@ const ALLOWED_HOSTS = new Set([
   'media1.klipy.com',
   'media2.klipy.com',
   'cdn.klipy.com',
+  // fal.ai CDN — картинки баннеров /vkusvill/banner. В РФ без VPN
+  // напрямую <img src="https://v3.fal.media/..."> не грузится → проксируем.
+  'fal.media',
+  'v2.fal.media',
+  'v3.fal.media',
 ])
 
 export default {
