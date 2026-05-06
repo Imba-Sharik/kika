@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 import {
   User, ChefHat, Mic, Palette, MapPin, Target, Camera, Gem, RotateCw,
-  Truck, Percent, Smartphone, Tag, Zap, Clock, Snowflake, Boxes,
+  Truck, Percent, Smartphone, Tag, Zap, Clock, Snowflake, Boxes, Plane,
 } from "lucide-react"
 
 export type BusinessImpactItem = {
@@ -20,7 +20,7 @@ export type PrimeBenefit = {
 }
 
 export type Brand = {
-  key: "vkusvill" | "pyaterochka" | "magnit" | "samokat" | "perekrestok" | "chizhik" | "azbuka" | "ozon"
+  key: "vkusvill" | "pyaterochka" | "magnit" | "samokat" | "perekrestok" | "chizhik" | "azbuka" | "ozon" | "aviasales"
   name: string
   nameLogo: string
   /** Цвет акцентов UI (кнопки, иконки, банеры). Может быть приглушённой версией бренда. */
@@ -29,11 +29,12 @@ export type Brand = {
   logoColor?: string
   /**
    * Доменная область бренда. Влияет на каталог продуктов, тексты UI и системные
-   * промпты бэка (бэк параметризован brand.domain).
+   * промпты бэка (бэк параметризован brand.key, см. vkusvill controllers).
    * - "grocery" — еда (vkusvill, pyaterochka, magnit и т.д.). recipe = блюдо.
    * - "marketplace" — общий маркетплейс (ozon). recipe = «проект» или «подбор».
+   * - "travel" — направления и поездки (aviasales). recipe = «trip planner».
    */
-  domain?: "grocery" | "marketplace"
+  domain?: "grocery" | "marketplace" | "travel"
   hero: { title: string; subtitle: string }
   profilePlaceholder: string
   /** Placeholder в input recipe-search (зависит от домена бренда). */
@@ -50,6 +51,12 @@ export type Brand = {
   photoCart?: {
     label: string
     presets?: { src: string; label: string }[]
+  }
+  /** Greeting Коханы. Если не задан — дефолтный grocery-текст и /yukai/companion-greeting.mp3.
+   * mp3 опционально: если файла нет в public, фронт всё равно сгенерит через Fish TTS на лету. */
+  companionGreeting?: {
+    text: string
+    mp3?: string
   }
   prime: {
     name: string
@@ -118,6 +125,36 @@ const MARKETPLACE_PROFILE_PLACEHOLDER = `# Мои предпочтения
 бюджет:
 - электроника максимум 100000₽
 - одежда до 10000₽ за вещь`
+
+const TRAVEL_PROFILE_PLACEHOLDER = `# Мои предпочтения
+
+куда люблю ездить:
+- тёплые направления, море
+- беспересадочные рейсы
+- природа > большие города
+
+виза:
+- есть Шенген до 2027
+- ОАЭ — visa on arrival
+- без визы: СНГ, Турция, Грузия, Сербия
+
+семья:
+- путешествую с женой
+- иногда с ребёнком 7 лет (нужно kids-friendly)
+
+бюджет:
+- weekend до 30000₽ за человека
+- неделя до 80000₽
+- отпуск до 150000₽
+
+даты:
+- гибкость ±3 дня
+- предпочитаю вылет в чт-пт
+- в марте отпуск 2 недели
+
+мили / лояльность:
+- Аэрофлот Bonus Gold
+- Turkish Airlines Miles&Smiles`
 
 export const BRANDS: Record<Brand["key"], Brand> = {
   vkusvill: {
@@ -439,6 +476,10 @@ export const BRANDS: Record<Brand["key"], Brand> = {
         { src: "/yukai/marketplace-samples/3.jpg", label: "Мультиварка" },
       ],
     },
+    companionGreeting: {
+      text: "Привет! Давай поговорим — расскажи какие бренды любишь, какой размер носишь, что хочешь собрать. Я подберу товары и заполню профиль.",
+      mp3: "/yukai/companion-greeting-ozon.mp3",
+    },
     prime: {
       name: "Ozon Premium",
       price: 399,
@@ -467,6 +508,67 @@ export const BRANDS: Record<Brand["key"], Brand> = {
       calculation: "AOV +22% × frequency +32% × adoption 40% × 50M MAU",
       payback: "6-8 мес",
       cost: "~250M ₽",
+    },
+  },
+
+  aviasales: {
+    key: "aviasales",
+    name: "Aviasales",
+    nameLogo: "AVIASALES",
+    color: "#00BAE8",
+    logoColor: "#00BAE8",
+    domain: "travel",
+    hero: {
+      title: "Куда вас отвезти",
+      subtitle: "Направления и поездки — AI собирает trip под бюджет, даты и визу",
+    },
+    profilePlaceholder: TRAVEL_PROFILE_PLACEHOLDER,
+    recipePlaceholder: "Какая поездка? AI соберёт trip — например, «weekend на двоих в марте до 80k»",
+    recipeUI: {
+      Icon: Plane,
+      emptyTitle: "Подобрано под поездку",
+      missingLabel: "не нашли в подборке",
+    },
+    photoCart: {
+      label: "Сфоткай место — найдём похожие направления",
+      presets: [
+        { src: "/yukai/travel-samples/1.jpg", label: "Тропика" },
+        { src: "/yukai/travel-samples/2.jpg", label: "Япония" },
+        { src: "/yukai/travel-samples/3.webp", label: "Каппадокия" },
+      ],
+    },
+    companionGreeting: {
+      text: "Привет! Давай поговорим — расскажи куда хочешь, какой бюджет, есть ли виза. Я соберу trip и заполню профиль.",
+      mp3: "/yukai/companion-greeting-aviasales.mp3",
+    },
+    prime: {
+      name: "Aviasales Premium",
+      price: 499,
+      badge: "Subscriber",
+      subtitle: "Уведомления о падениях цен, эксклюзивные тарифы и приоритетная поддержка",
+      benefits: [
+        { Icon: Zap, title: "Price-drop alerts", subtitle: "уведомление за 30 секунд после падения" },
+        { Icon: Tag, title: "Эксклюзивные тарифы", subtitle: "−15% на чартеры и закрытые блоки" },
+        { Icon: Smartphone, title: "Приоритетная поддержка", subtitle: "круглосуточный чат при отмене/задержке" },
+      ],
+    },
+    benchmarksLabel: "Бенчмарки Skyscanner, Kayak, Booking, Hopper, Expedia, Trip.com",
+    businessImpact: [
+      { Icon: User, feature: "Профиль + виза/мили/семья", metric: "+22%", metricLabel: "search→book", desc: "AI помнит визу, миль-программы, состав семьи, гибкость дат", source: "Hopper +24%, Booking Genius +20%" },
+      { Icon: Plane, feature: "Trip planner · «weekend на двоих»", metric: "+28%", metricLabel: "AOV", desc: "AI собирает trip из направления + даты + цена под бюджет", source: "Kayak Trips +25%, Skyscanner +28%" },
+      { Icon: Mic, feature: "Voice-companion для поиска", metric: "+35%", metricLabel: "session time", desc: "Голосом проще искать в long-tail (200+ направлений)", source: "Alexa Travel +32%, Google Assistant +35%" },
+      { Icon: Palette, feature: "AI-баннер по сезону и hot deals", metric: "+30%", metricLabel: "CTR", desc: "Personalized creative по визе, сезону, истории", source: "Hopper Notifications +30%, Klarna +28%" },
+      { Icon: MapPin, feature: "Hyperlocal · улететь от снега", metric: "+25%", metricLabel: "conversion", desc: "Москва +0°C → Бали из вашего города на следующих выходных", source: "Hopper weather +25%, Google Flights +20%" },
+      { Icon: Target, feature: "Banner CTA → готовый trip", metric: "+18%", metricLabel: "click-to-buy", desc: "«Стамбул на weekend от 18k» → корзина за клик", source: "Booking Smart Filters +18%, Expedia +22%" },
+      { Icon: Camera, feature: "Photo-to-trip (Vision)", metric: "+24%", metricLabel: "discovery", desc: "Фото места → AI находит похожие направления", source: "Pinterest Travel +28%, Expedia inspire +20%" },
+      { Icon: Gem, feature: "Aviasales Premium подписка", metric: "2.4x", metricLabel: "LTV", desc: "Price-drop alerts + закрытые тарифы — lock-in", source: "Hopper Premium 2.5x, Going.com 2.3x" },
+      { Icon: RotateCw, feature: "Регулярные маршруты на автопилоте", metric: "28%", metricLabel: "repeat bookings", desc: "«Родители в Сочи раз в полгода» — alerts на падения цены", source: "Hopper alerts 30%, Kayak Watch 28%" },
+    ],
+    totalImpact: {
+      headline: "+8.4 млрд ₽/год incremental margin",
+      calculation: "AOV +22% × frequency +28% × adoption 35% × 25M MAU",
+      payback: "5-7 мес",
+      cost: "~120M ₽",
     },
   },
 }

@@ -14,21 +14,28 @@ type Message = {
   emotion?: Emotion
 }
 
-const GREETING: Message = {
-  role: "assistant",
-  content:
-    "Привет! Давай поговорим — я автоматически заполню твои предпочтения или подберу продукты для блюда. Скажи, что любишь, или что хочешь приготовить.",
-  emotion: "happy",
-}
+const DEFAULT_GREETING_TEXT =
+  "Привет! Давай поговорим — я автоматически заполню твои предпочтения или подберу продукты для блюда. Скажи, что любишь, или что хочешь приготовить."
+const DEFAULT_GREETING_MP3 = "/yukai/companion-greeting.mp3"
 
 type Props = {
   brandKey: string
   brandColor: string
+  /** Опционально: brand-aware greeting (текст + путь к pre-generated mp3).
+   * Если не задано — дефолтный grocery-текст и /yukai/companion-greeting.mp3. */
+  greeting?: { text: string; mp3?: string }
   onProfileAppend?: (text: string) => void
   onRecipeQuery?: (query: string) => void
 }
 
-export function YukaiCompanion({ brandKey, brandColor, onProfileAppend, onRecipeQuery }: Props) {
+export function YukaiCompanion({ brandKey, brandColor, greeting, onProfileAppend, onRecipeQuery }: Props) {
+  const greetingText = greeting?.text ?? DEFAULT_GREETING_TEXT
+  const greetingMp3 = greeting?.mp3 ?? DEFAULT_GREETING_MP3
+  const GREETING: Message = {
+    role: "assistant",
+    content: greetingText,
+    emotion: "happy",
+  }
   const soundKey = `${brandKey}:companion:sound`
   const [open, setOpen] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
@@ -81,13 +88,13 @@ export function YukaiCompanion({ brandKey, brandColor, onProfileAppend, onRecipe
     let cancelled = false
     let resolved = false
 
-    fetch("/yukai/companion-greeting.mp3", { method: "HEAD" })
+    fetch(greetingMp3, { method: "HEAD" })
       .then(r => {
         if (cancelled || resolved || !r.ok || !audioRef.current) return
         resolved = true
-        audioRef.current.src = "/yukai/companion-greeting.mp3"
+        audioRef.current.src = greetingMp3
         audioRef.current.load()
-        greetingUrlRef.current = "/yukai/companion-greeting.mp3"
+        greetingUrlRef.current = greetingMp3
       })
       .catch(() => {})
 

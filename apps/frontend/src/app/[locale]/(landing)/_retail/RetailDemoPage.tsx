@@ -5,6 +5,7 @@ import {
   BarChart3, Gem, ShoppingCart, FileText, Users, Star, Ban, Clock, Search, ChefHat, X, Sparkles,
   Camera, CreditCard, DoorOpen, Check,
   Target, Dumbbell, Scale, Salad, Beef, Leaf, Utensils, Zap,
+  Plane, BellRing, Eye, TrendingDown,
   type LucideIcon,
 } from "lucide-react"
 import { getAiBaseUrl } from "@/shared/api/strapi"
@@ -15,6 +16,7 @@ import { PhotoCartButton } from "./PhotoCartButton"
 import { SubscriptionSuggestions } from "./SubscriptionSuggestions"
 import { PRODUCTS as PRODUCTS_GROCERY } from "./catalog"
 import { PRODUCTS_OZON } from "./catalog-ozon"
+import { PRODUCTS_TRAVEL } from "./catalog-travel"
 import { parseWithClaude, searchRecipe } from "./api"
 import {
   EMPTY_RESULT,
@@ -49,9 +51,14 @@ type Props = { brandKey: Brand["key"] }
 export function RetailDemoPage({ brandKey }: Props) {
   const brand = BRANDS[brandKey]
   const COLOR = brand.color
-  // Каталог переключается по domain бренда: marketplace (Ozon) → товары маркетплейса,
-  // иначе — продуктовый. Бэк параметризован тем же brand.key (см. vkusvill/controllers).
-  const PRODUCTS = brand.domain === "marketplace" ? PRODUCTS_OZON : PRODUCTS_GROCERY
+  // Каталог переключается по domain бренда. Бэк параметризован тем же brand.key
+  // (см. vkusvill/controllers — переключает grocery/marketplace/travel промпты).
+  const PRODUCTS =
+    brand.domain === "travel"
+      ? PRODUCTS_TRAVEL
+      : brand.domain === "marketplace"
+        ? PRODUCTS_OZON
+        : PRODUCTS_GROCERY
   const profileKey = `${brand.key}:profile:v3`
 
   const [query, setQuery] = useState("")
@@ -661,7 +668,7 @@ export function RetailDemoPage({ brandKey }: Props) {
                 type="text"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Найти товар…"
+                placeholder={brand.domain === "travel" ? "Найти направление…" : "Найти товар…"}
                 className="w-full rounded-2xl border border-neutral-200 bg-neutral-50 px-5 py-4 text-base outline-none transition focus:border-neutral-900 focus:bg-white"
               />
               <span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-neutral-400">
@@ -934,6 +941,7 @@ export function RetailDemoPage({ brandKey }: Props) {
       <YukaiCompanion
         brandKey={brand.key}
         brandColor={COLOR}
+        greeting={brand.companionGreeting}
         onProfileAppend={text => {
           updateProfile(prev => {
             const trimmed = prev.trimEnd()
@@ -982,6 +990,88 @@ export function RetailDemoPage({ brandKey }: Props) {
             ))}
           </div>
 
+          {brand.domain === "travel" ? (
+            <div
+              className="mb-4 overflow-hidden rounded-2xl border-2"
+              style={{ borderColor: COLOR, backgroundColor: `${COLOR}05` }}
+            >
+              <div className="flex flex-wrap items-center gap-3 px-4 pt-4">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl text-white" style={{ backgroundColor: COLOR }}>
+                  <BellRing size={22} />
+                </span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base font-bold text-neutral-900">Price Drop Watch</span>
+                    <span className="rounded-full bg-neutral-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                      Subscriber only
+                    </span>
+                  </div>
+                  <div className="text-xs text-neutral-600">Уведомление за 30 секунд после падения цены</div>
+                </div>
+              </div>
+
+              <div className="mt-3 grid grid-cols-3 gap-1 border-t border-b px-4 py-2 text-[11px] text-neutral-600" style={{ borderColor: `${COLOR}30` }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold" style={{ color: COLOR }}>1.</span>
+                  <span className="inline-flex items-center gap-1">
+                    Сохраняй маршрут <Plane size={12} className="shrink-0" />
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold" style={{ color: COLOR }}>2.</span>
+                  <span className="inline-flex items-center gap-1">
+                    AI следит за ценой <Eye size={12} className="shrink-0" />
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold" style={{ color: COLOR }}>3.</span>
+                  <span className="inline-flex items-center gap-1">
+                    Push при падении <TrendingDown size={12} className="shrink-0" />
+                  </span>
+                </div>
+              </div>
+
+              <div className="border-b px-4 py-3" style={{ borderColor: `${COLOR}30` }}>
+                <div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                  Под наблюдением (демо)
+                </div>
+                <div className="flex flex-col gap-1.5 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🇹🇷</span>
+                    <span className="flex-1 truncate">Москва → Стамбул, weekend</span>
+                    <span className="text-xs text-neutral-400 line-through">22000₽</span>
+                    <span className="font-medium" style={{ color: COLOR }}>18000₽</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🇮🇩</span>
+                    <span className="flex-1 truncate">Москва → Бали, 10 дней</span>
+                    <span className="text-xs text-neutral-400 line-through">75000₽</span>
+                    <span className="font-medium" style={{ color: COLOR }}>65000₽</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 p-4">
+                <button
+                  onClick={() => {
+                    setPhotoToast({
+                      summary: "Price-drop alerts включены — уведомим в Telegram при падении",
+                      found: 2,
+                      missing: [],
+                    })
+                    window.setTimeout(() => setPhotoToast(null), 6000)
+                  }}
+                  className="flex-1 rounded-full px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+                  style={{ backgroundColor: COLOR }}
+                >
+                  <span className="inline-flex items-center gap-1.5">
+                    <BellRing size={16} className="shrink-0" />
+                    Включить отслеживание
+                  </span>
+                </button>
+              </div>
+            </div>
+          ) : (
           <div
             className="mb-4 overflow-hidden rounded-2xl border-2"
             style={{ borderColor: COLOR, backgroundColor: `${COLOR}05` }}
@@ -1084,18 +1174,21 @@ export function RetailDemoPage({ brandKey }: Props) {
               )}
             </div>
           </div>
-          <input
-            ref={primeScanInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={e => {
-              const file = e.target.files?.[0]
-              e.target.value = ""
-              if (file) handlePrimeScan(file)
-            }}
-            className="hidden"
-          />
+          )}
+          {brand.domain !== "travel" && (
+            <input
+              ref={primeScanInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={e => {
+                const file = e.target.files?.[0]
+                e.target.value = ""
+                if (file) handlePrimeScan(file)
+              }}
+              className="hidden"
+            />
+          )}
 
           <SubscriptionSuggestions
             brandColor={COLOR}
