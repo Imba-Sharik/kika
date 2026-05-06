@@ -20,7 +20,7 @@ export type PrimeBenefit = {
 }
 
 export type Brand = {
-  key: "vkusvill" | "pyaterochka" | "magnit" | "samokat" | "perekrestok" | "chizhik"
+  key: "vkusvill" | "pyaterochka" | "magnit" | "samokat" | "perekrestok" | "chizhik" | "azbuka"
   name: string
   nameLogo: string
   /** Цвет акцентов UI (кнопки, иконки, банеры). Может быть приглушённой версией бренда. */
@@ -279,6 +279,48 @@ export const BRANDS: Record<Brand["key"], Brand> = {
       calculation: "AOV +24% × frequency +28% × adoption 40% × 8M активных Premium-карт",
       payback: "5-7 мес",
       cost: "~95M ₽",
+    },
+  },
+
+  azbuka: {
+    key: "azbuka",
+    name: "Азбука Вкуса",
+    nameLogo: "АЗБУКА ВКУСА",
+    color: "#1B4332",
+    logoColor: "#0F3023",
+    hero: {
+      title: "Премиум-ассортимент",
+      subtitle: "Гастрономия, фермерское, готовые блюда от шефов",
+    },
+    profilePlaceholder: BASE_PROFILE_PLACEHOLDER,
+    prime: {
+      name: "АВ Клуб Premium",
+      price: 499,
+      badge: "Premium",
+      subtitle: "Закрытые винные дегустации, шеф-меню от ресторанов АВ и приоритетная сборка свежего",
+      benefits: [
+        { Icon: Tag, title: "Кэшбек 12%", subtitle: "на готовую кухню и винотеку" },
+        { Icon: Truck, title: "Доставка от 0₽", subtitle: "приоритетная сборка фермерского" },
+        { Icon: Smartphone, title: "Закрытые предзаказы", subtitle: "редкие позиции до выкладки в зал" },
+      ],
+    },
+    benchmarksLabel: "Бенчмарки Whole Foods, Waitrose, Eataly, Erewhon, Selfridges Food",
+    businessImpact: [
+      { Icon: User, feature: "Профиль + premium-фильтры", metric: "+26%", metricLabel: "AOV", desc: "AI помнит вино, сыр, диету — премиум ценит точность", source: "Whole Foods +22%, Erewhon +28%" },
+      { Icon: ChefHat, feature: "Recipe search + кухня АВ", metric: "+34%", metricLabel: "ready-to-eat AOV", desc: "AI комбинирует готовое из ресторанов АВ + ингредиенты", source: "M&S Food +28%, Eataly +35%" },
+      { Icon: Mic, feature: "Voice — для занятых HNW", metric: "+40%", metricLabel: "session time", desc: "Голос экономит 60-90 сек на премиум-заказ", source: "Spotify Voice +42%, Alexa Shopping +35%" },
+      { Icon: Palette, feature: "AI-баннер «гастро-сезон»", metric: "+34%", metricLabel: "CTR", desc: "Сезон трюфеля, новый заход устриц, винные пары", source: "Klarna +28%, Whole Foods digital +35%" },
+      { Icon: MapPin, feature: "Hyperlocal · что свежего сейчас", metric: "+24%", metricLabel: "conversion", desc: "Свежие поставки фермерского/рыбы — live по магазину", source: "Waitrose local +25%, Eataly +28%" },
+      { Icon: Target, feature: "Banner → шеф-меню на ужин", metric: "+22%", metricLabel: "click-to-buy", desc: "«Ужин на двоих с вином 4500₽» → корзина", source: "Amazon discovery +12%, M&S +24%" },
+      { Icon: Camera, feature: "Photo-to-cart премиум-фото", metric: "+28%", metricLabel: "cart fill", desc: "Фото блюда из ресторана → AI собирает рецепт", source: "Walmart Spark +25%, Whole Foods +30%" },
+      { Icon: Gem, feature: "АВ Клуб Premium подписка", metric: "3.1x", metricLabel: "LTV", desc: "Premium-tier через кэшбек 12% + закрытые дегустации", source: "Costco Executive 3x, Amazon Prime 2.4x" },
+      { Icon: RotateCw, feature: "Авто-поставка вина и фермерского", metric: "38%", metricLabel: "repeat orders", desc: "Винный клуб + сыры/хлеб от пекарен по графику", source: "Amazon S&S 30%, Naked Wines 40%" },
+    ],
+    totalImpact: {
+      headline: "+6.8 млрд ₽/год incremental margin",
+      calculation: "AOV +26% × frequency +30% × adoption 45% × 3M активных Premium-карт",
+      payback: "4-6 мес",
+      cost: "~85M ₽",
     },
   },
 
