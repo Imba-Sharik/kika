@@ -56,6 +56,43 @@ function rehydrate(data: CachedData): HyperlocalContext {
   return { ...data, weatherIcon: WEATHER_ICON[data.weatherCode] ?? Globe }
 }
 
+type GeoResult = { city: string; country_name: string; latitude: number; longitude: number }
+
+async function fromSypexGeo(): Promise<GeoResult> {
+  const res = await fetch("https://api.sypexgeo.net/json/")
+  if (!res.ok) throw new Error("sypexgeo failed")
+  const data = await res.json()
+  const city = data?.city?.name_ru || data?.city?.name_en || ""
+  const country_name = data?.country?.name_ru || data?.country?.name_en || ""
+  const latitude = data?.city?.lat
+  const longitude = data?.city?.lon
+  if (typeof latitude !== "number" || typeof longitude !== "number") {
+    throw new Error("sypexgeo no coords")
+  }
+  return { city, country_name, latitude, longitude }
+}
+
+async function fromIpwhois(): Promise<GeoResult> {
+  const res = await fetch("https://ipwho.is/")
+  if (!res.ok) throw new Error("ipwho failed")
+  const data = await res.json()
+  if (data?.success === false) throw new Error("ipwho lookup failed")
+  const { city, country, latitude, longitude } = data
+  if (typeof latitude !== "number" || typeof longitude !== "number") {
+    throw new Error("ipwho no coords")
+  }
+  return { city: city || "", country_name: country || "", latitude, longitude }
+}
+
+async function resolveGeo(): Promise<GeoResult> {
+  try {
+    return await fromSypexGeo()
+  } catch (err) {
+    console.warn("[hyperlocal] sypexgeo failed, falling back to ipwho.is", err)
+    return await fromIpwhois()
+  }
+}
+
 export function useHyperlocalContext(): { context: HyperlocalContext | null; loading: boolean } {
   const [context, setContext] = useState<HyperlocalContext | null>(null)
   const [loading, setLoading] = useState(true)
@@ -77,19 +114,11 @@ export function useHyperlocalContext(): { context: HyperlocalContext | null; loa
 
     ;(async () => {
       try {
-        // ipapi.co режется CORS-политикой в РФ без VPN. Используем ipwho.is —
-        // CORS-friendly, работает в РФ, без ключа, free unlimited.
-        const geoRes = await fetch("https://ipwho.is/?fields=city,country,latitude,longitude,success")
-        if (!geoRes.ok) throw new Error("geo failed")
-        const geo = await geoRes.json()
+        // SypexGeo (РФ-сервис, CORS-friendly, без ключа) — primary.
+        // ipwho.is — fallback. ipapi.co зарезан CORS в РФ без VPN.
+        const geo = await resolveGeo()
         if (cancelled) return
-
-        if (geo.success === false) throw new Error("geo lookup failed")
-        const { city, country, latitude, longitude } = geo
-        const country_name = country
-        if (typeof latitude !== "number" || typeof longitude !== "number") {
-          throw new Error("no coords")
-        }
+        const { city, country_name, latitude, longitude } = geo
 
         const wRes = await fetch(
           `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`,
