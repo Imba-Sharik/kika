@@ -77,12 +77,16 @@ export function useHyperlocalContext(): { context: HyperlocalContext | null; loa
 
     ;(async () => {
       try {
-        const geoRes = await fetch("https://ipapi.co/json/")
+        // ipapi.co режется CORS-политикой в РФ без VPN. Используем ipwho.is —
+        // CORS-friendly, работает в РФ, без ключа, free unlimited.
+        const geoRes = await fetch("https://ipwho.is/?fields=city,country,latitude,longitude,success")
         if (!geoRes.ok) throw new Error("geo failed")
         const geo = await geoRes.json()
         if (cancelled) return
 
-        const { city, country_name, latitude, longitude } = geo
+        if (geo.success === false) throw new Error("geo lookup failed")
+        const { city, country, latitude, longitude } = geo
+        const country_name = country
         if (typeof latitude !== "number" || typeof longitude !== "number") {
           throw new Error("no coords")
         }
