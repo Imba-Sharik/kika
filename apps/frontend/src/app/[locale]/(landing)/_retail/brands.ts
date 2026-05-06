@@ -420,7 +420,11 @@ export const BRANDS: Record<Brand["key"], Brand> = {
     recipePlaceholder: "Какой проект? AI подберёт товары — например, «собрать домашний офис»",
     photoCart: {
       label: "Сфоткай товар или каталог",
-      // Без пресетов — нет marketplace-фото-сэмплов в public/. Меню покажет только Upload.
+      presets: [
+        { src: "/yukai/marketplace-samples/1.jpg", label: "Холодильник" },
+        { src: "/yukai/marketplace-samples/2.jpg", label: "Аэрогриль" },
+        { src: "/yukai/marketplace-samples/3.jpg", label: "Мультиварка" },
+      ],
     },
     prime: {
       name: "Ozon Premium",

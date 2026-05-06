@@ -24,6 +24,8 @@ export const PRODUCTS_OZON: Product[] = [
   { id: "air-fryer", name: "Аэрогриль Tefal 5л", emoji: "🍟", price: 11990, unit: "шт", category: "Бытовая техника", ingredients: [], tags: ["ready"] },
   { id: "blender", name: "Блендер Bosch 1000Вт", emoji: "🥤", price: 6490, unit: "шт", category: "Бытовая техника", ingredients: [], tags: ["ready"] },
   { id: "vacuum-robot", name: "Робот-пылесос Xiaomi", emoji: "🤖", price: 17990, unit: "шт", category: "Бытовая техника", ingredients: [], tags: ["ready"] },
+  { id: "multicooker", name: "Мультиварка Redmond 5л", emoji: "🍲", price: 8990, unit: "шт", category: "Бытовая техника", ingredients: [], tags: ["ready"] },
+  { id: "fridge-smart", name: "Холодильник Samsung Family Hub", emoji: "🧊", price: 189990, unit: "шт", category: "Бытовая техника", ingredients: [], tags: ["ready"] },
 
   // Дом
   { id: "desk-lamp", name: "Лампа настольная LED", emoji: "💡", price: 2490, unit: "шт", category: "Дом", ingredients: [], tags: ["ready"] },
