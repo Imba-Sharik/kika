@@ -674,7 +674,7 @@ export function RetailDemoPage({ brandKey }: Props) {
                 type="text"
                 value={recipeQuery}
                 onChange={e => updateRecipeQuery(e.target.value)}
-                placeholder="Что готовите? AI подберёт продукты — например, «хочу приготовить блины»"
+                placeholder={brand.recipePlaceholder ?? "Что готовите? AI подберёт продукты — например, «хочу приготовить блины»"}
                 className="w-full rounded-2xl border-2 px-5 py-4 text-base outline-none transition focus:bg-white"
                 style={{
                   borderColor: recipeQuery ? COLOR : "#e5e5e5",
@@ -699,6 +699,9 @@ export function RetailDemoPage({ brandKey }: Props) {
 
             <PhotoCartButton
               brandColor={COLOR}
+              brand={brand.key}
+              label={brand.photoCart?.label}
+              presets={brand.photoCart?.presets}
               products={bannerProducts}
               onResult={result => {
                 if (result.foundIds.length > 0) {

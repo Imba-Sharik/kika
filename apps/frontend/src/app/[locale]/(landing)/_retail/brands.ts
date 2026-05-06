@@ -36,6 +36,13 @@ export type Brand = {
   domain?: "grocery" | "marketplace"
   hero: { title: string; subtitle: string }
   profilePlaceholder: string
+  /** Placeholder в input recipe-search (зависит от домена бренда). */
+  recipePlaceholder?: string
+  /** Лейбл и пресеты для PhotoCartButton. Если presets не заданы — меню без пресетов. */
+  photoCart?: {
+    label: string
+    presets?: { src: string; label: string }[]
+  }
   prime: {
     name: string
     price: number
@@ -410,6 +417,11 @@ export const BRANDS: Record<Brand["key"], Brand> = {
       subtitle: "Электроника, дом, одежда, книги — AI собирает то что нужно именно вам",
     },
     profilePlaceholder: MARKETPLACE_PROFILE_PLACEHOLDER,
+    recipePlaceholder: "Какой проект? AI подберёт товары — например, «собрать домашний офис»",
+    photoCart: {
+      label: "Сфоткай товар или каталог",
+      // Без пресетов — нет marketplace-фото-сэмплов в public/. Меню покажет только Upload.
+    },
     prime: {
       name: "Ozon Premium",
       price: 399,

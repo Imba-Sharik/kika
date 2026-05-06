@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react"
 import { Camera, Upload } from "lucide-react"
 import { getAiBaseUrl } from "@/shared/api/strapi"
 
-const PRESETS = [
+const DEFAULT_PRESETS = [
   { src: "/yukai/fridge-samples/1.jpg", label: "Молочка" },
   { src: "/yukai/fridge-samples/2.webp", label: "Напитки" },
   { src: "/yukai/fridge-samples/3.jpg", label: "Перекус" },
 ]
+const DEFAULT_LABEL = "Сфоткай холодильник"
 
 export type PhotoCartProduct = { id: string; name: string; category?: string }
 
@@ -18,10 +19,18 @@ type PhotoCartResult = {
   summary: string
 }
 
+type Preset = { src: string; label: string }
+
 type Props = {
   brandColor: string
   products: PhotoCartProduct[]
   onResult: (result: PhotoCartResult) => void
+  /** Бренд для бэка — переключает marketplace/grocery промпт. */
+  brand?: string
+  /** Кастомный лейбл кнопки. Если не задан — "Сфоткай холодильник". */
+  label?: string
+  /** Кастомные пресеты. Если undefined — дефолтные grocery-пресеты. Если [] — меню без пресетов. */
+  presets?: Preset[]
 }
 
 function fileToDataUrl(file: Blob): Promise<string> {
@@ -58,7 +67,9 @@ async function compressImage(dataUrl: string, maxSize = 1280): Promise<string> {
   })
 }
 
-export function PhotoCartButton({ brandColor, products, onResult }: Props) {
+export function PhotoCartButton({ brandColor, products, onResult, brand, label, presets }: Props) {
+  const buttonLabel = label ?? DEFAULT_LABEL
+  const effectivePresets = presets ?? DEFAULT_PRESETS
   const fileInputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState(false)
@@ -83,7 +94,7 @@ export function PhotoCartButton({ brandColor, products, onResult }: Props) {
       const res = await fetch(`${getAiBaseUrl()}/vkusvill/photo-cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: compressed, products }),
+        body: JSON.stringify({ image: compressed, products, brand }),
       })
       if (!res.ok) throw new Error("photo-cart failed")
       const data = (await res.json()) as PhotoCartResult
@@ -133,7 +144,7 @@ export function PhotoCartButton({ brandColor, products, onResult }: Props) {
         aria-label="Фото-распознавание"
       >
         <span className="truncate text-neutral-500">
-          {busy ? "Распознаю фото…" : "Сфоткай холодильник"}
+          {busy ? "Распознаю фото…" : buttonLabel}
         </span>
         {busy ? (
           <span className="flex items-center gap-0.5">
@@ -161,12 +172,14 @@ export function PhotoCartButton({ brandColor, products, onResult }: Props) {
             </div>
           </button>
 
-          <div className="border-t border-neutral-100 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-            Или из последних
-          </div>
+          {effectivePresets.length > 0 && (
+            <div className="border-t border-neutral-100 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              Или из последних
+            </div>
+          )}
 
           <div className="grid grid-cols-3 gap-2 px-3 pb-3">
-            {PRESETS.map(p => (
+            {effectivePresets.map(p => (
               <button
                 key={p.src}
                 onClick={() => handlePreset(p.src)}
