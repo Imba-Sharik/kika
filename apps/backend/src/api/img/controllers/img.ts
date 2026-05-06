@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream'
 
 // Whitelist обязателен — иначе endpoint станет open proxy для anonymous-юзеров.
-// Только хосты которые отдают unsplash/klipy/fal сами.
+// Только хосты которые отдают unsplash/klipy сами.
 const ALLOWED_HOSTS = new Set([
   'images.unsplash.com',
   'plus.unsplash.com',
@@ -9,12 +9,18 @@ const ALLOWED_HOSTS = new Set([
   'media1.klipy.com',
   'media2.klipy.com',
   'cdn.klipy.com',
-  // fal.ai CDN — картинки баннеров /vkusvill/banner. В РФ без VPN
-  // напрямую <img src="https://v3.fal.media/..."> не грузится → проксируем.
-  'fal.media',
-  'v2.fal.media',
-  'v3.fal.media',
 ])
+
+// fal.ai CDN — картинки баннеров /vkusvill/banner. В РФ без VPN
+// напрямую <img src="https://v3.fal.media/..."> не грузится → проксируем.
+// fal раскидывает картинки по шардам: v3.fal.media, v3b.fal.media, v2.fal.media…
+// поэтому тут suffix-проверка вместо явного списка.
+const ALLOWED_HOST_SUFFIXES = ['.fal.media']
+
+function isHostAllowed(hostname: string): boolean {
+  if (ALLOWED_HOSTS.has(hostname)) return true
+  return ALLOWED_HOST_SUFFIXES.some(s => hostname === s.slice(1) || hostname.endsWith(s))
+}
 
 export default {
   async proxy(ctx) {
@@ -34,7 +40,7 @@ export default {
       return
     }
 
-    if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.has(parsed.hostname)) {
+    if (parsed.protocol !== 'https:' || !isHostAllowed(parsed.hostname)) {
       ctx.status = 403
       ctx.body = 'forbidden host'
       return
