@@ -737,15 +737,18 @@ export function RetailDemoPage({ brandKey }: Props) {
             >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-2 text-base font-bold">
-                  <ChefHat size={18} className="shrink-0" />
-                  {recipeResult.recipeName || "Подобрано по запросу"}
+                  {(() => {
+                    const Icon = brand.recipeUI?.Icon ?? ChefHat
+                    return <Icon size={18} className="shrink-0" />
+                  })()}
+                  {recipeResult.recipeName || (brand.recipeUI?.emptyTitle ?? "Подобрано по запросу")}
                 </span>
                 <span className="rounded-full bg-white px-3 py-1 text-xs font-medium ring-1 ring-neutral-200">
                   {recipeResult.neededIds.length} товаров в наличии
                 </span>
                 {recipeResult.missingItems.length > 0 && (
                   <span className="text-xs text-neutral-600">
-                    нет в магазине: {recipeResult.missingItems.join(", ")}
+                    {brand.recipeUI?.missingLabel ?? "нет в магазине"}: {recipeResult.missingItems.join(", ")}
                   </span>
                 )}
               </div>

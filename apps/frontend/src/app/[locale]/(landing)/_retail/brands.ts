@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react"
 import {
   User, ChefHat, Mic, Palette, MapPin, Target, Camera, Gem, RotateCw,
-  Truck, Percent, Smartphone, Tag, Zap, Clock, Snowflake,
+  Truck, Percent, Smartphone, Tag, Zap, Clock, Snowflake, Boxes,
 } from "lucide-react"
 
 export type BusinessImpactItem = {
@@ -38,6 +38,14 @@ export type Brand = {
   profilePlaceholder: string
   /** Placeholder в input recipe-search (зависит от домена бренда). */
   recipePlaceholder?: string
+  /** Адаптация UI блока с результатом recipe-search под домен бренда.
+   * Для grocery — дефолтные ChefHat / "Подобрано по запросу" / "нет в магазине".
+   * Для marketplace — Boxes / "Подобрано под проект" / "нет в каталоге". */
+  recipeUI?: {
+    Icon?: LucideIcon
+    emptyTitle?: string
+    missingLabel?: string
+  }
   /** Лейбл и пресеты для PhotoCartButton. Если presets не заданы — меню без пресетов. */
   photoCart?: {
     label: string
@@ -418,6 +426,11 @@ export const BRANDS: Record<Brand["key"], Brand> = {
     },
     profilePlaceholder: MARKETPLACE_PROFILE_PLACEHOLDER,
     recipePlaceholder: "Какой проект? AI подберёт товары — например, «собрать домашний офис»",
+    recipeUI: {
+      Icon: Boxes,
+      emptyTitle: "Подобрано под проект",
+      missingLabel: "нет в каталоге",
+    },
     photoCart: {
       label: "Сфоткай товар или каталог",
       presets: [
