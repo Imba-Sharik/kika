@@ -126,6 +126,7 @@ export function PersonalizedBanner({ mode, brandKey, brandColor, profileText = "
           body.products = products
         }
 
+        body.brand = brandKey
         const res = await fetch(`${getAiBaseUrl()}/vkusvill/banner`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

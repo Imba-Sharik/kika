@@ -1,13 +1,14 @@
 import { getAiBaseUrl } from "@/shared/api/strapi"
 import type { Product, ParseResult, RecipeResult, PriceCap, RecurringItem, DietGoal, CookingPreference } from "./types"
 
-export async function searchRecipe(text: string, products: Product[], signal?: AbortSignal): Promise<RecipeResult | null> {
+export async function searchRecipe(text: string, products: Product[], signal?: AbortSignal, brand?: string): Promise<RecipeResult | null> {
   try {
     const res = await fetch(`${getAiBaseUrl()}/vkusvill/recipe-search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         text,
+        brand,
         products: products.map(p => ({ id: p.id, name: p.name, category: p.category })),
       }),
       signal,
@@ -24,13 +25,14 @@ export async function searchRecipe(text: string, products: Product[], signal?: A
   }
 }
 
-export async function parseWithClaude(text: string, products: Product[], signal?: AbortSignal): Promise<ParseResult | null> {
+export async function parseWithClaude(text: string, products: Product[], signal?: AbortSignal, brand?: string): Promise<ParseResult | null> {
   try {
     const res = await fetch(`${getAiBaseUrl()}/vkusvill/parse-prefs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         text,
+        brand,
         products: products.map(p => ({ id: p.id, name: p.name, category: p.category, price: p.price, unit: p.unit })),
       }),
       signal,

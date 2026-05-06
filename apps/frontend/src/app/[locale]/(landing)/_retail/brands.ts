@@ -20,13 +20,20 @@ export type PrimeBenefit = {
 }
 
 export type Brand = {
-  key: "vkusvill" | "pyaterochka" | "magnit" | "samokat" | "perekrestok" | "chizhik" | "azbuka"
+  key: "vkusvill" | "pyaterochka" | "magnit" | "samokat" | "perekrestok" | "chizhik" | "azbuka" | "ozon"
   name: string
   nameLogo: string
   /** Цвет акцентов UI (кнопки, иконки, банеры). Может быть приглушённой версией бренда. */
   color: string
   /** Фирменный цвет лого. Опционально — fallback на color. */
   logoColor?: string
+  /**
+   * Доменная область бренда. Влияет на каталог продуктов, тексты UI и системные
+   * промпты бэка (бэк параметризован brand.domain).
+   * - "grocery" — еда (vkusvill, pyaterochka, magnit и т.д.). recipe = блюдо.
+   * - "marketplace" — общий маркетплейс (ozon). recipe = «проект» или «подбор».
+   */
+  domain?: "grocery" | "marketplace"
   hero: { title: string; subtitle: string }
   profilePlaceholder: string
   prime: {
@@ -71,6 +78,31 @@ const BASE_PROFILE_PLACEHOLDER = `# Мои предпочтения
 
 бюджет:
 - мясо дороже 500₽ не показывай`
+
+const MARKETPLACE_PROFILE_PLACEHOLDER = `# Мои предпочтения
+
+что я люблю и часто беру:
+- техника Apple, ценю минимализм
+- читаю бизнес-книги и фантастику
+- занимаюсь йогой 3 раза в неделю
+
+размеры:
+- одежда M, обувь 42
+- ребёнку 7 лет, рост 122
+
+что не показывать:
+- не люблю громоздкие гаджеты
+- без китайских no-name брендов
+- без подделок и реплик
+
+проекты на ближайшее время:
+- собираю домашний офис
+- ремонт ванной комнаты
+- ищу подарок маме на 60-летие, бюджет 15000₽
+
+бюджет:
+- электроника максимум 100000₽
+- одежда до 10000₽ за вещь`
 
 export const BRANDS: Record<Brand["key"], Brand> = {
   vkusvill: {
@@ -363,6 +395,49 @@ export const BRANDS: Record<Brand["key"], Brand> = {
       calculation: "AOV +15% × frequency +28% × adoption 30% × 5M активных карт",
       payback: "8-10 мес",
       cost: "~50M ₽",
+    },
+  },
+
+  ozon: {
+    key: "ozon",
+    name: "Ozon",
+    nameLogo: "OZON",
+    color: "#005BFF",
+    logoColor: "#005BFF",
+    domain: "marketplace",
+    hero: {
+      title: "Маркетплейс под вас",
+      subtitle: "Электроника, дом, одежда, книги — AI собирает то что нужно именно вам",
+    },
+    profilePlaceholder: MARKETPLACE_PROFILE_PLACEHOLDER,
+    prime: {
+      name: "Ozon Premium",
+      price: 399,
+      badge: "Top-tier",
+      subtitle: "Бесплатная доставка, кэшбек до 25%, закрытые распродажи и приоритет в Ozon Card",
+      benefits: [
+        { Icon: Truck, title: "Бесплатная доставка", subtitle: "на любую сумму, в т.ч. крупногабарит" },
+        { Icon: Tag, title: "Кэшбек до 25%", subtitle: "повышенный на участвующие категории" },
+        { Icon: Smartphone, title: "Закрытые распродажи", subtitle: "доступ за 24 часа до общего старта" },
+      ],
+    },
+    benchmarksLabel: "Бенчмарки Amazon, Coupang, Mercado Libre, Shopee, Flipkart",
+    businessImpact: [
+      { Icon: User, feature: "Профиль + бренды/размеры/проекты", metric: "+22%", metricLabel: "AOV", desc: "AI помнит размеры, любимые бренды, текущие проекты", source: "Amazon +20%, Coupang +24%" },
+      { Icon: ChefHat, feature: "Project search · «собрать офис»", metric: "+30%", metricLabel: "basket size", desc: "AI собирает корзину под проект (стол + кресло + лампа)", source: "Amazon Bundle +28%, Wayfair +32%" },
+      { Icon: Mic, feature: "Voice-companion для long-tail", metric: "+38%", metricLabel: "discovery", desc: "Голосом проще найти редкий товар в 200M SKU", source: "Alexa Shopping +35%, Spotify Voice +42%" },
+      { Icon: Palette, feature: "AI-баннер по интересам и сезону", metric: "+32%", metricLabel: "CTR", desc: "Personalized creative по 12 категориям и проектам", source: "Klarna gen-ads +28%, Coupang +30%" },
+      { Icon: MapPin, feature: "Hyperlocal · что доставят сегодня", metric: "+18%", metricLabel: "conversion", desc: "Локальные ПВЗ и сроки доставки в реальном времени", source: "Amazon same-day +20%, Coupang Rocket +22%" },
+      { Icon: Target, feature: "Banner CTA → готовый сетап", metric: "+20%", metricLabel: "click-to-buy", desc: "«Домашний офис под бюджет» → корзина за клик", source: "Amazon discovery +12%, Wayfair +25%" },
+      { Icon: Camera, feature: "Photo-to-cart (Vision)", metric: "+28%", metricLabel: "cart fill rate", desc: "Фото товара/каталога → AI находит у нас", source: "Pinterest Lens +32%, Amazon StyleSnap +25%" },
+      { Icon: Gem, feature: "Ozon Premium подписка", metric: "2.6x", metricLabel: "LTV", desc: "Lock-in через free delivery + кэшбек до 25%", source: "Amazon Prime 2.4x, Coupang WOW 2.8x" },
+      { Icon: RotateCw, feature: "Subscribe & Save регулярки", metric: "32%", metricLabel: "repeat orders", desc: "Бытовая химия, корм, расходники — auto", source: "Amazon S&S 30%, Coupang Auto 35%" },
+    ],
+    totalImpact: {
+      headline: "+34 млрд ₽/год incremental margin",
+      calculation: "AOV +22% × frequency +32% × adoption 40% × 50M MAU",
+      payback: "6-8 мес",
+      cost: "~250M ₽",
     },
   },
 }

@@ -202,6 +202,7 @@ export function YukaiCompanion({ brandKey, brandColor, onProfileAppend, onRecipe
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: text,
+          brand: brandKey,
           history: messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
         }),
       })

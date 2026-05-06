@@ -13,7 +13,8 @@ import { YukaiCompanion } from "./YukaiCompanion"
 import { PersonalizedBanner } from "./PersonalizedBanner"
 import { PhotoCartButton } from "./PhotoCartButton"
 import { SubscriptionSuggestions } from "./SubscriptionSuggestions"
-import { PRODUCTS } from "./catalog"
+import { PRODUCTS as PRODUCTS_GROCERY } from "./catalog"
+import { PRODUCTS_OZON } from "./catalog-ozon"
 import { parseWithClaude, searchRecipe } from "./api"
 import {
   EMPTY_RESULT,
@@ -48,7 +49,10 @@ type Props = { brandKey: Brand["key"] }
 export function RetailDemoPage({ brandKey }: Props) {
   const brand = BRANDS[brandKey]
   const COLOR = brand.color
-  const profileKey = `${brand.key}:profile:v2`
+  // Каталог переключается по domain бренда: marketplace (Ozon) → товары маркетплейса,
+  // иначе — продуктовый. Бэк параметризован тем же brand.key (см. vkusvill/controllers).
+  const PRODUCTS = brand.domain === "marketplace" ? PRODUCTS_OZON : PRODUCTS_GROCERY
+  const profileKey = `${brand.key}:profile:v3`
 
   const [query, setQuery] = useState("")
   const [recipeQuery, setRecipeQuery] = useState("")
@@ -100,6 +104,7 @@ export function RetailDemoPage({ brandKey }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           image: dataUrl,
+          brand: brand.key,
           products: PRODUCTS.map(p => ({ id: p.id, name: p.name, category: p.category })),
         }),
       })
@@ -170,7 +175,7 @@ export function RetailDemoPage({ brandKey }: Props) {
     if (!trimmed) return
     const controller = new AbortController()
     const timer = window.setTimeout(async () => {
-      const result = await parseWithClaude(trimmed, PRODUCTS, controller.signal)
+      const result = await parseWithClaude(trimmed, PRODUCTS, controller.signal, brand.key)
       if (controller.signal.aborted) return
       if (result) {
         setAiResult(result)
@@ -201,7 +206,7 @@ export function RetailDemoPage({ brandKey }: Props) {
     if (!trimmed) return
     const controller = new AbortController()
     const timer = window.setTimeout(async () => {
-      const result = await searchRecipe(trimmed, PRODUCTS, controller.signal)
+      const result = await searchRecipe(trimmed, PRODUCTS, controller.signal, brand.key)
       if (controller.signal.aborted) return
       if (result) {
         setRecipeResult(result)
