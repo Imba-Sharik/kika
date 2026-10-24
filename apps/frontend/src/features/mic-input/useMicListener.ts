@@ -191,15 +191,23 @@ export function useMicListener({
         // OpenAI Realtime / ChatGPT voice: даёт договорить, но не слишком медленно.
         redemptionMs: 700,
         // v6 API: аудио получаем сами через getStream, передаём свои constraints
-        getStream: () =>
-          navigator.mediaDevices.getUserMedia({
-            audio: {
-              ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
-              autoGainControl: true,
-              noiseSuppression: true,
-              echoCancellation: true,
-            },
-          }),
+        getStream: async () => {
+          const base = { autoGainControl: true, noiseSuppression: true, echoCancellation: true }
+          if (!deviceId) return navigator.mediaDevices.getUserMedia({ audio: base })
+          try {
+            return await navigator.mediaDevices.getUserMedia({
+              audio: { ...base, deviceId: { exact: deviceId } },
+            })
+          } catch (e) {
+            // Сохранённый мик отключён / Chromium сменил deviceId → OverconstrainedError
+            // (с пустым message — юзер видел просто «Ошибка:»). Падаем на дефолтный мик.
+            if (e instanceof Error && (e.name === 'OverconstrainedError' || e.name === 'NotFoundError')) {
+              console.warn('[mic] saved deviceId недоступен, беру дефолтный мик', e.name)
+              return navigator.mediaDevices.getUserMedia({ audio: base })
+            }
+            throw e
+          }
+        },
       })
 
       if (attempt !== startAttemptRef.current) {
@@ -211,7 +219,8 @@ export function useMicListener({
       setStateBoth('listening')
     } catch (e) {
       if (attempt !== startAttemptRef.current) return
-      setError(e instanceof Error ? e.message : String(e))
+      // DOMException от getUserMedia бывает с пустым message — показываем хотя бы name
+      setError(e instanceof Error ? e.message || e.name : String(e))
       setStateBoth('error')
     }
   }
