@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'kika:custom-emotions:v1'
+const STORAGE_KEY = 'yukai:custom-emotions:v1'
 
 export type CustomEmotion = {
   id: string

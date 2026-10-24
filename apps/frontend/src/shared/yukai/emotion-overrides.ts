@@ -1,6 +1,6 @@
 import type { Emotion } from './persona'
 
-const STORAGE_KEY = 'kika:emotion-overrides:v1'
+const STORAGE_KEY = 'yukai:emotion-overrides:v1'
 
 export type EmotionOverrides = Record<string, string>
 

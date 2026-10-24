@@ -17,7 +17,7 @@ type Options = {
   language?: string
 }
 
-const STORAGE_KEY = 'kika:dictation-history'
+const STORAGE_KEY = 'yukai:dictation-history'
 
 // Диктовка через Right Alt hold-to-talk (Wispr Flow-style).
 // Запись → STT с LLM-очисткой → вставка в активное поле через clipboard + keybd_event.

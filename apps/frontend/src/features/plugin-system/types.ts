@@ -8,8 +8,8 @@ export type Permission =
   | 'speaker'         // озвучка через TTS
   | 'keyboard'        // глобальные хоткеи
   | 'clipboard'       // запись/чтение буфера обмена
-  | 'memory'          // чтение/запись в kika-memory/
-  | 'chat'            // инжект в system prompt + подписка на ответы Kika
+  | 'memory'          // чтение/запись в yukai-memory/
+  | 'chat'            // инжект в system prompt + подписка на ответы Yukai
 
 export type Cleanup = () => void
 
@@ -24,7 +24,7 @@ export type ChatAttachment = {
 export type YukaiContext = {
   chat: {
     send: (text: string, attachments?: ChatAttachment[]) => Promise<string | void>
-    // Подписка на финальные ответы Kika (когда стрим завершён)
+    // Подписка на финальные ответы Yukai (когда стрим завершён)
     onResponse: (cb: (fullText: string) => void) => Cleanup
   }
   memory: {
@@ -45,7 +45,7 @@ export type YukaiContext = {
     openExternal: (url: string) => void
     // Положить картинку (data URL) в clipboard — для paste в trace.moe / любой сайт
     copyImageToClipboard: (dataUrl: string) => void
-    // Свернуть чат Kika (compact mode) — удобно перед скрином экрана
+    // Свернуть чат Yukai (compact mode) — удобно перед скрином экрана
     closeChat: () => void
   }
   // Текущий язык интерфейса — плагины используют для локализации своих UI-строк.
@@ -86,7 +86,7 @@ export type YukaiPlugin = {
   // Хуки жизненного цикла — вызываются из core.
   // Инжект контекста в system prompt Claude (английский словарь, weather-сводка и т.д.)
   injectSystemContext?: () => string | null
-  // Обработка финального ответа Kika (теги, извлечение данных)
+  // Обработка финального ответа Yukai (теги, извлечение данных)
   onChatResponse?: (fullText: string) => void
   // Перехватчик голосовых/текстовых команд юзера. Если вернул true —
   // команда "проглочена" плагином, обычная отправка в Claude пропускается.

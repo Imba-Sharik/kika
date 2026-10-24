@@ -29,7 +29,7 @@ export const BUILTIN_TRIGGERS: { id: string; label: string }[] = [
   { id: 'idle',           label: 'Ожидание' },
 ]
 
-const STORAGE_KEY = 'kika:character:v1'
+const STORAGE_KEY = 'yukai:character:v1'
 
 export function loadCharacter(): Character {
   try {

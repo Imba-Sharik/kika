@@ -244,8 +244,8 @@ function createWindow() {
     tryLoadOrigin(pickOriginUrl())
   }
 
-  // DevTools не открываем автоматически. Для отладки — запусти с KIKA_DEVTOOLS=1
-  if (process.env.KIKA_DEVTOOLS === '1') {
+  // DevTools не открываем автоматически. Для отладки — запусти с YUKAI_DEVTOOLS=1
+  if (process.env.YUKAI_DEVTOOLS === '1') {
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   }
 }

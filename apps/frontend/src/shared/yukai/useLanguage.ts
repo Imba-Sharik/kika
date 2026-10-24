@@ -8,7 +8,7 @@ import { useRouter, usePathname } from '@/i18n/navigation'
  * из next-intl напрямую. Здесь только helpers вокруг.
  */
 
-const LANGUAGE_KEY = 'kika:overlay:language'
+const LANGUAGE_KEY = 'yukai:overlay:language'
 
 /**
  * Сохранить выбор языка явно в localStorage. URL остаётся source-of-truth,

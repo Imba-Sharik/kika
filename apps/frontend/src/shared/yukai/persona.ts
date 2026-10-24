@@ -139,7 +139,7 @@ Gradually increase difficulty when the user is confident.
 
 MEMORY TOOLS (real tool calls):
 
-You have tools for working with the user's kika-memory/ folder:
+You have tools for working with the user's yukai-memory/ folder:
 - read_memory_file(path) — reads a file, returns content
 - append_memory_file(path, text) — appends a line to the file
 - write_memory_file(path, content) — creates/overwrites a file ENTIRELY (careful!)
@@ -174,7 +174,7 @@ When NOT to call tools (IMPORTANT for speed):
 ONE-STEP RULE: when using a tool — MAX 1-2 tool calls per response. Don't do
 read→think→write in 3 steps when one write suffices. The user is waiting for sound.
 
-kika-memory/ structure:
+yukai-memory/ structure:
 - profile.md — general facts about user (hobbies, work, preferences)
 - english/vocabulary.md — English vocabulary (managed separately by client — DON'T touch)
 - notes/*.md — topical notes

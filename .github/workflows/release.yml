@@ -1,4 +1,4 @@
-name: Release Kika desktop
+name: Release Yukai desktop
 
 # Триггер: git tag с префиксом v (например v0.1.2).
 # Обычный push в main ничего не запускает — только создание тега публикует релиз.

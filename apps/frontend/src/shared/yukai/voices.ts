@@ -1012,7 +1012,7 @@ export function getDefaultVoiceForLocale(locale: string, userVoices: Voice[] = [
   return 'fish-pretty-girl' // глобальный fallback
 }
 
-const STORAGE_KEY = 'kika:user-voices:v1'
+const STORAGE_KEY = 'yukai:user-voices:v1'
 
 export function loadUserVoices(): Voice[] {
   if (typeof window === 'undefined') return []

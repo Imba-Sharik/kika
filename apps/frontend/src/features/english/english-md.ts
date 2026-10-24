@@ -1,5 +1,5 @@
 // Парс/сериализация словаря английских слов в/из markdown.
-// Файл kika-memory/english/vocabulary.md — таблица как у english-agent, легко править вручную.
+// Файл yukai-memory/english/vocabulary.md — таблица как у english-agent, легко править вручную.
 
 export const INTERVALS_DAYS = [1, 3, 7, 14, 30, 60]
 export const KNOWN_IDX = 6 // выпуск из learning

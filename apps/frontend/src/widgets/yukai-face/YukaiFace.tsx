@@ -178,7 +178,7 @@ export function YukaiFace({ emotion, audio, size = 320, overrides }: Props) {
           height={size * 1.33}
           className="pointer-events-none absolute inset-0 h-full w-full object-contain"
           style={{
-            animation: `kikaFadeOut ${FADE_MS}ms ease-out forwards`,
+            animation: `yukaiFadeOut ${FADE_MS}ms ease-out forwards`,
           }}
           draggable={false}
         />
@@ -192,7 +192,7 @@ export function YukaiFace({ emotion, audio, size = 320, overrides }: Props) {
         width={size}
         height={size * 1.33}
         className="pointer-events-none relative h-full w-full object-contain"
-        style={prevSrc ? { animation: `kikaFadeIn ${FADE_MS}ms ease-out forwards` } : undefined}
+        style={prevSrc ? { animation: `yukaiFadeIn ${FADE_MS}ms ease-out forwards` } : undefined}
         draggable={false}
       />
 
@@ -209,11 +209,11 @@ export function YukaiFace({ emotion, audio, size = 320, overrides }: Props) {
       />
 
       <style>{`
-        @keyframes kikaFadeIn {
+        @keyframes yukaiFadeIn {
           from { opacity: 0 }
           to { opacity: 1 }
         }
-        @keyframes kikaFadeOut {
+        @keyframes yukaiFadeOut {
           from { opacity: 1 }
           to { opacity: 0 }
         }

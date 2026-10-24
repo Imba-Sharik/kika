@@ -23,7 +23,7 @@ function useDictPlugin(): DictationPluginState {
 
 // Provider читает выбранный микрофон из localStorage (как и раньше),
 // чтобы useDictation сразу шёл на правильное устройство.
-const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
+const MIC_STORAGE_KEY = 'yukai:overlay:micDeviceId'
 
 function DictProvider({ children }: { ctx: YukaiContext; children: ReactNode }) {
   const [deviceId, setDeviceId] = useState<string>(() => {

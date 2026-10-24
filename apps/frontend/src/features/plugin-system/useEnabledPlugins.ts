@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-const STORAGE_KEY = 'kika:plugins:enabled'
+const STORAGE_KEY = 'yukai:plugins:enabled'
 
 // Хранит список ID отключенных плагинов (по умолчанию все включены).
 // Используем "disabled-set" а не "enabled-set" чтобы новые плагины

@@ -81,7 +81,7 @@ export const musicPlugin: YukaiPlugin = {
   id: 'music',
   name: 'Распознавание песен',
   icon: '🎵',
-  description: 'Shazam-style: зажми Left Alt + ` чтобы Kika узнала что играет',
+  description: 'Shazam-style: зажми Left Alt + ` чтобы Yukai узнала что играет',
   permissions: ['desktop-audio', 'chat'],
   Provider: MusicProvider,
   slots: {

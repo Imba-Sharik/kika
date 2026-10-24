@@ -18,7 +18,7 @@ export const BUILTIN_CHARACTERS: Character[] = [
 
 export const DEFAULT_CHARACTER_ID = BUILTIN_CHARACTERS[0].id
 
-const STORAGE_KEY = 'kika:user-characters:v1'
+const STORAGE_KEY = 'yukai:user-characters:v1'
 
 export function loadUserCharacters(): Character[] {
   if (typeof window === 'undefined') return []

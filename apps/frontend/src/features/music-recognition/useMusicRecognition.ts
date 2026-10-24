@@ -13,13 +13,13 @@ export type MusicItem = {
 }
 
 type Options = {
-  // Вызывается когда Kika должна что-то сказать юзеру про результат.
+  // Вызывается когда Yukai должна что-то сказать юзеру про результат.
   onResult: (text: string) => void
   // Эмоция персонажа — хук выставляет 'listening' во время записи.
   onEmotion?: (emotion: 'listening' | 'neutral') => void
 }
 
-const STORAGE_KEY = 'kika:music-history'
+const STORAGE_KEY = 'yukai:music-history'
 
 // Распознавание песен через захват системного звука (loopback) → AudD API.
 // Вызов start/stop — например, по глобальному хоткею Alt+`.

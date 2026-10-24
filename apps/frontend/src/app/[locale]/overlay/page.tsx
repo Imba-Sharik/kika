@@ -1,5 +1,6 @@
 'use client'
 
+import '@/shared/yukai/legacy-storage'
 import { useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { YukaiFace } from '@/widgets/yukai-face/YukaiFace'
@@ -55,10 +56,10 @@ const CHARACTER = BUILTIN_CHARACTERS[0]
 // Sonnet 4.6 — лучше следует instruction'ам в mixed-context (memory ru + ja input → ja ответ).
 const MODEL = { provider: 'anthropic' as const, model: 'claude-sonnet-4-6' }
 
-const EMOTION_STORAGE_KEY = 'kika:overlay:emotion'
-const MIC_STORAGE_KEY = 'kika:overlay:micDeviceId'
-const VOICE_STORAGE_KEY = 'kika:overlay:voiceId'
-const VAD_THRESHOLD_KEY = 'kika:overlay:vadThreshold'
+const EMOTION_STORAGE_KEY = 'yukai:overlay:emotion'
+const MIC_STORAGE_KEY = 'yukai:overlay:micDeviceId'
+const VOICE_STORAGE_KEY = 'yukai:overlay:voiceId'
+const VAD_THRESHOLD_KEY = 'yukai:overlay:vadThreshold'
 const DEFAULT_VAD_THRESHOLD = 0.4
 
 // Устаревшие [APPEND:]/[WRITE:] текстовые теги больше не используются —
@@ -89,7 +90,7 @@ const kbdStyle: React.CSSProperties = {
 // без навигации Next.js. Лендинг остаётся URL-routed для SEO.
 // localStorage persistит выбор между запусками. NextIntlClientProvider раздаёт
 // messages через useTranslations/useLocale во все child-компоненты.
-const LOCALE_STORAGE_KEY = 'kika:overlay:locale'
+const LOCALE_STORAGE_KEY = 'yukai:overlay:locale'
 
 export default function OverlayWithLocale() {
   const urlLocale = useLocale()
@@ -147,7 +148,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   // чтобы автоподбор по локали не перезаписывал выбор.
   function selectVoiceManually(id: string) {
     selectVoice(id)
-    try { localStorage.setItem('kika:overlay:voice-user-picked', 'true') } catch {}
+    try { localStorage.setItem('yukai:overlay:voice-user-picked', 'true') } catch {}
   }
   // При смене локали — всегда переключаем на дефолтный voice для нового языка
   // (ru→Mita, ja→フェルン и т.д.). Юзер может вручную выбрать другой — выбор
@@ -161,7 +162,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
       if (recommended !== voiceId) {
         setVoiceId(recommended)
         localStorage.setItem(VOICE_STORAGE_KEY, recommended)
-        localStorage.removeItem('kika:overlay:voice-user-picked')
+        localStorage.removeItem('yukai:overlay:voice-user-picked')
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -197,7 +198,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   const [settingsOpen, setSettingsOpen] = useState(false)
   // Показываем первую подсказку «как начать разговор» один раз. Ключ версионирован —
   // при значительных правках онбординга бампай суффикс, юзеры увидят обновлённую версию.
-  const ONBOARDING_KEY = 'kika:onboarding-seen-v1'
+  const ONBOARDING_KEY = 'yukai:onboarding-seen-v1'
   // Default false на SSR и первом рендере → совпадает с клиентом → нет hydration mismatch.
   // useEffect читает localStorage уже после маунта.
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -233,7 +234,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   const trial = useTrialStatus()
   // localStorage ключ для dismiss warning'а — уникальный per-day чтобы он
   // не назойничал в течение одного дня но возвращался следующим утром.
-  const dismissKey = `kika:trial-dismissed:${new Date().toISOString().slice(0, 10)}`
+  const dismissKey = `yukai:trial-dismissed:${new Date().toISOString().slice(0, 10)}`
   const [trialDismissed, setTrialDismissed] = useState(false)
   /* eslint-disable react-hooks/set-state-in-effect -- localStorage init */
   useEffect(() => {
@@ -331,7 +332,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   // PluginProviders ниже, включая IPC-подписки и хоткеи.
 
   // Core API для плагинов
-  const kikaCtx: YukaiContext = {
+  const yukaiCtx: YukaiContext = {
     chat: {
       send: (text, attachments) => chat.send(text, attachments),
       onResponse: () => () => {}, // TODO: реализовать подписку на финальные ответы
@@ -431,7 +432,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
     try { localStorage.setItem(EMOTION_STORAGE_KEY, emotion) } catch {}
   }, [emotion])
 
-  // Авто-старт hands-free при запуске приложения — Kika сразу готова слушать,
+  // Авто-старт hands-free при запуске приложения — Yukai сразу готова слушать,
   // не нужно Ctrl+Z искать. Бежит один раз через ref-флаг.
   const autoStartedAtBootRef = useRef(false)
   useEffect(() => {
@@ -523,7 +524,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   async function send(userText: string) {
     // Сначала даём плагинам шанс перехватить команду (скриншот, погода и т.п.)
     for (const p of activePlugins) {
-      if (p.handleCommand?.(userText, kikaCtx)) return
+      if (p.handleCommand?.(userText, yukaiCtx)) return
     }
     await chat.send(userText)
   }
@@ -555,12 +556,12 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
   }
 
   return (
-    <YukaiContextProvider value={kikaCtx}>
+    <YukaiContextProvider value={yukaiCtx}>
       {/* Provider'ы ВСЕХ плагинов всегда монтируются — чтобы тогглы в настройках
           не перестраивали React-дерево и не сбрасывали скролл/фокус.
           Хосты ниже уже фильтруют по activePlugins — слоты отключенных
           плагинов просто не рендерятся. */}
-      <PluginProviders plugins={BUILTIN_PLUGINS} ctx={kikaCtx}>
+      <PluginProviders plugins={BUILTIN_PLUGINS} ctx={yukaiCtx}>
     <div
       className="fixed inset-0"
       style={{ background: 'transparent' }}
@@ -793,7 +794,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
               return {
                 icon: p.icon,
                 title: translated === i18nKey ? p.slots!.radial!.title : translated,
-                action: () => { p.slots!.radial!.onClick(kikaCtx); setMenuOpen(false) },
+                action: () => { p.slots!.radial!.onClick(yukaiCtx); setMenuOpen(false) },
               }
             })
           const rawItems = [
@@ -821,7 +822,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
           return <RadialMenu open={menuOpen} items={items} />
         })()}
         {/* Индикаторы статуса от плагинов (music LISTENING/RECOGNIZING и т.п.) */}
-        <CharacterOverlayHost plugins={activePlugins} ctx={kikaCtx} />
+        <CharacterOverlayHost plugins={activePlugins} ctx={yukaiCtx} />
       </div>
       <style>{`@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.3 } }`}</style>
 
@@ -1004,7 +1005,7 @@ function OverlayPage({ onLocaleChange }: { onLocaleChange: (l: string) => void }
       </div>
 
       <div data-interactive="true" style={{ display: 'contents' }}>
-        <PanelHost plugins={activePlugins} activeId={activePluginPanel} ctx={kikaCtx} />
+        <PanelHost plugins={activePlugins} activeId={activePluginPanel} ctx={yukaiCtx} />
       </div>
 
       {settingsOpen && (
