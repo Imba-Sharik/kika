@@ -1,4 +1,5 @@
 import type { Core } from '@strapi/strapi'
+import userLifecycles from './extensions/users-permissions/content-types/user/lifecycles'
 
 // Cleanup raw Usage записей старше N дней. User counters остаются вечно —
 // они нужны для quota/billing. Запускаем при старте + каждые 24 часа.
@@ -44,7 +45,10 @@ async function backfillExistingUsers(strapi: Core.Strapi) {
     const userTable = strapi.db.metadata.get('plugin::users-permissions.user').tableName
 
     const updated = await knex(userTable)
-      .whereNull('subscription_tier')
+      // + trial-юзеры без trialStartedAt (зарегались пока lifecycle не работал)
+      .where(q => q
+        .whereNull('subscription_tier')
+        .orWhere(q2 => q2.where('subscription_tier', 'trial').whereNull('trial_started_at')))
       .update({
         trial_started_at: new Date(),
         subscription_tier: 'trial',
@@ -158,7 +162,14 @@ export default {
    * An asynchronous register function that runs before
    * your application is initialized.
    */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register({ strapi }: { strapi: Core.Strapi }) {
+    // lifecycles.ts из extensions/ Strapi 5 сам не подхватывает — новые юзеры
+    // регистрировались без trialStartedAt и ловили 402 TrialNotStarted. Подписываем явно.
+    strapi.db.lifecycles.subscribe({
+      models: ['plugin::users-permissions.user'],
+      ...userLifecycles,
+    })
+  },
 
   /**
    * Bootstrap — после старта запускаем периодический cleanup старых Usage-логов.
