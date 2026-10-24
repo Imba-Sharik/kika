@@ -106,6 +106,53 @@ async function ensureManagerRole(strapi: Core.Strapi) {
   }
 }
 
+/**
+ * Права ролей на кастомные эндпоинты (routes с auth: {}). Без них Strapi
+ * режет запрос даже с валидным JWT. Идемпотентно: создаём только недостающие —
+ * после пересоздания БД (как 2026-10-24) права проставятся сами, без кликов в админке.
+ * Ручные правки в админке не откатываем — только добавляем.
+ */
+const AUTHENTICATED_ACTIONS = [
+  'api::chat.chat.stream',
+  'api::stt.stt.transcribe',
+  'api::tts.tts.speak',
+  'api::vision.vision.describe',
+  'api::me.me.quota',
+  'api::recognize-music.recognize-music.recognize',
+  'api::unsplash.unsplash.search',
+  'api::trace-moe.trace-moe.identify',
+  'api::billing.billing.checkout',
+]
+// Manager — это залогиненный юзер + аналитика. Базовые users-permissions действия
+// (me, changePassword) Strapi выдаёт только дефолтной Authenticated, дублируем.
+const MANAGER_ACTIONS = [
+  ...AUTHENTICATED_ACTIONS,
+  'plugin::users-permissions.user.me',
+  'plugin::users-permissions.auth.changePassword',
+]
+
+async function ensureRolePermissions(strapi: Core.Strapi, roleType: string, actions: string[]) {
+  try {
+    const role = await strapi.db
+      .query('plugin::users-permissions.role')
+      .findOne({ where: { type: roleType }, populate: ['permissions'] })
+    if (!role) return
+
+    const existing = new Set((role.permissions ?? []).map((p: { action: string }) => p.action))
+    const missing = actions.filter(a => !existing.has(a))
+    for (const action of missing) {
+      await strapi.db.query('plugin::users-permissions.permission').create({
+        data: { action, role: role.id },
+      })
+    }
+    if (missing.length > 0) {
+      strapi.log.info(`[bootstrap] роль ${roleType}: добавлено ${missing.length} прав`)
+    }
+  } catch (err) {
+    strapi.log.warn(`[bootstrap] ensureRolePermissions(${roleType}) failed: ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -119,6 +166,8 @@ export default {
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     await ensureManagerRole(strapi)
+    await ensureRolePermissions(strapi, 'authenticated', AUTHENTICATED_ACTIONS)
+    await ensureRolePermissions(strapi, 'manager', MANAGER_ACTIONS)
     await backfillExistingUsers(strapi)
     // Первый прогон через 5 минут после старта (даём БД миграциям отработать),
     // дальше — раз в сутки.
