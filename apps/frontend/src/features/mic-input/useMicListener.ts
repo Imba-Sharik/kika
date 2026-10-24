@@ -48,6 +48,7 @@ export function useMicListener({
   const stateRef = useRef<VadState>('off')
   const pausedRef = useRef<boolean>(!!paused)
   const transcribingRef = useRef<boolean>(false)
+  const startAttemptRef = useRef(0)
   const utilsRef = useRef<{ encodeWAV: (a: Float32Array) => ArrayBuffer } | null>(null)
   const onTranscriptRef = useRef(onTranscript)
   // Аналогично onTranscript — MicVAD.new() вызывается один раз в start(), так что
@@ -145,6 +146,12 @@ export function useMicListener({
   }
 
   async function start() {
+    // Старый VAD мог остаться (повторный start из error) — иначе два getUserMedia на один мик
+    vadRef.current?.destroy()
+    vadRef.current = null
+    // Токен попытки: если юзер выключил мик пока грузится VAD (stop() во время 'loading'),
+    // stop() бампает счётчик — и созданный VAD надо сразу уничтожить, а не включать.
+    const attempt = ++startAttemptRef.current
     setError(null)
     setStateBoth('loading')
     try {
@@ -195,16 +202,23 @@ export function useMicListener({
           }),
       })
 
+      if (attempt !== startAttemptRef.current) {
+        vad.destroy()
+        return
+      }
       vadRef.current = vad
       if (!pausedRef.current) vad.start()
       setStateBoth('listening')
     } catch (e) {
+      if (attempt !== startAttemptRef.current) return
       setError(e instanceof Error ? e.message : String(e))
       setStateBoth('error')
     }
   }
 
   function stop() {
+    startAttemptRef.current++
+    setError(null)
     vadRef.current?.destroy()
     vadRef.current = null
     setStateBoth('off')
